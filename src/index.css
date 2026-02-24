@@ -1,0 +1,93 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+  body {
+    @apply bg-navy-950 text-slate-200 font-body antialiased;
+    background-image: 
+      radial-gradient(ellipse at 20% 50%, rgba(45, 212, 191, 0.04) 0%, transparent 50%),
+      radial-gradient(ellipse at 80% 20%, rgba(201, 162, 39, 0.04) 0%, transparent 50%);
+  }
+  ::selection {
+    @apply bg-teal-500/30 text-teal-300;
+  }
+  ::-webkit-scrollbar {
+    width: 5px;
+  }
+  ::-webkit-scrollbar-track {
+    @apply bg-navy-900;
+  }
+  ::-webkit-scrollbar-thumb {
+    @apply bg-teal-500/40 rounded-full;
+  }
+}
+
+@layer components {
+  .section-title {
+    @apply font-display text-4xl md:text-5xl font-bold text-white mb-3;
+  }
+  .section-line {
+    @apply w-16 h-1 bg-gradient-to-r from-teal-400 to-gold rounded-full mb-6;
+  }
+  .nav-link {
+    @apply font-mono text-sm text-slate-400 hover:text-teal-400 transition-colors duration-200 relative;
+  }
+  .card-glass {
+    @apply bg-white/[0.03] border border-white/[0.07] rounded-2xl backdrop-blur-sm;
+  }
+  .tag {
+    @apply font-mono text-xs px-3 py-1 rounded-full bg-teal-400/10 text-teal-400 border border-teal-400/20;
+  }
+  .btn-primary {
+    @apply px-6 py-3 bg-teal-500 text-navy-950 font-body font-medium rounded-lg hover:bg-teal-400 transition-all duration-200 hover:shadow-lg hover:shadow-teal-500/25 hover:-translate-y-0.5;
+  }
+  .btn-outline {
+    @apply px-6 py-3 border border-teal-500/50 text-teal-400 font-body font-medium rounded-lg hover:bg-teal-500/10 transition-all duration-200 hover:-translate-y-0.5;
+  }
+}
+
+@layer utilities {
+  .text-gradient {
+    @apply bg-gradient-to-r from-teal-400 to-teal-200 bg-clip-text text-transparent;
+  }
+  .text-gradient-gold {
+    @apply bg-gradient-to-r from-gold to-yellow-300 bg-clip-text text-transparent;
+  }
+  .glow-teal {
+    box-shadow: 0 0 40px rgba(45, 212, 191, 0.15);
+  }
+}
+
+/* Typed cursor blink */
+.typed-cursor {
+  animation: blink 1s step-end infinite;
+  color: #2dd4bf;
+}
+@keyframes blink {
+  50% { opacity: 0; }
+}
+
+/* Skill bar animation */
+.skill-bar-fill {
+  animation: skillFill 1.5s ease forwards;
+  transform-origin: left;
+}
+@keyframes skillFill {
+  from { width: 0% !important; }
+}
+
+/* Dot grid background */
+.dot-grid {
+  background-image: radial-gradient(circle, rgba(45,212,191,0.12) 1px, transparent 1px);
+  background-size: 28px 28px;
+}
+
+/* Floating glow orbs */
+.orb {
+  @apply absolute rounded-full blur-3xl pointer-events-none;
+  animation: float 8s ease-in-out infinite;
+}

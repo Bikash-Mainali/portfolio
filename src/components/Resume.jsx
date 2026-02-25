@@ -2,42 +2,98 @@ import { useInView } from '../hooks/useInView'
 
 const experiences = [
   {
-    title: 'Java Engineer',
-    company: 'Apple Inc.',
+    title: 'Senior Software Engineer',
+    company: 'CHG Healthcare',
+    location: 'Utah, US',
+    period: '07/2024 – Present',
+    type: 'Full-time',
+    bullets: [
+      'Architected and developed Java 25 Spring Boot microservices serving healthcare professionals across multiple platforms',
+      'Built AI-powered video chat assistant using RAG architecture (LLaMA, FastAPI, React) to enhance internal productivity',
+      'Implemented Kafka-based event-driven architecture improving data pipeline reliability',
+      'Reduced deployment time by 40% by engineering CI/CD pipelines with GitHub Actions and SonarCloud (95% code coverage)',
+      'Orchestrated Docker containerization and Kubernetes (EKS) deployments with zero-downtime releases'
+    ],
+    tags: ['Java 25', 'Spring Boot', 'Kafka', 'AWS EKS', 'React 19', 'FastAPI', 'MongoDB', 'Grafana', 'Docker', 'Kubernetes', 'CI/CD'],
+  },
+  {
+    title: 'Java Developer',
+    company: 'Morgan Stanley',
+    location: 'New York, NY',
+    period: '07/2023 – 09/2024',
+    type: 'Full-time',
+    bullets: [
+      'Developed Enterprise Customer Risk Ranking (ECRR) and AML/CFT systems processing millions of daily transactions',
+      'Designed Single Client View (SCV) application using Angular 15 and TypeScript, reducing client lookup time by 60%',
+      'Built RESTful APIs using Spring Boot and JAX-RS with Elasticsearch and Redis caching (50% DB reduction)',
+      'Implemented Kafka messaging for real-time risk calculation and cross-system notifications',
+      'Optimized MongoDB, IBM DB2, and MSSQL queries improving performance by 40%',
+      'Established Jenkins CI/CD pipelines and Liquibase versioning ensuring zero data migration issues'
+    ],
+    tags: ['Java', 'Spring Boot', 'Kafka', 'Angular 15', 'Redis', 'MongoDB', 'Splunk', 'Sonar', 'IBM DB2', 'Jenkins'],
+  },
+  {
+    title: 'Java Engineer (Contract)',
+    company: 'Advantis Global Inc. (Client: Apple)',
     location: 'Cupertino, CA',
-    period: '2022 – 2023',
-    type: 'Full-time',
-    bullets: ['Requirement analysis & feature design for ad-platform services', 'Back-end development using Java & Spring Boot microservices', 'Technical documentation and code reviews'],
-    tags: ['Java', 'Spring Boot', 'Microservices', 'AWS'],
+    period: '10/2022 – 02/2023',
+    type: 'Contract',
+    bullets: [
+      'Developed high-performance microservices for Apple Search Ads platform serving millions of ad requests with sub-100ms latency',
+      'Deployed services on AWS EKS using Docker ensuring 99.9% uptime',
+      'Integrated Kafka for event-driven communication processing millions of events daily',
+      'Implemented CI/CD pipelines using Spinnaker reducing deployment cycles by 50%',
+      'Applied TDD achieving 80%+ code coverage using JUnit and TestNG',
+      'Optimized Cassandra and Oracle databases for high-throughput ad serving'
+    ],
+    tags: ['Java 11', 'Spring Boot', 'Kafka', 'AWS EKS', 'Cassandra', 'Oracle', 'Docker', 'Spinnaker'],
   },
   {
-    title: 'Software Engineer (Full Stack)',
-    company: 'Deerwalk Services',
+    title: 'Software Engineer (Contract)',
+    company: 'Deerwalk Services Pvt. Ltd.',
     location: 'Kathmandu, Nepal',
-    period: '2021',
-    type: 'Full-time',
-    bullets: ['Full-stack development for healthcare analytics platform', 'Mentorship of junior engineers', 'Agile/Scrum sprint planning and execution'],
-    tags: ['Java', 'Angular', 'PostgreSQL', 'Docker'],
+    period: '03/2021 – 10/2021',
+    type: 'Contract',
+    bullets: [
+      'Architected File Mapper Engine microservices supporting 500+ healthcare organizations',
+      'Built Angular 9 interfaces improving page load times by 70%',
+      'Implemented Kafka streaming pipelines for asynchronous healthcare data exchange',
+      'Integrated Elasticsearch and built Kibana dashboards for performance metrics',
+      'Established Jenkins CI/CD pipelines with SonarQube quality gates',
+      'Conducted SAST, DAST, and SCA security assessments before production releases'
+    ],
+    tags: ['Java', 'Spring Boot', 'Angular 9', 'Kafka', 'Elasticsearch', 'Jenkins', 'OAuth2', 'JWT'],
   },
   {
-    title: 'Java Web Developer (Full Stack)',
-    company: 'Datum Systems Pvt Ltd',
+    title: 'Java Web Developer',
+    company: 'Datum Systems Pvt. Ltd.',
     location: 'Kathmandu, Nepal',
-    period: '2020 – 2021',
+    period: '03/2020 – 03/2021',
     type: 'Full-time',
-    bullets: ['Built and maintained full-stack web applications', 'Database design and PL/SQL stored procedures', 'Technical documentation'],
-    tags: ['Java', 'Spring', 'Oracle', 'PL/SQL'],
+    bullets: [
+      'Developed AML/ATF systems for major commercial banks',
+      'Built secure REST APIs using Spring Boot with JWT and OAuth2',
+      'Implemented React (Redux) and Angular full-stack features',
+      'Created PostgreSQL stored procedures optimizing high-volume transactions',
+      'Practiced TDD/BDD achieving high test coverage with JUnit, Mockito, and Cucumber'
+    ],
+    tags: ['Java', 'Spring Boot', 'React', 'Angular', 'PostgreSQL', 'MongoDB', 'JWT'],
   },
   {
-    title: 'Web Developer (Java Full Stack)',
-    company: 'Ishani Technology Pvt Ltd',
-    location: 'Kathmandu, Nepal',
-    period: '2017 – 2020',
+    title: 'Web Application Developer',
+    company: 'Ishani Technology Pvt. Ltd.',
+    location: 'Lalitpur, Nepal',
+    period: '05/2017 – 02/2020',
     type: 'Full-time',
-    bullets: ['Full-stack development for banking and e-commerce systems', 'Front-end development with jQuery and Bootstrap', 'Report writing and stakeholder communication'],
-    tags: ['Java', 'jQuery', 'MySQL', 'Bootstrap'],
+    bullets: [
+      'Developed enterprise web applications using Spring MVC, Hibernate, and JAX-RS',
+      'Built dynamic UI using Angular, jQuery, AJAX, JSP, HTML5, and CSS3',
+      'Optimized PostgreSQL queries and implemented TDD using JUnit and Mockito',
+      'Applied multiple design patterns improving code maintainability and scalability'
+    ],
+    tags: ['Java', 'Spring MVC', 'Hibernate', 'Angular', 'PostgreSQL', 'jQuery'],
   },
-]
+];
 
 const education = [
   {
@@ -67,7 +123,7 @@ export default function Resume() {
 
         <div className="flex flex-wrap gap-4 mb-12 items-center">
           <a
-            href="/assets/pdf/resume.pdf"
+            href="/BIKASH MAINALI-Resume-v2.pdf"
             target="_blank"
             className="btn-primary flex items-center gap-2 text-sm"
           >

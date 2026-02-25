@@ -39,7 +39,7 @@ export default function Navbar() {
              {l.label}
             </a>
           ))}
-          <a href="/assets/pdf/resume.pdf" target="_blank" className="btn-outline text-lg py-2 px-4">
+          <a href="/BIKASH MAINALI-Resume-v2.pdf" target="_blank" className="btn-outline text-lg py-2 px-4">
             Resume
           </a>
         </nav>
@@ -69,7 +69,7 @@ export default function Navbar() {
               <span className="text-teal-400 mr-2">0{i + 1}.</span>{l.label}
             </a>
           ))}
-          <a href="/assets/pdf/resume.pdf" target="_blank" className="btn-outline text-sm py-2 px-4 w-fit">
+          <a href="/BIKASH MAINALI-Resume-v2.pdf" target="_blank" className="btn-outline text-sm py-2 px-4 w-fit">
             Resume
           </a>
         </nav>

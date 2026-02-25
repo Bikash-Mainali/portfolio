@@ -116,10 +116,6 @@ export default function About() {
                   bikashmainali18@gmail.com
                 </a>
               </div>
-              <div className="flex items-center gap-3 text-sm text-slate-400">
-                <span className="text-teal-400"><Phone/></span>
-                <a href="tel:5109275844" className="hover:text-teal-400 transition-colors">510-927-5844</a>
-              </div>
             </div>
           </div>
         </div>

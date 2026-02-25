@@ -46,7 +46,6 @@ export default function Contact() {
             {[
               { icon: <MapPinned/>, label: 'Location', value: 'CA, USA', href: null },
               { icon: <Mail />, label: 'Email', value: 'bikashmainali18@gmail.com', href: 'mailto:bikashmainali18@gmail.com' },
-              { icon: <Phone />, label: 'Phone', value: '510-927-5844', href: 'tel:5109275844' },
               { icon: <Linkedin />, label: 'LinkedIn', value: 'bikash-mainali', href: 'https://www.linkedin.com/in/bikash-mainali-629505168/' },
             ].map(item => (
               <div key={item.label} className="card-glass rounded-xl p-4 flex items-center gap-4 hover:border-teal-400/25 transition-all duration-200">

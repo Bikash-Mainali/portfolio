@@ -177,14 +177,14 @@ export default function Portfolio() {
                                 <div className="flex gap-3">
                                     {project.links && Object.entries(project.links).map(([key, value]) => (
                                         <a
+                                            key={`${project.id}-${key}`}
                                             href={value.link}
                                             target="_blank"
                                             rel="noopener noreferrer"
                                             className="flex items-center gap-2 text-sm font-mono text-teal-400 hover:text-teal-300 transition-colors"
                                         >
-                                            <>
-                                                <span>{value.icon}</span>{value.label}
-                                            </>
+                                            <span>{value.icon}</span>
+                                            {value.label}
                                         </a>
                                         )
                                     )}

@@ -173,7 +173,7 @@ export default function Contact() {
 
                             <div className="grid gap-5">
                                 <div>
-                                    <label className="font-mono text-xs text-slate-500 mb-2 block">Your Name</label>
+                                    <label className="font-mono text-xs text-slate-500 mb-2 block">Subject</label>
                                     <input
                                         type="text"
                                         name="title"

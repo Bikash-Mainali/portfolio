@@ -35,7 +35,7 @@ export default function Skills() {
   return (
     <section id="skills" ref={ref} className="py-28 bg-navy-900/50 relative">
       <div className="absolute inset-0 dot-grid opacity-20"></div>
-      <div className="relative max-w-6xl mx-auto px-6">
+      <div className="relative max-w-7xl mx-auto px-6">
         <div className={`transition-all duration-700 ${visible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
           <h2 className="section-title">Tech Stack</h2>
           <div className="section-line"></div>

@@ -1,7 +1,9 @@
 import {useState} from 'react'
 import {useInView} from '../hooks/useInView'
-import {ExternalLink, Github} from 'lucide-react'
-
+import {
+    Github,
+    ExternalLink
+} from "../icons";
 const projects = [
     {
         id: 1,
@@ -10,7 +12,13 @@ const projects = [
         description: 'Professional beauty services website with booking functionality and gallery. Built with modern web technologies and responsive design.',
         tags: ['HTML', 'CSS', 'JavaScript', 'Bootstrap'],
         img: 'https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?w=600&q=80',
-        links: {link: 'https://creativebrows.com/', label: 'Live Site', icon: <ExternalLink className="h-4 w-4"/>}
+        links: {
+            'external': {
+                link: 'https://creativebrows.com/',
+                label: 'Live',
+                icon: <ExternalLink className="h-4 w-4"/>
+            },
+        }
     },
     {
         id: 2,
@@ -18,20 +26,33 @@ const projects = [
         category: 'Web',
         description: 'First iteration of personal portfolio site from scratch HTML, JavaScript and CSS — bikashmainali.com.np — showcasing projects, skills and professional journey.',
         tags: ['HTML', 'CSS', 'Bootstrap', 'jQuery'],
-        img: 'https://images.unsplash.com/photo-1467232004584-a241de8bcf5d?w=600&q=80',
-        links: {link: 'https://bikash-mainali.github.io/bm/', label: 'GitHub', icon: <Github className="h-4 w-4"/>}
+        img: '/portfolio-site-v1.png',
+        links: {
+            'external': {
+                link: 'https://bikash-mainali.github.io/bm/',
+                label: 'Live',
+                icon: <ExternalLink className="h-4 w-4"/>
+            },
+            'github': {
+                link: 'https://github.com/Bikash-Mainali/portfolio-v1',
+                label: 'Github',
+                icon: <Github className="h-4 w-4"/>
+            }
+        }
     },
     {
         id: 3,
         title: 'Music App — Express & JS',
-        category: 'App',
+        category: 'Web',
         description: 'Full-featured music streaming application built with Node.js, Express, and vanilla JavaScript. Includes playback controls, playlists, and search.',
         tags: ['Node.js', 'Express', 'JavaScript', 'MongoDB'],
-        img: 'https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=600&q=80',
+        img: '/music-app.png',
         links: {
-            link: 'https://github.com/Bikash-Mainali/Music-APP-Express-JavaScript',
-            label: 'GitHub',
-            icon: <Github className="h-4 w-4"/>
+            'github': {
+                link: 'https://github.com/Bikash-Mainali/Music-APP-Express-JavaScript',
+                label: 'Github',
+                icon: <Github className="h-4 w-4"/>
+            }
         }
     },
     {
@@ -41,10 +62,42 @@ const projects = [
         description: 'Large-scale enterprise banking application with microservice architecture. Features real-time transaction processing and secure authentication.',
         tags: ['Java', 'Spring Boot', 'Oracle', 'Angular'],
         img: 'https://images.unsplash.com/photo-1563013544-824ae1b704d3?w=600&q=80',
+    },
+    {
+        id: 5,
+        title: 'Namaste Lekhapadhi',
+        category: 'Web',
+        description: 'Real State Website built with React, TypeScript, Vite and Tailwind CSS. It features a modern design, responsive layout, and interactive UI components.',
+        tags: ['React', 'TypeScript', 'Vite', 'Tailwind CSS'],
+        img: '/namaste-lekhapadhi-site.png',
         links: {
-            link: 'https://github.com/Bikash-Mainali/Music-APP-Express-JavaScript',
-            label: 'Live Site',
-            icon: <ExternalLink className="h-4 w-4"/>
+            'live': {
+                link: 'https://bikash-mainali.github.io/namaste-lekhapadhi/#/',
+                label: 'Live',
+                icon: <ExternalLink className="h-4 w-4"/>
+            },
+            'github': {
+                link: 'https://github.com/Bikash-Mainali/namaste-lekhapadhi',
+                label: 'GitHub',
+                icon: <Github className="h-4 w-4"/>
+            }
+
+        }
+    },
+    {
+        id: 6,
+        title: 'Is It AI? — DeepFake Detection Mobile App',
+        category: 'App',
+        description: 'Mobile app that detects deepfake image using a Python Lambda function for analysis and AWS S3 for storage. Built with React Native and TypeScript.',
+        tags: ['ReactNative', 'TypeScript', 'Python Lambda function', 'AWS S3'],
+        img: '/deepfake-detector.png',
+        links: {
+            'live': {
+                link: 'https://apps.apple.com/us/app/isitai/id6758316655',
+                label: 'Live',
+                icon: <ExternalLink className="h-4 w-4"/>
+            }
+
         }
     },
 ]
@@ -60,7 +113,7 @@ export default function Portfolio() {
     return (
         <section id="portfolio" ref={ref} className="py-28 bg-navy-900/50 relative">
             <div className="absolute inset-0 dot-grid opacity-15"></div>
-            <div className="relative max-w-6xl mx-auto px-6">
+            <div className="relative max-w-7xl mx-auto px-6">
                 <div
                     className={`transition-all duration-700 ${visible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
                     <h2 className="section-title">Projects</h2>
@@ -122,17 +175,18 @@ export default function Portfolio() {
                                 </div>
 
                                 <div className="flex gap-3">
-                                    {project.links && (
+                                    {project.links && Object.entries(project.links).map(([key, value]) => (
                                         <a
-                                            href={project.links.link}
+                                            href={value.link}
                                             target="_blank"
                                             rel="noopener noreferrer"
                                             className="flex items-center gap-2 text-sm font-mono text-teal-400 hover:text-teal-300 transition-colors"
                                         >
                                             <>
-                                                <span>{project.links.icon}</span>{project.links.label}
+                                                <span>{value.icon}</span>{value.label}
                                             </>
                                         </a>
+                                        )
                                     )}
                                 </div>
                             </div>

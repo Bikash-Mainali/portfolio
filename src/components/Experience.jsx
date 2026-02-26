@@ -1,8 +1,8 @@
 import { useInView } from '../hooks/useInView'
-
+import {Barchart, GraduationCap} from '../icons';
 const experiences = [
   {
-    title: 'Senior Software Engineer',
+    title: 'Senior Software Engineer (Full Stack)',
     company: 'CHG Healthcare',
     location: 'Utah, US',
     period: '07/2024 – Present',
@@ -17,7 +17,7 @@ const experiences = [
     tags: ['Java 25', 'Spring Boot', 'Kafka', 'AWS EKS', 'React 19', 'FastAPI', 'MongoDB', 'Grafana', 'Docker', 'Kubernetes', 'CI/CD'],
   },
   {
-    title: 'Java Developer',
+    title: 'Java Developer (Full Stack)',
     company: 'Morgan Stanley',
     location: 'New York, NY',
     period: '07/2023 – 09/2024',
@@ -33,8 +33,8 @@ const experiences = [
     tags: ['Java', 'Spring Boot', 'Kafka', 'Angular 15', 'Redis', 'MongoDB', 'Splunk', 'Sonar', 'IBM DB2', 'Jenkins'],
   },
   {
-    title: 'Java Engineer (Contract)',
-    company: 'Advantis Global Inc. (Client: Apple)',
+    title: 'Java Engineer (Full Stack)',
+    company: 'Client Inc',
     location: 'Cupertino, CA',
     period: '10/2022 – 02/2023',
     type: 'Contract',
@@ -49,7 +49,7 @@ const experiences = [
     tags: ['Java 11', 'Spring Boot', 'Kafka', 'AWS EKS', 'Cassandra', 'Oracle', 'Docker', 'Spinnaker'],
   },
   {
-    title: 'Software Engineer (Contract)',
+    title: 'Software Engineer (Full Stack)',
     company: 'Deerwalk Services Pvt. Ltd.',
     location: 'Kathmandu, Nepal',
     period: '03/2021 – 10/2021',
@@ -65,7 +65,7 @@ const experiences = [
     tags: ['Java', 'Spring Boot', 'Angular 9', 'Kafka', 'Elasticsearch', 'Jenkins', 'OAuth2', 'JWT'],
   },
   {
-    title: 'Java Web Developer',
+    title: 'Java Web Developer (Full Stack)',
     company: 'Datum Systems Pvt. Ltd.',
     location: 'Kathmandu, Nepal',
     period: '03/2020 – 03/2021',
@@ -110,12 +110,12 @@ const education = [
   },
 ]
 
-export default function Resume() {
+export default function Experience() {
   const [ref, visible] = useInView()
 
   return (
-    <section id="resume" ref={ref} className="py-28 relative">
-      <div className="max-w-6xl mx-auto px-6">
+    <section id="experience" ref={ref} className="py-28 relative">
+      <div className="max-w-7xl mx-auto px-6">
         <div className={`transition-all duration-700 ${visible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
           <h2 className="section-title">Experience</h2>
           <div className="section-line"></div>
@@ -185,7 +185,7 @@ export default function Resume() {
             style={{ opacity: visible ? 1 : 0, transform: visible ? 'translateY(0)' : 'translateY(20px)' }}
           >
             <h3 className="font-display text-xl text-white font-semibold mb-6 flex items-center gap-2">
-              <span className="text-teal-400">🎓</span> Education
+              <GraduationCap size='45'/>Education
             </h3>
             <div className="space-y-5">
               {education.map((edu, i) => (
@@ -200,14 +200,14 @@ export default function Resume() {
 
             {/* Facts */}
             <h3 className="font-display text-xl text-white font-semibold mt-10 mb-6 flex items-center gap-2">
-              <span className="text-teal-400">📊</span> At a Glance
+              <Barchart size="45"/> At a Glance
             </h3>
             <div className="grid grid-cols-2 gap-4">
               {[
-                { num: '7', label: 'Projects' },
+                { num: '10', label: 'Projects' },
                 { num: '8+', label: 'Years Exp.' },
                 { num: '1', label: 'In Progress' },
-                { num: '3', label: 'Companies' },
+                { num: '4', label: 'Companies' },
               ].map(f => (
                 <div key={f.label} className="card-glass rounded-xl p-4 text-center">
                   <div className="font-display text-2xl font-bold text-gradient">{f.num}</div>

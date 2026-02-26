@@ -1,9 +1,10 @@
 import { useState, useEffect } from 'react'
 
 const links = [
+  { href: '#home', label: 'Home' },
   { href: '#about', label: 'About' },
   { href: '#skills', label: 'Skills' },
-  { href: '#resume', label: 'Resume' },
+  { href: '#experience', label: 'Experience' },
   { href: '#portfolio', label: 'Portfolio' },
   { href: '#contact', label: 'Contact' },
 ]
@@ -21,9 +22,9 @@ export default function Navbar() {
 
   return (
     <header className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${scrolled ? 'bg-navy-950/90 backdrop-blur-md border-b border-white/5 shadow-xl shadow-black/20' : ''}`}>
-      <div className="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
+      <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
         {/* Logo */}
-        <a href="#hero" className="font-display  text-3xl font-bold text-white hover:text-teal-400 transition-colors">
+        <a href="#home" className="font-display  text-3xl font-bold text-white hover:text-teal-400 transition-colors">
           BM
         </a>
 
@@ -66,11 +67,11 @@ export default function Navbar() {
               onClick={() => { setMenuOpen(false); setActive(l.href); }}
               className="nav-link text-base"
             >
-              <span className="text-teal-400 mr-2">0{i + 1}.</span>{l.label}
+              {l.label}
             </a>
           ))}
           <a href="/BIKASH MAINALI-Resume-v2.pdf" target="_blank" className="btn-outline text-sm py-2 px-4 w-fit">
-            Resume
+            Experience
           </a>
         </nav>
       </div>

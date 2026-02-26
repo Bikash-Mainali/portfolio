@@ -1,8 +1,8 @@
 import Navbar from './components/Navbar'
-import Hero from './components/Hero'
+import Home from './components/Home.jsx'
 import About from './components/About'
 import Skills from './components/Skills'
-import Resume from './components/Resume'
+import Experience from './components/Experience.jsx'
 import Portfolio from './components/Portfolio'
 import Contact from './components/Contact'
 import Footer from './components/Footer'
@@ -12,10 +12,10 @@ export default function App() {
     <>
       <Navbar />
       <main>
-        <Hero />
+        <Home />
         <About />
         <Skills />
-        <Resume />
+        <Experience />
         <Portfolio />
         <Contact />
       </main>

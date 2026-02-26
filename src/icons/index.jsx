@@ -1,0 +1,11 @@
+export { default as Github } from "./Github";
+export { default as Linkedin } from "./Linkedin";
+export { default as Facebook } from "./Facebook";
+export { default as Instagram } from "./Instagram";
+export { default as Send } from "./Send";
+export { default as Mail } from "./Email";
+export { default as MapPinned } from "./MapPinned";
+export { default as ExternalLink } from "./ExternalLink";
+export { default as Phone } from "./Phone";
+export {default as GraduationCap} from "./GraduationCap";
+export {default as Barchart} from "./Barchart";

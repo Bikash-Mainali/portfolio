@@ -10,12 +10,17 @@
   },
   "dependencies": {
     "@emailjs/browser": "^4.4.1",
+    "@supabase/supabase-js": "^2.98.0",
     "install": "^0.13.0",
     "lucide-react": "^0.575.0",
     "npm": "^11.11.0",
     "react": "^18.2.0",
-    "react-dom": "^18.2.0",
-    "react-lucid": "^0.0.1"
+    "react-dom": "^18.3.1",
+    "react-lucid": "^0.0.1",
+    "react-markdown": "^10.1.0",
+    "react-router": "^7.13.1",
+    "rehype-highlight": "^7.0.2",
+    "remark-gfm": "^4.0.1"
   },
   "devDependencies": {
     "@vitejs/plugin-react": "^4.2.0",

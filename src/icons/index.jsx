@@ -9,3 +9,5 @@ export { default as ExternalLink } from "./ExternalLink";
 export { default as Phone } from "./Phone";
 export {default as GraduationCap} from "./GraduationCap";
 export {default as Barchart} from "./Barchart";
+export {default as LeftArrow} from "./LeftArrow";
+export {default as Loader} from "./Loader.jsx";

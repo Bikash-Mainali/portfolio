@@ -18,7 +18,6 @@ export default function Contact() {
     const [sending, setSending] = useState(false)
 
     function handleChange(e) {
-        debugger
         setForm({...form, [e.target.name]: e.target.value})
     }
 

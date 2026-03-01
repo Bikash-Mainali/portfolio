@@ -76,7 +76,7 @@ export default function Home() {
                             style={{animationDelay: '0.5s', opacity: 0}}
                         >
                             Full-stack engineer with <span
-                            className="text-teal-400 font-medium">8+ years</span>
+                            className="text-teal-400 font-medium">8+ years &nbsp;</span>
                           Full Stack Software Engineer building scalable, high-performance solutions across healthcare, ad-tech, banking, and e-commerce. Passionate about designing robust systems, bridging frontend and backend technologies, and delivering software that drives business impact. Always excited to solve complex problems and innovate.                        </p>
 
                         <div className="flex flex-wrap gap-4 animate-fade-up"

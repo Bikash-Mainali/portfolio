@@ -1,44 +1,48 @@
-import { useState, useRef, useCallback } from "react";
-import { Link } from "react-router";
-import { supabase } from "../util/supabaseClient.js";
+import {useState, useRef, useCallback} from "react";
+import {Link} from "react-router";
+import {supabase} from "../util/supabaseClient.js";
+import {LeftArrow} from "../icons/index.jsx";
 
 // ─── Static Data ──────────────────────────────────────────────────────────────
 const CATEGORIES = [
-    { id: 1, name: "Technology" }, { id: 2, name: "Lifestyle" },
-    { id: 3, name: "Travel" },     { id: 4, name: "Music" },
-    { id: 5, name: "Food" },       { id: 6, name: "Fashion" },
-    { id: 7, name: "Health" },     { id: 8, name: "Sports" },
-    { id: 9, name: "Education" },  { id: 10, name: "Finance" },
+    {id: 1, name: "Technology"}, {id: 2, name: "Lifestyle"},
+    {id: 3, name: "Travel"}, {id: 4, name: "Music"},
+    {id: 5, name: "Food"}, {id: 6, name: "Fashion"},
+    {id: 7, name: "Health"}, {id: 8, name: "Sports"},
+    {id: 9, name: "Education"}, {id: 10, name: "Finance"},
 ];
 
 const TAGS_BY_CATEGORY = {
-    1: [{ id:1,name:"Java"},{ id:2,name:"Python"},{ id:3,name:"JavaScript"},{ id:4,name:"React"},{ id:5,name:"Node.js"},{ id:6,name:"Docker"}],
-    2: [{ id:7,name:"Wellness"},{ id:8,name:"Minimalism"},{ id:9,name:"Productivity"}],
-    3: [{ id:10,name:"Adventure"},{ id:11,name:"Backpacking"},{ id:12,name:"Budget Travel"}],
-    4: [{ id:13,name:"Indie"},{ id:14,name:"Jazz"},{ id:15,name:"Classical"}],
-    5: [{ id:16,name:"Recipes"},{ id:17,name:"Vegan"},{ id:18,name:"Street Food"}],
-    6: [{ id:19,name:"Trends"},{ id:20,name:"Sustainable"},{ id:21,name:"Vintage"}],
-    7: [{ id:22,name:"Fitness"},{ id:23,name:"Mental Health"},{ id:24,name:"Nutrition"}],
-    8: [{ id:25,name:"Football"},{ id:26,name:"Basketball"},{ id:27,name:"Running"}],
-    9: [{ id:28,name:"Online Learning"},{ id:29,name:"Tutorials"},{ id:30,name:"Research"}],
-    10:[{ id:31,name:"Investing"},{ id:32,name:"Crypto"},{ id:33,name:"Budgeting"}],
+    1: [{id: 1, name: "Java"}, {id: 2, name: "Python"}, {id: 3, name: "JavaScript"}, {id: 4, name: "React"}, {
+        id: 5,
+        name: "Node.js"
+    }, {id: 6, name: "Docker"}],
+    2: [{id: 7, name: "Wellness"}, {id: 8, name: "Minimalism"}, {id: 9, name: "Productivity"}],
+    3: [{id: 10, name: "Adventure"}, {id: 11, name: "Backpacking"}, {id: 12, name: "Budget Travel"}],
+    4: [{id: 13, name: "Indie"}, {id: 14, name: "Jazz"}, {id: 15, name: "Classical"}],
+    5: [{id: 16, name: "Recipes"}, {id: 17, name: "Vegan"}, {id: 18, name: "Street Food"}],
+    6: [{id: 19, name: "Trends"}, {id: 20, name: "Sustainable"}, {id: 21, name: "Vintage"}],
+    7: [{id: 22, name: "Fitness"}, {id: 23, name: "Mental Health"}, {id: 24, name: "Nutrition"}],
+    8: [{id: 25, name: "Football"}, {id: 26, name: "Basketball"}, {id: 27, name: "Running"}],
+    9: [{id: 28, name: "Online Learning"}, {id: 29, name: "Tutorials"}, {id: 30, name: "Research"}],
+    10: [{id: 31, name: "Investing"}, {id: 32, name: "Crypto"}, {id: 33, name: "Budgeting"}],
 };
 
 const FONT_FAMILIES = [
-    { label: "Default",    value: "Georgia, serif" },
-    { label: "Sans-serif", value: "Arial, sans-serif" },
-    { label: "Monospace",  value: "'Courier New', monospace" },
-    { label: "Serif",      value: "'Times New Roman', serif" },
-    { label: "Modern",     value: "'Trebuchet MS', sans-serif" },
+    {label: "Default", value: "Georgia, serif"},
+    {label: "Sans-serif", value: "Arial, sans-serif"},
+    {label: "Monospace", value: "'Courier New', monospace"},
+    {label: "Serif", value: "'Times New Roman', serif"},
+    {label: "Modern", value: "'Trebuchet MS', sans-serif"},
 ];
 
 const FONT_SIZES = [
-    { label: "Small",   value: "13px" },
-    { label: "Normal",  value: "17px" },
-    { label: "Medium",  value: "20px" },
-    { label: "Large",   value: "24px" },
-    { label: "X-Large", value: "30px" },
-    { label: "Huge",    value: "38px" },
+    {label: "Small", value: "13px"},
+    {label: "Normal", value: "17px"},
+    {label: "Medium", value: "20px"},
+    {label: "Large", value: "24px"},
+    {label: "X-Large", value: "30px"},
+    {label: "Huge", value: "38px"},
 ];
 
 const BLOCK_TAGS = new Set(["p", "h1", "h2", "h3", "h4", "pre", "blockquote", "div"]);
@@ -50,25 +54,46 @@ function nodeToMarkdown(node) {
     const tag = node.tagName.toLowerCase();
     const inner = Array.from(node.childNodes).map(nodeToMarkdown).join("");
     switch (tag) {
-        case "h1": return `# ${inner}\n\n`;
-        case "h2": return `## ${inner}\n\n`;
-        case "h3": return `### ${inner}\n\n`;
-        case "h4": return `#### ${inner}\n\n`;
-        case "p":  return `${inner}\n\n`;
-        case "br": return "\n";
-        case "strong": case "b": return `**${inner}**`;
-        case "em": case "i":     return `*${inner}*`;
-        case "code": return node.parentElement?.tagName?.toLowerCase() === "pre" ? inner : `\`${inner}\``;
-        case "pre":  return "```\n" + inner + "\n```\n\n";
-        case "ul":   return Array.from(node.children).map(li => `- ${nodeToMarkdown(li).trim()}`).join("\n") + "\n\n";
-        case "ol":   return Array.from(node.children).map((li, i) => `${i+1}. ${nodeToMarkdown(li).trim()}`).join("\n") + "\n\n";
-        case "li":   return inner;
-        case "a":    return `[${inner}](${node.getAttribute("href") || ""})`;
-        case "img":  return `![${node.getAttribute("alt") || ""}](${node.getAttribute("src") || ""})\n\n`;
-        case "hr":   return `---\n\n`;
-        case "blockquote": return inner.split("\n").filter(Boolean).map(l => `> ${l}`).join("\n") + "\n\n";
-        case "span": return inner; // strip span wrappers, they don't map to markdown
-        default:     return inner + "\n";
+        case "h1":
+            return `# ${inner}\n\n`;
+        case "h2":
+            return `## ${inner}\n\n`;
+        case "h3":
+            return `### ${inner}\n\n`;
+        case "h4":
+            return `#### ${inner}\n\n`;
+        case "p":
+            return `${inner}\n\n`;
+        case "br":
+            return "\n";
+        case "strong":
+        case "b":
+            return `**${inner}**`;
+        case "em":
+        case "i":
+            return `*${inner}*`;
+        case "code":
+            return node.parentElement?.tagName?.toLowerCase() === "pre" ? inner : `\`${inner}\``;
+        case "pre":
+            return "```\n" + inner + "\n```\n\n";
+        case "ul":
+            return Array.from(node.children).map(li => `- ${nodeToMarkdown(li).trim()}`).join("\n") + "\n\n";
+        case "ol":
+            return Array.from(node.children).map((li, i) => `${i + 1}. ${nodeToMarkdown(li).trim()}`).join("\n") + "\n\n";
+        case "li":
+            return inner;
+        case "a":
+            return `[${inner}](${node.getAttribute("href") || ""})`;
+        case "img":
+            return `![${node.getAttribute("alt") || ""}](${node.getAttribute("src") || ""})\n\n`;
+        case "hr":
+            return `---\n\n`;
+        case "blockquote":
+            return inner.split("\n").filter(Boolean).map(l => `> ${l}`).join("\n") + "\n\n";
+        case "span":
+            return inner; // strip span wrappers, they don't map to markdown
+        default:
+            return inner + "\n";
     }
 }
 
@@ -251,7 +276,7 @@ function insertImageAtRange(src, range, editorEl) {
 }
 
 // ─── Toolbar Button ───────────────────────────────────────────────────────────
-function TBtn({ onAction, title, children }) {
+function TBtn({onAction, title, children}) {
     return (
         <button
             onMouseDown={(e) => {
@@ -268,17 +293,17 @@ function TBtn({ onAction, title, children }) {
 
 // ─── Main Component ───────────────────────────────────────────────────────────
 export default function PostEditor() {
-    const editorRef     = useRef(null);
-    const fileInputRef  = useRef(null);
+    const editorRef = useRef(null);
+    const fileInputRef = useRef(null);
     const savedRangeRef = useRef(null); // persists selection across toolbar interactions
 
-    const [title, setTitle]               = useState("");
-    const [categoryId, setCategoryId]     = useState("");
+    const [title, setTitle] = useState("");
+    const [categoryId, setCategoryId] = useState("");
     const [selectedTags, setSelectedTags] = useState([]);
     const [isPublishing, setIsPublishing] = useState(false);
-    const [published, setPublished]       = useState(false);
-    const [error, setError]               = useState(null);
-    const [wordCount, setWordCount]       = useState(0);
+    const [published, setPublished] = useState(false);
+    const [error, setError] = useState(null);
+    const [wordCount, setWordCount] = useState(0);
 
     const availableTags = categoryId ? TAGS_BY_CATEGORY[parseInt(categoryId)] || [] : [];
 
@@ -330,17 +355,17 @@ export default function PostEditor() {
         setError(null);
         try {
             const markdown = serializeToMarkdown(editorRef.current);
-            const { data: post, error: postError } = await supabase
+            const {data: post, error: postError} = await supabase
                 .from("posts")
-                .insert({ title, content: markdown, category_id: parseInt(categoryId) })
+                .insert({title, content: markdown, category_id: parseInt(categoryId)})
                 .select()
                 .single();
             if (postError) throw postError;
 
             if (selectedTags.length > 0) {
-                const { error: tagError } = await supabase
+                const {error: tagError} = await supabase
                     .from("post_tags")
-                    .insert(selectedTags.map((t) => ({ post_id: post.id, tag_id: t.id })));
+                    .insert(selectedTags.map((t) => ({post_id: post.id, tag_id: t.id})));
                 if (tagError) throw tagError;
             }
             setPublished(true);
@@ -354,8 +379,11 @@ export default function PostEditor() {
     const handleReset = () => {
         setTitle("");
         if (editorRef.current) editorRef.current.innerHTML = "";
-        setCategoryId(""); setSelectedTags([]);
-        setPublished(false); setError(null); setWordCount(0);
+        setCategoryId("");
+        setSelectedTags([]);
+        setPublished(false);
+        setError(null);
+        setWordCount(0);
         savedRangeRef.current = null;
     };
 
@@ -373,16 +401,18 @@ export default function PostEditor() {
                 <div className="text-center max-w-sm p-8">
                     <div className="w-16 h-16 rounded-full bg-green-100 flex items-center justify-center mx-auto mb-5">
                         <svg className="w-8 h-8 text-green-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 13l4 4L19 7" />
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 13l4 4L19 7"/>
                         </svg>
                     </div>
                     <h2 className="text-2xl font-bold text-gray-900 mb-1">Published!</h2>
                     <p className="text-gray-500 text-sm mb-6">"{title}" is now live.</p>
                     <div className="flex gap-3 justify-center">
-                        <button onClick={handleReset} className="px-5 py-2.5 bg-white border border-gray-200 text-gray-700 rounded-lg text-sm font-medium hover:bg-gray-50 transition-colors">
+                        <button onClick={handleReset}
+                                className="px-5 py-2.5 bg-white border border-gray-200 text-gray-700 rounded-lg text-sm font-medium hover:bg-gray-50 transition-colors">
                             Write Another
                         </button>
-                        <Link to="/blogs" className="px-5 py-2.5 bg-indigo-600 text-white rounded-lg text-sm font-semibold hover:bg-indigo-700 transition-colors">
+                        <Link to="/blogs"
+                              className="px-5 py-2.5 bg-indigo-600 text-white rounded-lg text-sm font-semibold hover:bg-indigo-700 transition-colors">
                             View All Posts
                         </Link>
                     </div>
@@ -397,14 +427,14 @@ export default function PostEditor() {
             {/* ── Top Bar ── */}
             <header className="sticky top-0 z-30 bg-white border-b border-gray-200 shadow-sm">
                 <div className="max-w-5xl mx-auto px-4 h-13 flex items-center justify-between gap-4 py-2">
-                    <div className="flex items-center gap-2">
-                        <Link to="/" className="p-1.5 text-gray-400 hover:text-gray-700 transition-colors rounded">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="w-5 h-5">
-                                <path d="M15 19l-7-7 7-7"/>
-                            </svg>
+                    <div className="flex items-center text-black">
+                        <Link to="/" className="p-1.5  hover:text-gray-700 transition-colors rounded">
+                            <LeftArrow/>
                         </Link>
-                        <span className="text-sm font-semibold text-gray-800">New Post</span>
+                        Back
                     </div>
+                    <div className="text-xl font-semibold text-gray-800">New Post</div>
+
                     <div className="flex items-center gap-3">
                         {wordCount > 0 && (
                             <span className="text-xs text-gray-400 hidden sm:block">
@@ -467,7 +497,7 @@ export default function PostEditor() {
                         >
                             <option value="" disabled>Font</option>
                             {FONT_FAMILIES.map((f) => (
-                                <option key={f.value} value={f.value} style={{ fontFamily: f.value }}>{f.label}</option>
+                                <option key={f.value} value={f.value} style={{fontFamily: f.value}}>{f.label}</option>
                             ))}
                         </select>
 
@@ -487,7 +517,7 @@ export default function PostEditor() {
                             ))}
                         </select>
 
-                        <div className="w-px h-5 bg-gray-200 mx-0.5" />
+                        <div className="w-px h-5 bg-gray-200 mx-0.5"/>
 
                         {/* Bold */}
                         <TBtn
@@ -497,7 +527,7 @@ export default function PostEditor() {
                             <b>B</b>
                         </TBtn>
 
-                        <div className="w-px h-5 bg-gray-200 mx-0.5" />
+                        <div className="w-px h-5 bg-gray-200 mx-0.5"/>
 
                         {/* Code block */}
                         <TBtn
@@ -507,14 +537,15 @@ export default function PostEditor() {
                             <span className="font-mono text-xs">&lt;/&gt;</span>
                         </TBtn>
 
-                        <div className="w-px h-5 bg-gray-200 mx-0.5" />
+                        <div className="w-px h-5 bg-gray-200 mx-0.5"/>
 
                         {/* Image upload */}
                         <TBtn
                             onAction={() => fileInputRef.current?.click()}
                             title="Upload Image"
                         >
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="w-4 h-4 inline">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"
+                                 className="w-4 h-4 inline">
                                 <rect x="3" y="3" width="18" height="18" rx="2"/>
                                 <circle cx="8.5" cy="8.5" r="1.5"/>
                                 <polyline points="21 15 16 10 5 21"/>
@@ -538,7 +569,7 @@ export default function PostEditor() {
                             onChange={(e) => setTitle(e.target.value)}
                             placeholder="Post title…"
                             className="w-full text-3xl font-bold text-gray-900 placeholder-gray-300 outline-none bg-transparent border-b-2 border-transparent focus:border-indigo-200 pb-2 transition-colors"
-                            style={{ fontFamily: "Georgia, serif" }}
+                            style={{fontFamily: "Georgia, serif"}}
                         />
                     </div>
 
@@ -552,7 +583,7 @@ export default function PostEditor() {
                         onMouseUp={handleSelectionChange}
                         data-placeholder="Start writing your post…"
                         className="px-8 pb-16 pt-2 min-h-[480px] outline-none text-gray-800"
-                        style={{ fontFamily: "Georgia, serif", fontSize: "17px", lineHeight: "1.8" }}
+                        style={{fontFamily: "Georgia, serif", fontSize: "17px", lineHeight: "1.8"}}
                     />
                 </div>
 
@@ -562,7 +593,10 @@ export default function PostEditor() {
                         <h3 className="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-3">Category</h3>
                         <select
                             value={categoryId}
-                            onChange={(e) => { setCategoryId(e.target.value); setSelectedTags([]); }}
+                            onChange={(e) => {
+                                setCategoryId(e.target.value);
+                                setSelectedTags([]);
+                            }}
                             className="w-full bg-gray-50 border border-gray-200 text-gray-700 rounded-lg px-3 py-2 text-sm outline-none focus:border-indigo-400 transition-colors"
                         >
                             <option value="">Select…</option>

@@ -31,10 +31,10 @@ export default function Login({displayLoginModal}) {
     }
 
     return (
-        <div className="fixed inset-0 z-[60] flex items-center justify-center bg-black/50 backdrop-blur-sm"
+        <div className="fixed inset-0 z-[60] flex items-center justify-center bg-black/50 backdrop-blur-sm p-5"
              onClick={closeModal}
         >
-            <div className="bg-navy-900 border border-white/10 rounded-xl p-8 w-full max-w-md shadow-2xl"
+            <div className="bg-navy-900 border border-gray-600 rounded-xl p-8 w-full max-w-md shadow-[1px_1px_20px_16px_#404342]"
                  onClick={(e) => e.stopPropagation()}>
                 <div className="flex justify-between items-center mb-6">
                     <h2 className="text-2xl font-bold text-white">Login</h2>
@@ -54,7 +54,7 @@ export default function Login({displayLoginModal}) {
                             name="email"
                             value={userCredentials.email}
                             onChange={handleOnChange}
-                            className="w-full px-4 py-2 bg-navy-950 border border-white/10 rounded-lg text-white focus:outline-none focus:border-teal-400 transition-colors"
+                            className="w-full px-4 py-2 bg-navy-950 border border-gray-600 rounded-lg text-white focus:outline-none focus:border-teal-400 transition-colors"
                             placeholder="your@email.com"
                             required
                         />
@@ -67,7 +67,7 @@ export default function Login({displayLoginModal}) {
                             name="password"
                             value={userCredentials.password}
                             onChange={handleOnChange}
-                            className="w-full px-4 py-2 bg-navy-950 border border-white/10 rounded-lg text-white focus:outline-none focus:border-teal-400 transition-colors"
+                            className="w-full px-4 py-2 bg-navy-950 border border-gray-600  rounded-lg text-white focus:outline-none focus:border-teal-400 transition-colors"
                             placeholder="••••••••"
                             required
                         />

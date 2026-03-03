@@ -5,7 +5,6 @@ import {AuthenticationEnum} from "../util/AuthenticationEnum.js";
 const AdminLayout = () => {
     const navigate = useNavigate();
     if (!localStorage.getItem(AuthenticationEnum.ACCESS_TOKEN)) {
-        debugger
         navigate('/home');
         return null;
     }

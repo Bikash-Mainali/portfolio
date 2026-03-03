@@ -27,7 +27,6 @@ export default function Navbar() {
     }, [])
 
     const displayLoginModal = (showModal) => {
-        debugger
         setShowLogin(showModal)
     }
 
@@ -43,7 +42,7 @@ export default function Navbar() {
                     </a>
 
                     {/* Desktop Nav */}
-                    <nav className="hidden md:flex items-center gap-8">
+                    <nav className="hidden md:flex items-center gap-8 py-3">
                         {links.map((l) => (
                             <a
                                 key={l.href}
@@ -53,6 +52,7 @@ export default function Navbar() {
                             >
                                 {l.label}
                             </a>
+
                         ))}
                         <Link to={'/blogs'} className="nav-link text-lg">
                             Blogs
@@ -63,7 +63,7 @@ export default function Navbar() {
                         </a>
                         <button
                             onClick={() => setShowLogin(true)}
-                            className="bg-teal-500 hover:bg-teal-600 text-white text-sm py-2 px-4 rounded-lg transition-colors"
+                            className="bg-teal-500 hover:bg-teal-600 text-white text-sm py-3 px-7 rounded-lg transition-colors"
                         >
                             Login
                         </button>
@@ -85,10 +85,13 @@ export default function Navbar() {
                 </div>
 
                 {/* Mobile Menu */}
+                {menuOpen && (
                 <div
-                    className={`md:hidden transition-all duration-300 overflow-hidden ${menuOpen ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'}`}>
+                    className={`md:hidden transition-all duration-300 overflow-hidden`}>
                     <nav
-                        className="bg-navy-900/95 backdrop-blur-xl border-t border-white/5 px-6 py-6 flex flex-col gap-5">
+                        className="bg-navy-800 backdrop-blur-xl  border-y border-gray-500 px-6 py-6 flex flex-col gap-5"
+                        onClick={() => setMenuOpen(false)}
+                    >
                         {links.map((l) => (
                             <a
                                 key={l.href}
@@ -97,26 +100,30 @@ export default function Navbar() {
                                     setMenuOpen(false);
                                     setActive(l.href);
                                 }}
-                                className="nav-link text-base"
+                                className={`nav-link ${active === l.href ? 'text-teal-400' : ''} text-lg`}
                             >
                                 {l.label}
                             </a>
                         ))}
+                        <Link to={'/blogs'} className="nav-link text-lg">
+                            Blogs
+                        </Link>
                         <a href="/BIKASH MAINALI-Resume-v2.pdf" target="_blank"
                            className="btn-outline text-sm py-2 px-4 w-fit">
-                            Experience
+                            Resume
                         </a>
                         <button
                             onClick={() => {
                                 setShowLogin(true);
                                 setMenuOpen(false);
                             }}
-                            className="bg-teal-500 hover:bg-teal-600 text-white text-sm py-2 px-4 rounded-lg transition-colors w-fit"
+                            className="bg-teal-500 hover:bg-teal-600 text-white text-sm py-3 px-7 rounded-lg transition-colors w-fit"
                         >
                             Login
                         </button>
                     </nav>
                 </div>
+                    )}
             </header>
 
             {/* Login Modal */}

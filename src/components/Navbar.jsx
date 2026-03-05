@@ -24,6 +24,15 @@ export default function Navbar() {
         return () => window.removeEventListener('scroll', onScroll)
     }, [])
 
+    // Close mobile menu on resize to desktop
+    useEffect(() => {
+        const onResize = () => {
+            if (window.innerWidth >= 768) setMenuOpen(false)
+        }
+        window.addEventListener('resize', onResize)
+        return () => window.removeEventListener('resize', onResize)
+    }, [])
+
     const displayLoginModal = (showModal) => {
         setShowLogin(showModal)
     }
@@ -37,40 +46,40 @@ export default function Navbar() {
                         : ''
                 }`}
             >
-                <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
+                <div className="max-w-7xl mx-auto px-4 sm:px-6 py-3 sm:py-4 flex items-center justify-between">
                     {/* Logo */}
                     <a
                         href="#home"
-                        className="font-display text-3xl font-bold text-stone-900 dark:text-white hover:text-amber-600 dark:hover:text-teal-400 transition-colors"
+                        className="font-display text-2xl sm:text-3xl font-bold text-stone-900 dark:text-white hover:text-amber-600 dark:hover:text-teal-400 transition-colors"
                     >
                         BM
                     </a>
 
                     {/* Desktop Nav */}
-                    <nav className="hidden md:flex items-center gap-8 py-3">
+                    <nav className="hidden md:flex items-center gap-6 lg:gap-8 py-3">
                         {links.map((l) => (
                             <a
                                 key={l.href}
                                 href={l.href}
                                 onClick={() => setActive(l.href)}
-                                className={`nav-link ${active === l.href ? 'text-amber-600 dark:text-teal-400' : ''} text-lg`}
+                                className={`nav-link ${active === l.href ? 'text-amber-600 dark:text-teal-400' : ''} text-base lg:text-lg`}
                             >
                                 {l.label}
                             </a>
                         ))}
-                        <Link to={'/blogs'} className="nav-link text-lg">
+                        <Link to={'/blogs'} className="nav-link text-base lg:text-lg">
                             Blogs
                         </Link>
                         <a
                             href="/BIKASH MAINALI-Resume-v2.pdf"
                             target="_blank"
-                            className="btn-outline text-lg py-2 px-4"
+                            className="btn-outline text-base lg:text-lg py-2 px-3 lg:px-4"
                         >
                             Resume
                         </a>
                         <button
                             onClick={() => setShowLogin(true)}
-                            className="bg-amber-600 hover:bg-amber-700 dark:bg-teal-500 dark:hover:bg-teal-600 text-white text-sm py-3 px-7 rounded-lg transition-colors"
+                            className="bg-amber-600 hover:bg-amber-700 dark:bg-teal-500 dark:hover:bg-teal-600 text-white text-sm py-2.5 lg:py-3 px-5 lg:px-7 rounded-lg transition-colors"
                         >
                             Login
                         </button>
@@ -99,47 +108,53 @@ export default function Navbar() {
                 </div>
 
                 {/* Mobile Menu */}
-                {menuOpen && (
-                    <div className="md:hidden transition-all duration-300 overflow-hidden">
-                        <nav
-                            className="bg-stone-100 dark:bg-navy-800 backdrop-blur-xl border-y border-stone-300 dark:border-gray-500 px-6 py-6 flex flex-col gap-5"
+                <div
+                    className={`md:hidden transition-all duration-300 ease-in-out overflow-hidden ${
+                        menuOpen ? 'max-h-screen opacity-100' : 'max-h-0 opacity-0'
+                    }`}
+                >
+                    <nav
+                        className="bg-stone-100 dark:bg-navy-800 backdrop-blur-xl border-y border-stone-300 dark:border-gray-500 px-6 py-6 flex flex-col gap-5"
+                    >
+                        {links.map((l) => (
+                            <a
+                                key={l.href}
+                                href={l.href}
+                                onClick={() => {
+                                    setMenuOpen(false);
+                                    setActive(l.href);
+                                }}
+                                className={`nav-link ${active === l.href ? 'text-amber-600 dark:text-teal-400' : ''} text-lg`}
+                            >
+                                {l.label}
+                            </a>
+                        ))}
+                        <Link
+                            to={'/blogs'}
+                            className="nav-link text-lg"
                             onClick={() => setMenuOpen(false)}
                         >
-                            {links.map((l) => (
-                                <a
-                                    key={l.href}
-                                    href={l.href}
-                                    onClick={() => {
-                                        setMenuOpen(false);
-                                        setActive(l.href);
-                                    }}
-                                    className={`nav-link ${active === l.href ? 'text-amber-600 dark:text-teal-400' : ''} text-lg`}
-                                >
-                                    {l.label}
-                                </a>
-                            ))}
-                            <Link to={'/blogs'} className="nav-link text-lg">
-                                Blogs
-                            </Link>
-                            <a
-                                href="/BIKASH MAINALI-Resume-v2.pdf"
-                                target="_blank"
-                                className="btn-outline text-sm py-2 px-4 w-fit"
-                            >
-                                Resume
-                            </a>
-                            <button
-                                onClick={() => {
-                                    setShowLogin(true);
-                                    setMenuOpen(false);
-                                }}
-                                className="bg-amber-600 hover:bg-amber-700 dark:bg-teal-500 dark:hover:bg-teal-600 text-white text-sm py-3 px-7 rounded-lg transition-colors w-fit"
-                            >
-                                Login
-                            </button>
-                        </nav>
-                    </div>
-                )}
+                            Blogs
+                        </Link>
+                        <a
+                            href="/BIKASH MAINALI-Resume-v2.pdf"
+                            target="_blank"
+                            className="btn-outline text-sm py-2 px-4 w-fit"
+                            onClick={() => setMenuOpen(false)}
+                        >
+                            Resume
+                        </a>
+                        <button
+                            onClick={() => {
+                                setShowLogin(true);
+                                setMenuOpen(false);
+                            }}
+                            className="bg-amber-600 hover:bg-amber-700 dark:bg-teal-500 dark:hover:bg-teal-600 text-white text-sm py-3 px-7 rounded-lg transition-colors w-fit"
+                        >
+                            Login
+                        </button>
+                    </nav>
+                </div>
             </header>
 
             {/* Login Modal */}

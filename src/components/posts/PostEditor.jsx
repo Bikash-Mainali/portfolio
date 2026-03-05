@@ -1,49 +1,9 @@
 import {useState, useRef, useCallback} from "react";
 import {Link} from "react-router";
-import {supabase} from "../util/supabaseClient.js";
-import {LeftArrow} from "../icons/index.jsx";
-
-// ─── Static Data ──────────────────────────────────────────────────────────────
-const CATEGORIES = [
-    {id: 1, name: "Technology"}, {id: 2, name: "Lifestyle"},
-    {id: 3, name: "Travel"}, {id: 4, name: "Music"},
-    {id: 5, name: "Food"}, {id: 6, name: "Fashion"},
-    {id: 7, name: "Health"}, {id: 8, name: "Sports"},
-    {id: 9, name: "Education"}, {id: 10, name: "Finance"},
-];
-
-const TAGS_BY_CATEGORY = {
-    1: [{id: 1, name: "Java"}, {id: 2, name: "Python"}, {id: 3, name: "JavaScript"}, {id: 4, name: "React"}, {
-        id: 5,
-        name: "Node.js"
-    }, {id: 6, name: "Docker"}],
-    2: [{id: 7, name: "Wellness"}, {id: 8, name: "Minimalism"}, {id: 9, name: "Productivity"}],
-    3: [{id: 10, name: "Adventure"}, {id: 11, name: "Backpacking"}, {id: 12, name: "Budget Travel"}],
-    4: [{id: 13, name: "Indie"}, {id: 14, name: "Jazz"}, {id: 15, name: "Classical"}],
-    5: [{id: 16, name: "Recipes"}, {id: 17, name: "Vegan"}, {id: 18, name: "Street Food"}],
-    6: [{id: 19, name: "Trends"}, {id: 20, name: "Sustainable"}, {id: 21, name: "Vintage"}],
-    7: [{id: 22, name: "Fitness"}, {id: 23, name: "Mental Health"}, {id: 24, name: "Nutrition"}],
-    8: [{id: 25, name: "Football"}, {id: 26, name: "Basketball"}, {id: 27, name: "Running"}],
-    9: [{id: 28, name: "Online Learning"}, {id: 29, name: "Tutorials"}, {id: 30, name: "Research"}],
-    10: [{id: 31, name: "Investing"}, {id: 32, name: "Crypto"}, {id: 33, name: "Budgeting"}],
-};
-
-const FONT_FAMILIES = [
-    {label: "Default", value: "Georgia, serif"},
-    {label: "Sans-serif", value: "Arial, sans-serif"},
-    {label: "Monospace", value: "'Courier New', monospace"},
-    {label: "Serif", value: "'Times New Roman', serif"},
-    {label: "Modern", value: "'Trebuchet MS', sans-serif"},
-];
-
-const FONT_SIZES = [
-    {label: "Small", value: "13px"},
-    {label: "Normal", value: "17px"},
-    {label: "Medium", value: "20px"},
-    {label: "Large", value: "24px"},
-    {label: "X-Large", value: "30px"},
-    {label: "Huge", value: "38px"},
-];
+import {supabase} from "../../util/supabaseClient.js";
+import {LeftArrow} from "../../icons/index.jsx";
+import {CATEGORIES, FONT_FAMILIES, FONT_SIZES, TAGS_BY_CATEGORY} from "../constants/BlogConstants.js";
+import TBtn from "./TBtn.jsx";
 
 const BLOCK_TAGS = new Set(["p", "h1", "h2", "h3", "h4", "pre", "blockquote", "div"]);
 
@@ -91,7 +51,7 @@ function nodeToMarkdown(node) {
         case "blockquote":
             return inner.split("\n").filter(Boolean).map(l => `> ${l}`).join("\n") + "\n\n";
         case "span":
-            return inner; // strip span wrappers, they don't map to markdown
+            return inner;
         default:
             return inner + "\n";
     }
@@ -108,14 +68,12 @@ function serializeToMarkdown(el) {
 
 // ─── Selection / Range helpers ────────────────────────────────────────────────
 
-/** Snapshot the current browser selection as a cloned Range */
 function getActiveRange() {
     const sel = window.getSelection();
     if (!sel || sel.rangeCount === 0) return null;
     return sel.getRangeAt(0).cloneRange();
 }
 
-/** Make a previously saved Range the active browser selection */
 function applyRange(range) {
     if (!range) return;
     const sel = window.getSelection();
@@ -123,10 +81,6 @@ function applyRange(range) {
     sel.addRange(range);
 }
 
-/**
- * Walk up the DOM to find the nearest block-level element
- * whose direct parent is the editor root.
- */
 function getBlockAncestor(node, editorEl) {
     let current = node.nodeType === Node.TEXT_NODE ? node.parentElement : node;
     while (current && current !== editorEl) {
@@ -138,7 +92,6 @@ function getBlockAncestor(node, editorEl) {
     return null;
 }
 
-/** Walk up to find the nearest ancestor with a given tag name */
 function findAncestor(node, tagName) {
     let current = node.nodeType === Node.TEXT_NODE ? node.parentElement : node;
     while (current) {
@@ -148,7 +101,6 @@ function findAncestor(node, tagName) {
     return null;
 }
 
-/** Replace a node with its own children (remove wrapper, keep contents) */
 function unwrapNode(node) {
     const parent = node.parentNode;
     while (node.firstChild) parent.insertBefore(node.firstChild, node);
@@ -157,58 +109,44 @@ function unwrapNode(node) {
 
 // ─── Core editing operations ──────────────────────────────────────────────────
 
-/**
- * BOLD — toggle <strong> on the current selection.
- * Already bold → unwrap. Not bold → wrap in <strong>.
- */
 function toggleBold(range) {
     if (!range || range.collapsed) return;
 
     const ancestor = findAncestor(range.commonAncestorContainer, "strong");
     if (ancestor) {
-        // Remove bold: replace <strong> with its children
         unwrapNode(ancestor);
         return;
     }
 
-    // Add bold: pull out selected nodes, wrap in <strong>, re-insert
     const fragment = range.extractContents();
     const strong = document.createElement("strong");
     strong.appendChild(fragment);
     range.insertNode(strong);
 
-    // Restore selection around new <strong>
     const newRange = document.createRange();
     newRange.selectNodeContents(strong);
     applyRange(newRange);
 }
 
-/**
- * FORMAT BLOCK — change the block tag wrapping the cursor.
- * <p>Hello</p>  →  <h2>Hello</h2>
- */
 function formatBlock(tag, range, editorEl) {
     if (!range) return;
 
     const block = getBlockAncestor(range.commonAncestorContainer, editorEl);
 
     if (block) {
-        // Swap the tag, keep inner HTML
         const newBlock = document.createElement(tag);
         newBlock.innerHTML = block.innerHTML;
         block.replaceWith(newBlock);
 
-        // Move cursor to end of new block
         const newRange = document.createRange();
         newRange.selectNodeContents(newBlock);
         newRange.collapse(false);
         applyRange(newRange);
     } else {
-        // No block ancestor found — wrap selected content directly
         const newBlock = document.createElement(tag);
         newBlock.appendChild(
             range.collapsed
-                ? document.createTextNode("\u200B") // zero-width space so cursor has somewhere to land
+                ? document.createTextNode("\u200B")
                 : range.extractContents()
         );
         range.insertNode(newBlock);
@@ -220,15 +158,9 @@ function formatBlock(tag, range, editorEl) {
     }
 }
 
-/**
- * SPAN STYLE — apply font-family or font-size to the selected text.
- * Wraps selection in <span style="...">. If already wrapped, updates in place.
- * styleKey: "fontFamily" | "fontSize"
- */
 function applySpanStyle(styleKey, styleValue, range) {
     if (!range || range.collapsed) return;
 
-    // If the selection is already inside a styled span, just update it
     const existingSpan = findAncestor(range.commonAncestorContainer, "span");
     if (existingSpan && existingSpan.style[styleKey]) {
         existingSpan.style[styleKey] = styleValue;
@@ -246,11 +178,7 @@ function applySpanStyle(styleKey, styleValue, range) {
     applyRange(newRange);
 }
 
-/**
- * INSERT IMAGE — place an <img> wrapped in a <p> at the cursor position.
- */
 function insertImageAtRange(src, range, editorEl) {
-    // Fall back to end of editor if no range saved
     const targetRange = range ?? (() => {
         const r = document.createRange();
         r.selectNodeContents(editorEl);
@@ -268,34 +196,17 @@ function insertImageAtRange(src, range, editorEl) {
     targetRange.collapse(false);
     targetRange.insertNode(p);
 
-    // Move cursor to after the image paragraph
     const newRange = document.createRange();
     newRange.setStartAfter(p);
     newRange.collapse(true);
     applyRange(newRange);
 }
 
-// ─── Toolbar Button ───────────────────────────────────────────────────────────
-function TBtn({onAction, title, children}) {
-    return (
-        <button
-            onMouseDown={(e) => {
-                e.preventDefault(); // keeps editor focused & selection intact
-                onAction();
-            }}
-            title={title}
-            className="px-2.5 py-1.5 rounded text-sm font-medium transition-colors select-none text-gray-600 hover:bg-gray-100 hover:text-gray-900 border border-transparent"
-        >
-            {children}
-        </button>
-    );
-}
-
-// ─── Main Component ───────────────────────────────────────────────────────────
+//─── Main Component ──────────────────────────────────────────────────────────
 export default function PostEditor() {
     const editorRef = useRef(null);
     const fileInputRef = useRef(null);
-    const savedRangeRef = useRef(null); // persists selection across toolbar interactions
+    const savedRangeRef = useRef(null);
 
     const [title, setTitle] = useState("");
     const [categoryId, setCategoryId] = useState("");
@@ -307,12 +218,10 @@ export default function PostEditor() {
 
     const availableTags = categoryId ? TAGS_BY_CATEGORY[parseInt(categoryId)] || [] : [];
 
-    // Called on the toolbar wrapper's onMouseDown — saves selection before focus moves away
     const saveRange = useCallback(() => {
         savedRangeRef.current = getActiveRange();
     }, []);
 
-    // Restore saved range, run the operation, then refocus the editor
     const withRange = useCallback((fn) => {
         applyRange(savedRangeRef.current);
         fn(savedRangeRef.current, editorRef.current);
@@ -320,7 +229,6 @@ export default function PostEditor() {
         savedRangeRef.current = getActiveRange();
     }, []);
 
-    // Keep savedRangeRef fresh while the user moves the cursor inside the editor
     const handleSelectionChange = useCallback(() => {
         const sel = window.getSelection();
         if (sel && sel.rangeCount > 0) {
@@ -336,7 +244,6 @@ export default function PostEditor() {
         setWordCount(text.trim() ? text.trim().split(/\s+/).length : 0);
     };
 
-    // ── Image upload → base64 → insert at saved cursor position ──────────────
     const handleImageUpload = (e) => {
         const file = e.target.files?.[0];
         if (!file) return;
@@ -349,7 +256,6 @@ export default function PostEditor() {
         e.target.value = "";
     };
 
-    // ── Publish ───────────────────────────────────────────────────────────────
     const handlePublish = async () => {
         setIsPublishing(true);
         setError(null);
@@ -394,25 +300,26 @@ export default function PostEditor() {
 
     const isPublishable = title.trim() && wordCount > 0 && categoryId && !isPublishing;
 
-    // ── Published screen ──────────────────────────────────────────────────────
     if (published) {
         return (
-            <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+            <div className="min-h-screen bg-stone-50 dark:bg-navy-950 flex items-center justify-center">
                 <div className="text-center max-w-sm p-8">
-                    <div className="w-16 h-16 rounded-full bg-green-100 flex items-center justify-center mx-auto mb-5">
-                        <svg className="w-8 h-8 text-green-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <div
+                        className="w-16 h-16 rounded-full bg-green-100 dark:bg-green-900/30 flex items-center justify-center mx-auto mb-5">
+                        <svg className="w-8 h-8 text-green-500 dark:text-green-400" fill="none" viewBox="0 0 24 24"
+                             stroke="currentColor">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 13l4 4L19 7"/>
                         </svg>
                     </div>
-                    <h2 className="text-2xl font-bold text-gray-900 mb-1">Published!</h2>
-                    <p className="text-gray-500 text-sm mb-6">"{title}" is now live.</p>
+                    <h2 className="text-2xl font-bold text-stone-900 dark:text-white mb-1">Published!</h2>
+                    <p className="text-stone-500 dark:text-slate-400 text-sm mb-6">"{title}" is now live.</p>
                     <div className="flex gap-3 justify-center">
                         <button onClick={handleReset}
-                                className="px-5 py-2.5 bg-white border border-gray-200 text-gray-700 rounded-lg text-sm font-medium hover:bg-gray-50 transition-colors">
+                                className="px-5 py-2.5 bg-white dark:bg-navy-800 border border-stone-200 dark:border-gray-600 text-stone-700 dark:text-slate-300 rounded-lg text-sm font-medium hover:bg-stone-50 dark:hover:bg-navy-700 transition-colors">
                             Write Another
                         </button>
                         <Link to="/blogs"
-                              className="px-5 py-2.5 bg-indigo-600 text-white rounded-lg text-sm font-semibold hover:bg-indigo-700 transition-colors">
+                              className="px-5 py-2.5 bg-amber-600 dark:bg-teal-500 text-white rounded-lg text-sm font-semibold hover:bg-amber-700 dark:hover:bg-teal-600 transition-colors">
                             View All Posts
                         </Link>
                     </div>
@@ -422,22 +329,24 @@ export default function PostEditor() {
     }
 
     return (
-        <div className="min-h-screen bg-gray-50">
+        <div className="min-h-screen bg-stone-50 dark:bg-navy-950">
 
             {/* ── Top Bar ── */}
-            <header className="sticky top-0 z-30 bg-white border-b border-gray-200 shadow-sm">
+            <header
+                className="sticky top-0 z-30 bg-white dark:bg-navy-900 border-b border-stone-200 dark:border-gray-700 shadow-sm">
                 <div className="max-w-5xl mx-auto px-4 h-13 flex items-center justify-between gap-4 py-2">
-                    <div className="flex items-center text-black">
-                        <Link to="/" className="p-1.5  hover:text-gray-700 transition-colors rounded">
+                    <div className="flex items-center text-stone-900 dark:text-white">
+                        <Link to="/"
+                              className="p-1.5 hover:text-stone-700 dark:hover:text-slate-300 transition-colors rounded">
                             <LeftArrow/>
                         </Link>
                         Back
                     </div>
-                    <div className="text-xl font-semibold text-gray-800">New Post</div>
+                    <div className="text-xl font-semibold text-stone-800 dark:text-white">New Post</div>
 
                     <div className="flex items-center gap-3">
                         {wordCount > 0 && (
-                            <span className="text-xs text-gray-400 hidden sm:block">
+                            <span className="text-xs text-stone-400 dark:text-slate-500 hidden sm:block">
                                 {wordCount} words · ~{Math.max(1, Math.ceil(wordCount / 200))} min read
                             </span>
                         )}
@@ -445,7 +354,7 @@ export default function PostEditor() {
                         <button
                             onClick={handlePublish}
                             disabled={!isPublishable}
-                            className="px-4 py-2 bg-indigo-600 text-white text-sm font-semibold rounded-lg hover:bg-indigo-700 disabled:bg-gray-200 disabled:text-gray-400 disabled:cursor-not-allowed transition-colors"
+                            className="px-4 py-2 bg-amber-600 dark:bg-teal-500 text-white text-sm font-semibold rounded-lg hover:bg-amber-700 dark:hover:bg-teal-600 disabled:bg-stone-200 dark:disabled:bg-gray-700 disabled:text-stone-400 dark:disabled:text-gray-500 disabled:cursor-not-allowed transition-colors"
                         >
                             {isPublishing ? "Publishing…" : "Publish"}
                         </button>
@@ -456,18 +365,13 @@ export default function PostEditor() {
             <div className="max-w-5xl mx-auto px-4 py-6 grid grid-cols-1 lg:grid-cols-[1fr_256px] gap-6">
 
                 {/* ── Editor Card ── */}
-                <div className="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
+                <div
+                    className="bg-white dark:bg-navy-900 rounded-xl border border-stone-200 dark:border-gray-700 shadow-sm overflow-hidden">
 
-                    {/*
-                        Toolbar — onMouseDown on the wrapper fires BEFORE the editor loses focus.
-                        saveRange() snapshots the selection. Then each control calls withRange()
-                        which restores it before running the operation.
-                    */}
                     <div
-                        className="border-b border-gray-100 px-3 py-2 flex flex-wrap items-center gap-1 bg-gray-50"
+                        className="border-b border-stone-100 dark:border-gray-700 px-3 py-2 flex flex-wrap items-center gap-1 bg-stone-50 dark:bg-navy-800"
                         onMouseDown={saveRange}
                     >
-                        {/* Heading / block format */}
                         <select
                             defaultValue=""
                             onChange={(e) => {
@@ -475,7 +379,7 @@ export default function PostEditor() {
                                 e.target.value = "";
                                 if (val) withRange((range, editor) => formatBlock(val, range, editor));
                             }}
-                            className="text-xs text-gray-600 bg-white border border-gray-200 rounded-md px-2 py-1.5 outline-none cursor-pointer hover:bg-gray-50 transition-colors"
+                            className="text-xs text-stone-600 dark:text-slate-300 bg-white dark:bg-navy-950 border border-stone-200 dark:border-gray-600 rounded-md px-2 py-1.5 outline-none cursor-pointer hover:bg-stone-50 dark:hover:bg-navy-900 transition-colors"
                         >
                             <option value="" disabled>Heading</option>
                             <option value="p">Normal</option>
@@ -485,7 +389,6 @@ export default function PostEditor() {
                             <option value="h4">Heading 4</option>
                         </select>
 
-                        {/* Font family */}
                         <select
                             defaultValue=""
                             onChange={(e) => {
@@ -493,7 +396,7 @@ export default function PostEditor() {
                                 e.target.value = "";
                                 if (val) withRange((range) => applySpanStyle("fontFamily", val, range));
                             }}
-                            className="text-xs text-gray-600 bg-white border border-gray-200 rounded-md px-2 py-1.5 outline-none cursor-pointer hover:bg-gray-50 transition-colors"
+                            className="text-xs text-stone-600 dark:text-slate-300 bg-white dark:bg-navy-950 border border-stone-200 dark:border-gray-600 rounded-md px-2 py-1.5 outline-none cursor-pointer hover:bg-stone-50 dark:hover:bg-navy-900 transition-colors"
                         >
                             <option value="" disabled>Font</option>
                             {FONT_FAMILIES.map((f) => (
@@ -501,7 +404,6 @@ export default function PostEditor() {
                             ))}
                         </select>
 
-                        {/* Font size */}
                         <select
                             defaultValue=""
                             onChange={(e) => {
@@ -509,7 +411,7 @@ export default function PostEditor() {
                                 e.target.value = "";
                                 if (val) withRange((range) => applySpanStyle("fontSize", val, range));
                             }}
-                            className="text-xs text-gray-600 bg-white border border-gray-200 rounded-md px-2 py-1.5 outline-none cursor-pointer hover:bg-gray-50 transition-colors"
+                            className="text-xs text-stone-600 dark:text-slate-300 bg-white dark:bg-navy-950 border border-stone-200 dark:border-gray-600 rounded-md px-2 py-1.5 outline-none cursor-pointer hover:bg-stone-50 dark:hover:bg-navy-900 transition-colors"
                         >
                             <option value="" disabled>Size</option>
                             {FONT_SIZES.map((s) => (
@@ -517,9 +419,8 @@ export default function PostEditor() {
                             ))}
                         </select>
 
-                        <div className="w-px h-5 bg-gray-200 mx-0.5"/>
+                        <div className="w-px h-5 bg-stone-200 dark:bg-gray-600 mx-0.5"/>
 
-                        {/* Bold */}
                         <TBtn
                             onAction={() => withRange((range) => toggleBold(range))}
                             title="Bold"
@@ -527,9 +428,8 @@ export default function PostEditor() {
                             <b>B</b>
                         </TBtn>
 
-                        <div className="w-px h-5 bg-gray-200 mx-0.5"/>
+                        <div className="w-px h-5 bg-stone-200 dark:bg-gray-600 mx-0.5"/>
 
-                        {/* Code block */}
                         <TBtn
                             onAction={() => withRange((range, editor) => formatBlock("pre", range, editor))}
                             title="Code Block"
@@ -537,9 +437,8 @@ export default function PostEditor() {
                             <span className="font-mono text-xs">&lt;/&gt;</span>
                         </TBtn>
 
-                        <div className="w-px h-5 bg-gray-200 mx-0.5"/>
+                        <div className="w-px h-5 bg-stone-200 dark:bg-gray-600 mx-0.5"/>
 
-                        {/* Image upload */}
                         <TBtn
                             onAction={() => fileInputRef.current?.click()}
                             title="Upload Image"
@@ -561,19 +460,17 @@ export default function PostEditor() {
                         />
                     </div>
 
-                    {/* Title */}
                     <div className="px-8 pt-8 pb-4">
                         <input
                             type="text"
                             value={title}
                             onChange={(e) => setTitle(e.target.value)}
                             placeholder="Post title…"
-                            className="w-full text-3xl font-bold text-gray-900 placeholder-gray-300 outline-none bg-transparent border-b-2 border-transparent focus:border-indigo-200 pb-2 transition-colors"
+                            className="w-full text-3xl font-bold text-stone-900 dark:text-white placeholder-stone-300 dark:placeholder-slate-600 outline-none bg-transparent border-b-2 border-transparent focus:border-amber-200 dark:focus:border-teal-400/30 pb-2 transition-colors"
                             style={{fontFamily: "Georgia, serif"}}
                         />
                     </div>
 
-                    {/* Content editable */}
                     <div
                         ref={editorRef}
                         contentEditable
@@ -582,22 +479,23 @@ export default function PostEditor() {
                         onKeyUp={handleSelectionChange}
                         onMouseUp={handleSelectionChange}
                         data-placeholder="Start writing your post…"
-                        className="px-8 pb-16 pt-2 min-h-[480px] outline-none text-gray-800"
+                        className="px-8 pb-16 pt-2 min-h-[480px] outline-none text-stone-800 dark:text-slate-200"
                         style={{fontFamily: "Georgia, serif", fontSize: "17px", lineHeight: "1.8"}}
                     />
                 </div>
 
                 {/* ── Sidebar ── */}
                 <div className="space-y-4">
-                    <div className="bg-white rounded-xl border border-gray-200 shadow-sm p-4">
-                        <h3 className="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-3">Category</h3>
+                    <div
+                        className="bg-white dark:bg-navy-900 rounded-xl border border-stone-200 dark:border-gray-700 shadow-sm p-4">
+                        <h3 className="text-xs font-semibold text-stone-500 dark:text-slate-400 uppercase tracking-wide mb-3">Category</h3>
                         <select
                             value={categoryId}
                             onChange={(e) => {
                                 setCategoryId(e.target.value);
                                 setSelectedTags([]);
                             }}
-                            className="w-full bg-gray-50 border border-gray-200 text-gray-700 rounded-lg px-3 py-2 text-sm outline-none focus:border-indigo-400 transition-colors"
+                            className="w-full bg-stone-50 dark:bg-navy-950 border border-stone-200 dark:border-gray-600 text-stone-700 dark:text-slate-300 rounded-lg px-3 py-2 text-sm outline-none focus:border-amber-400 dark:focus:border-teal-400 transition-colors"
                         >
                             <option value="">Select…</option>
                             {CATEGORIES.map((c) => <option key={c.id} value={c.id}>{c.name}</option>)}
@@ -605,7 +503,7 @@ export default function PostEditor() {
 
                         {availableTags.length > 0 && (
                             <div className="mt-4">
-                                <h3 className="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-2">Tags</h3>
+                                <h3 className="text-xs font-semibold text-stone-500 dark:text-slate-400 uppercase tracking-wide mb-2">Tags</h3>
                                 <div className="flex flex-wrap gap-1.5">
                                     {availableTags.map((tag) => {
                                         const sel = selectedTags.find((t) => t.id === tag.id);
@@ -615,8 +513,8 @@ export default function PostEditor() {
                                                 onClick={() => toggleTag(tag)}
                                                 className={`px-2.5 py-1 rounded-full text-xs font-medium border transition-colors ${
                                                     sel
-                                                        ? "bg-indigo-600 border-indigo-600 text-white"
-                                                        : "bg-white border-gray-200 text-gray-600 hover:border-indigo-300"
+                                                        ? "bg-amber-600 dark:bg-teal-500 border-amber-600 dark:border-teal-500 text-white"
+                                                        : "bg-white dark:bg-navy-950 border-stone-200 dark:border-gray-600 text-stone-600 dark:text-slate-400 hover:border-amber-300 dark:hover:border-teal-400"
                                                 }`}
                                             >
                                                 {tag.name}
@@ -628,8 +526,9 @@ export default function PostEditor() {
                         )}
                     </div>
 
-                    <div className="bg-white rounded-xl border border-gray-200 shadow-sm p-4">
-                        <h3 className="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-3">Stats</h3>
+                    <div
+                        className="bg-white dark:bg-navy-900 rounded-xl border border-stone-200 dark:border-gray-700 shadow-sm p-4">
+                        <h3 className="text-xs font-semibold text-stone-500 dark:text-slate-400 uppercase tracking-wide mb-3">Stats</h3>
                         <div className="space-y-2">
                             {[
                                 ["Words", wordCount || "—"],
@@ -638,8 +537,9 @@ export default function PostEditor() {
                                 ["Tags", selectedTags.length || "—"],
                             ].map(([label, val]) => (
                                 <div key={label} className="flex justify-between">
-                                    <span className="text-xs text-gray-400">{label}</span>
-                                    <span className="text-xs font-medium text-gray-700">{val}</span>
+                                    <span className="text-xs text-stone-400 dark:text-slate-500">{label}</span>
+                                    <span
+                                        className="text-xs font-medium text-stone-700 dark:text-slate-300">{val}</span>
                                 </div>
                             ))}
                         </div>
@@ -653,10 +553,17 @@ export default function PostEditor() {
                     color: #d1d5db;
                     pointer-events: none;
                 }
+                .dark [contenteditable][data-placeholder]:empty:before {
+                    color: #475569;
+                }
                 [contenteditable] h1 { font-size: 2rem; font-weight: 800; margin: 1.25rem 0 0.5rem; color: #111827; }
+                .dark [contenteditable] h1 { color: #f8fafc; }
                 [contenteditable] h2 { font-size: 1.5rem; font-weight: 700; margin: 1rem 0 0.5rem; color: #1f2937; }
+                .dark [contenteditable] h2 { color: #e2e8f0; }
                 [contenteditable] h3 { font-size: 1.25rem; font-weight: 600; margin: 0.75rem 0 0.4rem; color: #374151; }
+                .dark [contenteditable] h3 { color: #cbd5e1; }
                 [contenteditable] h4 { font-size: 1.1rem; font-weight: 600; margin: 0.5rem 0 0.3rem; color: #4b5563; }
+                .dark [contenteditable] h4 { color: #94a3b8; }
                 [contenteditable] p  { margin: 0 0 0.75rem; }
                 [contenteditable] pre {
                     background: #1e293b; color: #e2e8f0;
@@ -664,7 +571,11 @@ export default function PostEditor() {
                     font-family: 'Courier New', monospace; font-size: 0.875rem;
                     margin: 1rem 0; overflow-x: auto; white-space: pre-wrap;
                 }
+                .dark [contenteditable] pre {
+                    background: #0f172a; color: #cbd5e1;
+                }
                 [contenteditable] img { max-width: 100%; border-radius: 0.5rem; margin: 0.75rem 0; border: 1px solid #e5e7eb; display: block; }
+                .dark [contenteditable] img { border-color: #374151; }
                 [contenteditable]:focus { outline: none; }
             `}</style>
         </div>

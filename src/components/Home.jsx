@@ -38,10 +38,13 @@ export default function Home() {
     }, [displayed, typing, roleIndex])
 
     return (
-        <section id="home" className="relative min-h-screen flex items-center overflow-hidden">
+        <section id="home"
+                 className="relative min-h-screen flex items-center overflow-hidden bg-white dark:bg-navy-950">
             {/* Background orbs */}
-            <div className="orb w-96 h-96 bg-teal-500/8 top-20 -left-40" style={{animationDelay: '0s'}}></div>
-            <div className="orb w-72 h-72 bg-gold/6 bottom-20 -right-20" style={{animationDelay: '3s'}}></div>
+            <div className="orb w-96 h-96 bg-amber-600/10 dark:bg-teal-400/8 top-20 -left-40"
+                 style={{animationDelay: '0s'}}></div>
+            <div className="orb w-72 h-72 bg-amber-600/8 dark:bg-teal-400/6 bottom-20 -right-20"
+                 style={{animationDelay: '3s'}}></div>
 
             {/* Dot grid */}
             <div className="absolute inset-0 dot-grid opacity-30"></div>
@@ -51,13 +54,13 @@ export default function Home() {
 
                     {/* LEFT: text */}
                     <div className="flex-1 max-w-xl">
-                        <p className="font-mono text-teal-400 text-lg mb-5 animate-fade-up"
+                        <p className="font-mono text-amber-600 dark:text-teal-400 text-lg mb-5 animate-fade-up"
                            style={{animationDelay: '0.1s', opacity: 0}}>
                             Hi there, I'm
                         </p>
 
                         <h1
-                            className="font-display text-6xl md:text-7xl font-bold text-white leading-none mb-4 animate-fade-up"
+                            className="font-display text-6xl md:text-7xl font-bold text-stone-900 dark:text-white leading-none mb-4 animate-fade-up"
                             style={{animationDelay: '0.2s', opacity: 0}}
                         >
                             Bikash<br/>
@@ -65,18 +68,18 @@ export default function Home() {
                         </h1>
 
                         <div
-                            className="font-mono text-xl md:text-2xl text-slate-400 mb-8 h-9 animate-fade-up"
+                            className="font-mono text-xl md:text-2xl text-stone-700 dark:text-slate-300 mb-8 h-9 animate-fade-up"
                             style={{animationDelay: '0.35s', opacity: 0}}
                         >
                             {displayed}<span className="typed-cursor">|</span>
                         </div>
 
                         <p
-                            className="font-body text-slate-400 text-lg leading-relaxed mb-10 animate-fade-up"
+                            className="font-body text-stone-700 dark:text-slate-300 text-lg leading-relaxed mb-10 animate-fade-up"
                             style={{animationDelay: '0.5s', opacity: 0}}
                         >
                             Full-stack engineer with <span
-                            className="text-teal-400 font-medium">8+ years &nbsp;</span>
+                            className="text-amber-600 dark:text-teal-400 font-medium">8+ years &nbsp;</span>
                             building scalable, high-performance solutions across healthcare, ad-tech, banking, and
                             e-commerce. Passionate about designing robust systems, bridging frontend and backend
                             technologies, and delivering software that drives business impact. Always excited to solve
@@ -97,7 +100,8 @@ export default function Home() {
                             ].map(s => (
                                 <div key={s.label}>
                                     <div className="font-display text-3xl font-bold text-gradient-gold">{s.value}</div>
-                                    <div className="font-mono text-xs text-slate-500 mt-1">{s.label}</div>
+                                    <div
+                                        className="font-mono text-xs text-stone-500 dark:text-slate-500 mt-1">{s.label}</div>
                                 </div>
                             ))}
                         </div>
@@ -109,33 +113,34 @@ export default function Home() {
 
                             {/* Animated glow ring */}
                             <div
-                                className="absolute -inset-1 bg-gradient-to-br from-teal-400 via-teal-600 to-gold opacity-60 blur-md group-hover:opacity-90 transition-all duration-500 animate-pulse-slow"></div>
+                                className="absolute -inset-1 bg-gradient-to-br from-amber-500 via-amber-600 to-amber-600 dark:from-teal-400 dark:via-teal-500 dark:to-teal-400 opacity-60 blur-md group-hover:opacity-90 transition-all duration-500 animate-pulse-slow"></div>
 
                             {/* Corner brackets decoration */}
                             <div
-                                className="absolute -top-5 -left-5 w-9 h-9 border-t-2 border-l-2 border-teal-400/60 rounded-tl-lg pointer-events-none"></div>
+                                className="absolute -top-5 -left-5 w-9 h-9 border-t-2 border-l-2 border-amber-600/60 dark:border-teal-400/60 rounded-tl-lg pointer-events-none"></div>
                             <div
-                                className="absolute -bottom-5 -right-5 w-9 h-9 border-b-2 border-r-2 border-gold/60 rounded-br-lg pointer-events-none"></div>
+                                className="absolute -bottom-5 -right-5 w-9 h-9 border-b-2 border-r-2 border-amber-600/60 dark:border-teal-400/60 rounded-br-lg pointer-events-none"></div>
 
                             {/* Image circle */}
                             <div
-                                className="relative w-64 h-64 md:w-80 md:h-80 lg:w-96 lg:h-96 rounded-lg overflow-hidden border-2 border-teal-400/30 ">
+                                className="relative w-64 h-64 md:w-80 md:h-80 lg:w-96 lg:h-96 rounded-lg overflow-hidden border-2 border-amber-600/30 dark:border-teal-400/30 ">
                                 <img
                                     src="/profile.jpg"
                                     alt="Bikash Mainali"
                                     className="w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-700"
                                 />
                                 <div
-                                    className="absolute inset-0 bg-gradient-to-t from-navy-950/30 to-transparent pointer-events-none rounded-lg"></div>
+                                    className="absolute inset-0 bg-gradient-to-t from-stone-900/20 dark:from-navy-950/30 to-transparent pointer-events-none rounded-lg"></div>
                             </div>
 
                             {/* Floating badge */}
                             <div
-                                className="absolute -bottom-2 -left-8 card-glass rounded-xl px-4 py-2 flex items-center gap-2 shadow-lg shadow-black/40">
-                                <span className="w-2 h-2 rounded-full bg-teal-400 animate-pulse"></span>
-                                <span className="font-mono text-xs text-slate-300">Available for co-operation</span>
+                                className="absolute -bottom-2 -left-8 card-glass  rounded-xl px-4 py-2 flex items-center gap-2 shadow-lg shadow-amber-600/20 dark:shadow-black/40 d">
+                                <span
+                                    className="w-3 h-3 rounded-full bg-amber-600 dark:bg-teal-400 animate-pulse [animation-duration:0.5s]"></span>
+                                <span
+                                    className="font-bold text-xs tracking-wider text-white dark:text-teal-400  decoration-amber-400 decoration-2 underline-offset-4">Available for remote-work</span>
                             </div>
-
                         </div>
                     </div>
                 </div>

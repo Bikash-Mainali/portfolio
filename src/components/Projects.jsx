@@ -4,6 +4,7 @@ import {
     Github,
     ExternalLink
 } from "../icons";
+
 const projects = [
     {
         id: 1,
@@ -22,7 +23,7 @@ const projects = [
     },
     {
         id: 2,
-        title: 'Personal Portfolio v1',
+        title: 'Personal Projects v1',
         category: 'Web',
         description: 'First iteration of personal portfolio site from scratch HTML, JavaScript and CSS — bikashmainali.com.np — showcasing projects, skills and professional journey.',
         tags: ['HTML', 'CSS', 'Bootstrap', 'jQuery'],
@@ -104,15 +105,15 @@ const projects = [
 
 const filters = ['All', 'Web', 'App']
 
-export default function Portfolio() {
+export default function Projects() {
     const [active, setActive] = useState('All')
     const [ref, visible] = useInView()
 
     const filtered = active === 'All' ? projects : projects.filter(p => p.category === active)
 
     return (
-        <section id="portfolio" ref={ref} className="py-28 bg-navy-900/50 relative">
-            <div className="absolute inset-0 dot-grid opacity-15"></div>
+        <section id="portfolio" ref={ref} className="py-28 bg-stone-50 dark:bg-navy-900/50 relative">
+            <div className="absolute inset-0 dot-grid opacity-20 dark:opacity-15"></div>
             <div className="relative max-w-7xl mx-auto px-6">
                 <div
                     className={`transition-all duration-700 ${visible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
@@ -128,8 +129,8 @@ export default function Portfolio() {
                             onClick={() => setActive(f)}
                             className={`font-mono text-sm px-5 py-2 rounded-full transition-all duration-200 ${
                                 active === f
-                                    ? 'bg-teal-500 text-navy-950 font-medium'
-                                    : 'text-slate-400 border border-white/10 hover:border-teal-400/30 hover:text-teal-400'
+                                    ? 'bg-amber-600 dark:bg-teal-500 text-white dark:text-navy-950 font-medium'
+                                    : 'text-stone-600 dark:text-slate-400 border border-stone-300 dark:border-white/10 hover:border-amber-600/30 dark:hover:border-teal-400/30 hover:text-amber-600 dark:hover:text-teal-400'
                             }`}
                         >
                             {f}
@@ -142,7 +143,7 @@ export default function Portfolio() {
                     {filtered.map((project, i) => (
                         <div
                             key={project.id}
-                            className="group card-glass rounded-2xl overflow-hidden hover:border-teal-400/25 hover:glow-teal transition-all duration-300"
+                            className="group card-glass rounded-2xl overflow-hidden hover:border-amber-600/25 dark:hover:border-teal-400/25 transition-all duration-300"
                             style={{
                                 transitionDelay: `${i * 100}ms`,
                                 opacity: visible ? 1 : 0,
@@ -157,16 +158,16 @@ export default function Portfolio() {
                                     className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                                 />
                                 <div
-                                    className="absolute inset-0 bg-gradient-to-t from-navy-950 to-transparent opacity-60"></div>
+                                    className="absolute inset-0 bg-gradient-to-t from-white dark:from-navy-950 to-transparent opacity-60"></div>
                                 <span
-                                    className="absolute top-3 right-3 font-mono text-xs px-3 py-1 rounded-full bg-navy-950/70 text-teal-400 border border-teal-400/30 backdrop-blur-sm">
+                                    className="absolute top-3 right-3 font-mono text-xs px-3 py-1 rounded-full bg-white/70 dark:bg-navy-950/70 text-amber-600 dark:text-teal-400 border border-amber-600/30 dark:border-teal-400/30 backdrop-blur-sm">
                   {project.category}
                 </span>
                             </div>
 
                             <div className="p-6">
-                                <h3 className="font-display font-bold text-white text-xl mb-2">{project.title}</h3>
-                                <p className="text-slate-400 text-sm leading-relaxed mb-4">{project.description}</p>
+                                <h3 className="font-display font-bold text-stone-900 dark:text-white text-xl mb-2">{project.title}</h3>
+                                <p className="text-stone-600 dark:text-slate-400 text-sm leading-relaxed mb-4">{project.description}</p>
 
                                 <div className="flex flex-wrap gap-2 mb-5">
                                     {project.tags.map(t => (
@@ -176,16 +177,16 @@ export default function Portfolio() {
 
                                 <div className="flex gap-3">
                                     {project.links && Object.entries(project.links).map(([key, value]) => (
-                                        <a
-                                            key={`${project.id}-${key}`}
-                                            href={value.link}
-                                            target="_blank"
-                                            rel="noopener noreferrer"
-                                            className="flex items-center gap-2 text-sm font-mono text-teal-400 hover:text-teal-300 transition-colors"
-                                        >
-                                            <span>{value.icon}</span>
-                                            {value.label}
-                                        </a>
+                                            <a
+                                                key={`${project.id}-${key}`}
+                                                href={value.link}
+                                                target="_blank"
+                                                rel="noopener noreferrer"
+                                                className="flex items-center gap-2 text-sm font-mono text-amber-600 dark:text-teal-400 hover:text-amber-700 dark:hover:text-teal-300 transition-colors"
+                                            >
+                                                <span>{value.icon}</span>
+                                                {value.label}
+                                            </a>
                                         )
                                     )}
                                 </div>

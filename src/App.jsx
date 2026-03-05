@@ -3,7 +3,7 @@ import Home from './components/Home.jsx'
 import About from './components/About'
 import Skills from './components/Skills'
 import Experience from './components/Experience.jsx'
-import Portfolio from './components/Portfolio'
+import Projects from './components/Projects.jsx'
 import Contact from './components/Contact'
 import Footer from './components/Footer'
 
@@ -16,7 +16,7 @@ export default function App() {
         <About />
         <Skills />
         <Experience />
-        <Portfolio />
+        <Projects />
         <Contact />
       </main>
       <Footer />

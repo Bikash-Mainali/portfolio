@@ -34,16 +34,16 @@ export default function Contact() {
             }, (error) => {
                 console.log('FAILED...', error);
             });
-        }
+    }
 
     return (
-        <section id="contact" ref={ref} className="py-28 relative">
+        <section id="contact" ref={ref} className="py-28 bg-white dark:bg-navy-950 relative">
             <div className="relative max-w-7xl mx-auto px-6">
                 <div
                     className={`text-center transition-all duration-700 ${visible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
                     <h2 className="section-title text-center">Get In Touch</h2>
                     <div className="section-line mx-auto"></div>
-                    <p className="text-slate-400 max-w-lg mx-auto mb-12 text-sm leading-relaxed">
+                    <p className="text-stone-600 dark:text-slate-400 max-w-lg mx-auto mb-12 text-sm leading-relaxed">
                         I'm currently open to new opportunities. Whether you have a question, a project idea, or just
                         want to say hi — my inbox is always open!
                     </p>
@@ -52,42 +52,43 @@ export default function Contact() {
                 <div className="grid md:grid-cols-5 gap-10">
                     {/* Info cards */}
                     <div
-                        className="md:col-span-2 flex justi flex-col gap-5 transition-all duration-700 delay-200"
+                        className="md:col-span-2 flex flex-col gap-5 transition-all duration-700 delay-200"
                         style={{opacity: visible ? 1 : 0, transform: visible ? 'translateX(0)' : 'translateX(-20px)'}}
                     >
                         {[
                             {
-                                icon: <MapPinned className="text-slate-300"/>,
+                                icon: <MapPinned className="text-amber-600 dark:text-teal-400"/>,
                                 label: 'Location',
                                 value: 'CA, USA',
                                 href: null
                             },
                             {
-                                icon: <Mail className="text-slate-300"/>,
+                                icon: <Mail className="text-amber-600 dark:text-teal-400"/>,
                                 label: 'Email',
                                 value: 'bikashmainali18@gmail.com',
                                 href: 'mailto:bikashmainali18@gmail.com'
                             },
                             {
-                                icon: <Linkedin className="text-slate-300"/>,
+                                icon: <Linkedin className="text-amber-600 dark:text-teal-400"/>,
                                 label: 'LinkedIn',
                                 value: 'bikash-mainali',
                                 href: 'https://www.linkedin.com/in/bikash-mainali-629505168/'
                             },
                         ].map(item => (
                             <div key={item.label}
-                                 className="card-glass rounded-xl p-4 flex items-center gap-4 hover:border-teal-400/25 transition-all duration-200">
+                                 className="card-glass rounded-xl p-4 flex items-center gap-4 hover:border-amber-600/25 dark:hover:border-teal-400/25 transition-all duration-200">
                                 <span className="text-2xl">{item.icon}</span>
                                 <div>
-                                    <div className="font-mono text-xs text-slate-500 mb-0.5">{item.label}</div>
+                                    <div
+                                        className="font-mono text-xs text-stone-500 dark:text-slate-500 mb-0.5">{item.label}</div>
                                     {item.href ? (
                                         <a href={item.href} target={item.href.startsWith('http') ? '_blank' : undefined}
                                            rel="noopener noreferrer"
-                                           className="text-sm text-slate-300 hover:text-teal-400 transition-colors">
+                                           className="text-sm text-stone-700 dark:text-slate-300 hover:text-amber-600 dark:hover:text-teal-400 transition-colors">
                                             {item.value}
                                         </a>
                                     ) : (
-                                        <span className="text-sm text-slate-300">{item.value}</span>
+                                        <span className="text-sm text-stone-700 dark:text-slate-300">{item.value}</span>
                                     )}
                                 </div>
                             </div>
@@ -106,7 +107,7 @@ export default function Contact() {
                                     href: 'https://github.com/Bikash-Mainali',
                                     label: 'github',
                                     icon: <Github/>,
-                                    color: "text-white border-white/30 hover:border-white hover:text-gray-200 hover:bg-white/10 hover:shadow-[0_0_15px_white]"
+                                    color: "text-stone-800 dark:text-white border-stone-800/30 dark:border-white/30 hover:border-stone-800 dark:hover:border-white hover:text-stone-900 dark:hover:text-gray-200 hover:bg-stone-800/10 dark:hover:bg-white/10 hover:shadow-[0_0_15px_rgba(120,113,108,0.3)] dark:hover:shadow-[0_0_15px_white]"
                                 },
                                 {
                                     href: 'https://www.facebook.com/biki51',
@@ -145,7 +146,8 @@ export default function Contact() {
                         <form onSubmit={handleSubmit} className="card-glass rounded-2xl p-8 space-y-5">
                             <div className="grid sm:grid-cols-2 gap-5">
                                 <div>
-                                    <label className="font-mono text-xs text-slate-500 mb-2 block">Your Name</label>
+                                    <label className="font-mono text-xs text-stone-500 dark:text-slate-500 mb-2 block">Your
+                                        Name</label>
                                     <input
                                         type="text"
                                         name="name"
@@ -153,11 +155,12 @@ export default function Contact() {
                                         onChange={handleChange}
                                         required
                                         placeholder="Name"
-                                        className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-sm text-white placeholder-slate-600 focus:outline-none focus:border-teal-400/50 focus:bg-teal-400/5 transition-all"
+                                        className="w-full bg-stone-100 dark:bg-white/5 border border-stone-300 dark:border-white/10 rounded-lg px-4 py-3 text-sm text-stone-900 dark:text-white placeholder-stone-400 dark:placeholder-slate-600 focus:outline-none focus:border-amber-600/50 dark:focus:border-teal-400/50 focus:bg-amber-600/5 dark:focus:bg-teal-400/5 transition-all"
                                     />
                                 </div>
                                 <div>
-                                    <label className="font-mono text-xs text-slate-500 mb-2 block">Your Email</label>
+                                    <label className="font-mono text-xs text-stone-500 dark:text-slate-500 mb-2 block">Your
+                                        Email</label>
                                     <input
                                         type="email"
                                         name="email"
@@ -165,14 +168,15 @@ export default function Contact() {
                                         onChange={handleChange}
                                         required
                                         placeholder="Email"
-                                        className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-sm text-white placeholder-slate-600 focus:outline-none focus:border-teal-400/50 focus:bg-teal-400/5 transition-all"
+                                        className="w-full bg-stone-100 dark:bg-white/5 border border-stone-300 dark:border-white/10 rounded-lg px-4 py-3 text-sm text-stone-900 dark:text-white placeholder-stone-400 dark:placeholder-slate-600 focus:outline-none focus:border-amber-600/50 dark:focus:border-teal-400/50 focus:bg-amber-600/5 dark:focus:bg-teal-400/5 transition-all"
                                     />
                                 </div>
                             </div>
 
                             <div className="grid gap-5">
                                 <div>
-                                    <label className="font-mono text-xs text-slate-500 mb-2 block">Subject</label>
+                                    <label
+                                        className="font-mono text-xs text-stone-500 dark:text-slate-500 mb-2 block">Subject</label>
                                     <input
                                         type="text"
                                         name="title"
@@ -180,12 +184,13 @@ export default function Contact() {
                                         onChange={handleChange}
                                         required
                                         placeholder="Title/Subject"
-                                        className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-sm text-white placeholder-slate-600 focus:outline-none focus:border-teal-400/50 focus:bg-teal-400/5 transition-all"
+                                        className="w-full bg-stone-100 dark:bg-white/5 border border-stone-300 dark:border-white/10 rounded-lg px-4 py-3 text-sm text-stone-900 dark:text-white placeholder-stone-400 dark:placeholder-slate-600 focus:outline-none focus:border-amber-600/50 dark:focus:border-teal-400/50 focus:bg-amber-600/5 dark:focus:bg-teal-400/5 transition-all"
                                     />
                                 </div>
                             </div>
                             <div>
-                                <label className="font-mono text-xs text-slate-500 mb-2 block">Message</label>
+                                <label
+                                    className="font-mono text-xs text-stone-500 dark:text-slate-500 mb-2 block">Message</label>
                                 <textarea
                                     name="message"
                                     value={form.message}
@@ -193,7 +198,7 @@ export default function Contact() {
                                     required
                                     rows={5}
                                     placeholder="Tell me something..."
-                                    className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-sm text-white placeholder-slate-600 focus:outline-none focus:border-teal-400/50 focus:bg-teal-400/5 transition-all resize-none"
+                                    className="w-full bg-stone-100 dark:bg-white/5 border border-stone-300 dark:border-white/10 rounded-lg px-4 py-3 text-sm text-stone-900 dark:text-white placeholder-stone-400 dark:placeholder-slate-600 focus:outline-none focus:border-amber-600/50 dark:focus:border-teal-400/50 focus:bg-amber-600/5 dark:focus:bg-teal-400/5 transition-all resize-none"
                                 ></textarea>
                             </div>
 
@@ -222,9 +227,10 @@ export default function Contact() {
                                 )}
                             </button>
 
-                            <p className="font-mono text-xs text-slate-600 text-center">
+                            <p className="font-mono text-xs text-stone-600 dark:text-slate-600 text-center">
                                 Or email me directly at{' '}
-                                <a href="mailto:bikashmainali18@gmail.com" className="text-teal-400 hover:underline">
+                                <a href="mailto:bikashmainali18@gmail.com"
+                                   className="text-amber-600 dark:text-teal-400 hover:underline">
                                     bikashmainali18@gmail.com
                                 </a>
                             </p>

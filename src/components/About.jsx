@@ -38,7 +38,7 @@ export default function About() {
     const [ref, visible] = useInView()
 
     return (
-        <section id="about" ref={ref} className="py-28 relative">
+        <section id="about" ref={ref} className="py-28 relative bg-white dark:bg-navy-950">
             <div className="max-w-7xl mx-auto px-6">
                 <div
                     className={`transition-all duration-700 ${visible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
@@ -50,26 +50,26 @@ export default function About() {
                     {/* Text */}
                     <div
                         className={`lg:col-span-3 transition-all duration-700 delay-200 ${visible ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-8'}`}>
-                        <div className="space-y-4 text-slate-400 leading-relaxed text-[15px]">
+                        <div className="space-y-4 text-stone-700 dark:text-slate-300 leading-relaxed text-[15px]">
                             <p>
-                                Hello! I'm <span className="text-teal-400 font-medium">Bikash Mainali</span>, a Full
+                                Hello! I'm <span className="text-amber-600 dark:text-teal-400 font-medium">Bikash Mainali</span>, a Full
                                 Stack Software Engineer with 8+ years of experience building enterprise-grade systems
                                 across
-                                healthcare, Apple’s ad-tech platform, banking, and e-commerce.
+                                healthcare, Apple's ad-tech platform, banking, and e-commerce.
                             </p>
                             <p>
                                 I specialize in designing scalable, high-performance applications using <span
-                                className="text-white/80">Java (Spring
+                                className="text-stone-900 dark:text-white/80">Java (Spring
                                 Boot), Node.js, Python FAST API, React, Angular, TypeScript, Postgres, MongoDB, and
                               Microservices architectures </span>. My
                                 experience spans backend system design, cloud-native deployments, and crafting
                                 intuitive, pixel-perfect frontend experiences.
                             </p>
                             <p>
-                                Recently, I’ve been expanding my focus into <span className="text-white/80">AI/ML-driven systems, exploring how
+                                Recently, I've been expanding my focus into <span className="text-stone-900 dark:text-white/80">AI/ML-driven systems, exploring how
                                 intelligent automation, data modeling, agentic AI and AI-powered features can enhance
                                 enterprise
-                              applications </span>. I’m particularly interested in building software that integrates
+                              applications </span>. I'm particularly interested in building software that integrates
                                 machine
                                 learning, predictive systems, and intelligent workflows into real-world products.
                             </p>
@@ -87,7 +87,7 @@ export default function About() {
                         <div className="mt-10 space-y-6">
                             {Object.entries(stacks).map(([category, items]) => (
                                 <div key={category}>
-                                    <h4 className="font-mono text-xs text-gold mb-3 uppercase tracking-widest">{category}</h4>
+                                    <h4 className="font-mono text-xs text-amber-600 dark:text-teal-400 mb-3 uppercase tracking-widest">{category}</h4>
                                     <div className="flex flex-wrap gap-2">
                                         {items.map(item => (
                                             <span key={item} className="tag">{item}</span>
@@ -104,8 +104,8 @@ export default function About() {
                         <div className="relative group">
                             {/* Decorative frame */}
                             <div
-                                className="absolute -inset-1 rounded-2xl bg-gradient-to-br from-teal-400/40 to-gold/30 blur-sm group-hover:blur-md transition-all duration-300"></div>
-                            <div className="relative w-64 h-64 rounded-2xl overflow-hidden border border-teal-400/20">
+                                className="absolute -inset-1 rounded-2xl bg-gradient-to-br from-gray-300 to-gray-300 dark:from-teal-400/40 dark:to-teal-400/30 blur-sm group-hover:blur-md transition-all duration-300"></div>
+                            <div className="relative w-64 h-64 rounded-2xl overflow-hidden border border-gray-300 dark:border-teal-400/20">
                                 <img
                                     src="/profile1.jpg"
                                     alt="Bikash Mainali"
@@ -138,7 +138,7 @@ export default function About() {
                                     href={s.href}
                                     target="_blank"
                                     rel="noopener noreferrer"
-                                    className="flex items-center gap-2 px-4 py-2 card-glass rounded-full text-sm text-slate-300 hover:text-teal-400 hover:border-teal-400/30 transition-all duration-200 hover:-translate-y-0.5"
+                                    className="flex items-center gap-2 px-4 py-2 card-glass rounded-full text-sm text-stone-700 dark:text-slate-300 hover:text-amber-600 dark:hover:text-teal-400 hover:border-amber-600/30 dark:hover:border-teal-400/30 transition-all duration-200 hover:-translate-y-0.5"
                                 >
                                     <span>{s.icon}</span>
                                     <span className="font-mono text-xs">{s.label}</span>
@@ -148,14 +148,14 @@ export default function About() {
 
                         {/* Contact info box */}
                         <div className="card-glass rounded-xl p-5 w-full space-y-3">
-                            <div className="flex items-center gap-3 text-sm text-slate-400">
-                                <span className="text-teal-400"><MapPinned/></span>
+                            <div className="flex items-center gap-3 text-sm text-stone-700 dark:text-slate-300">
+                                <span className="text-amber-600 dark:text-teal-400"><MapPinned/></span>
                                 <span>CA, USA</span>
                             </div>
-                            <div className="flex items-center gap-3 text-sm text-slate-400">
-                                <span className="text-teal-400"><Mail/></span>
+                            <div className="flex items-center gap-3 text-sm text-stone-700 dark:text-slate-300">
+                                <span className="text-amber-600 dark:text-teal-400"><Mail/></span>
                                 <a href="mailto:bikashmainali18@gmail.com"
-                                   className="hover:text-teal-400 transition-colors">
+                                   className="hover:text-amber-600 dark:hover:text-teal-400 transition-colors">
                                     bikashmainali18@gmail.com
                                 </a>
                             </div>

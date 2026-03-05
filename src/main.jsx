@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom/client'
 import {BrowserRouter, Routes, Route} from "react-router";
 import App from './App.jsx'
 import './index.css'
-import PostEditor from "./components/PostEditor.jsx";
+import PostEditor from "./components/posts/PostEditor.jsx";
 import AdminLayout from "./components/AdminLayout.jsx";
 import ProtectedRoute from "./components/ProtectedRoute.jsx";
 import NotFound from "./components/NotFound.jsx";

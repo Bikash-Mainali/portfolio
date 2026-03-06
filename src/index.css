@@ -97,15 +97,43 @@
         scroll-behavior: smooth;
     }
 
-    body {
-        @apply bg-white dark:bg-navy-950 text-stone-900 dark:text-slate-200 font-body antialiased;
-        background-image: radial-gradient(ellipse at 20% 50%, rgba(251, 191, 36, 0.04) 0%, transparent 50%),
-        radial-gradient(ellipse at 80% 20%, rgba(245, 158, 11, 0.04) 0%, transparent 50%);
+    /* Global theme/background variables */
+    :root {
+        --site-bg: white; /* light mode background */
+        --site-bg-dark: var(--color-navy-950); /* dark mode background token */
     }
 
+    .bg-site-bg {
+        background-color: var(--site-bg);
+    }
+
+    /* Allow .dark class to flip the site variable for ease-of-use */
+    .dark {
+        --site-bg: var(--site-bg-dark);
+    }
+
+    body {
+        @apply bg-white dark:bg-navy-950 text-stone-900 dark:text-slate-200 font-body antialiased;
+        /* Use CSS variable for site background so it's configurable globally */
+        background-color: var(--site-bg);
+        /*background-image: radial-gradient(ellipse at 20% 50%, rgba(251, 191, 36, 0.04) 0%, transparent 50%),*/
+        /*radial-gradient(ellipse at 80% 20%, rgba(245, 158, 11, 0.04) 0%, transparent 50%);*/
+    }
+
+    /* .dark class now flips --site-bg via :root override above, keep gradients but align with var */
     .dark body {
-        background-image: radial-gradient(ellipse at 20% 50%, rgba(45, 212, 191, 0.04) 0%, transparent 50%),
-        radial-gradient(ellipse at 80% 20%, rgba(201, 162, 39, 0.04) 0%, transparent 50%);
+        background-color: var(--site-bg);
+        /*background-image: radial-gradient(ellipse at 20% 50%, rgba(45, 212, 191, 0.04) 0%, transparent 50%),*/
+        /*radial-gradient(ellipse at 80% 20%, rgba(201, 162, 39, 0.04) 0%, transparent 50%);*/
+    }
+
+    /* Utility: apply the site background on any element */
+    .bg-site {
+        background-color: var(--site-bg) !important;
+    }
+
+    .dark .bg-site {
+        background-color: var(--site-bg) !important;
     }
 
     ::selection {

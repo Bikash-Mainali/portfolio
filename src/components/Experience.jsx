@@ -115,7 +115,7 @@ export default function Experience() {
     const [ref, visible] = useInView()
 
     return (
-        <section id="experience" ref={ref} className="py-28 relative bg-white dark:bg-navy-950">
+        <section id="experience" ref={ref} className="py-28 relative bg-site">
             <div className="max-w-7xl mx-auto px-6">
                 <div className={`transition-all duration-700 ${visible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
                     <h2 className="section-title">Experience</h2>

@@ -1,7 +1,8 @@
 import {useState, useEffect} from 'react'
 import Login from "./Login.jsx";
-import {Link} from "react-router";
+import {Link, useNavigate} from "react-router";
 import ThemeToggle from "./ThemToggle.jsx";
+import BrandName from "./shared/BrandName.jsx";
 
 const links = [
     {href: '#home', label: 'Home'},
@@ -17,6 +18,7 @@ export default function Navbar() {
     const [menuOpen, setMenuOpen] = useState(false)
     const [active, setActive] = useState('')
     const [showLogin, setShowLogin] = useState(false)
+    const navigate = useNavigate();
 
     useEffect(() => {
         const onScroll = () => setScrolled(window.scrollY > 40)
@@ -37,6 +39,81 @@ export default function Navbar() {
         setShowLogin(showModal)
     }
 
+    // Scroll helper: scroll to an element id (without leading '#') with header offset
+    const scrollToId = (id) => {
+        if (!id) return false;
+        // special case: home -> scroll to top
+        if (id === 'home') {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+            return true;
+        }
+        const el = document.getElementById(id);
+        if (!el) return false;
+        const header = document.querySelector('header');
+        const offset = header ? header.offsetHeight : 0;
+        // use offsetTop for reliable document position
+        const top = el.offsetTop - offset - 8; // small gap
+        window.scrollTo({ top: Math.max(0, top), behavior: 'smooth' });
+        // set focus for accessibility after a short delay
+        setTimeout(() => {
+            try { el.focus && el.focus({ preventScroll: true }); } catch (e) {}
+        }, 300);
+        return true;
+    };
+
+    const ensureNavigationThenScroll = (hash) => {
+        if (!hash) return;
+        const id = hash.startsWith('#') ? hash.slice(1) : hash;
+
+        const scrollHomeNow = () => {
+            try {
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            } catch (e) {
+                try { window.scrollTo(0, 0); } catch (err) {}
+            }
+            try { history.replaceState(null, '', '/#home'); } catch (e) {}
+        };
+
+        // If not on home, navigate first then try scrolling until element exists or timeouts
+        if (window.location.pathname !== '/') {
+            navigate('/');
+            let attempts = 0;
+            const maxAttempts = 40; // give up after ~4s
+            const tryScroll = () => {
+                attempts++;
+                if (id === 'home') {
+                    scrollHomeNow();
+                    // stop if already at top
+                    if (window.scrollY <= 2 || attempts >= maxAttempts) return;
+                    setTimeout(tryScroll, 100);
+                    return;
+                }
+                if (scrollToId(id) || attempts >= maxAttempts) return;
+                setTimeout(tryScroll, 100);
+            };
+            setTimeout(tryScroll, 200);
+        } else {
+            // already on home
+            if (id === 'home') {
+                scrollHomeNow();
+            } else {
+                scrollToId(id);
+            }
+        }
+    };
+
+    const handleNavClick = (href, opts = {}) => (e) => {
+        if (e && e.preventDefault) e.preventDefault();
+        setActive(href);
+        if (href && href.startsWith('#')) {
+            ensureNavigationThenScroll(href);
+        } else if (href) {
+            // fallback navigation for non-hash links
+            try { navigate(href); } catch (err) {}
+        }
+        if (opts.closeMenu) setMenuOpen(false);
+    };
+
     return (
         <>
             <header
@@ -48,12 +125,17 @@ export default function Navbar() {
             >
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 py-3 sm:py-4 flex items-center justify-between">
                     {/* Logo */}
-                    <a
-                        href="#home"
-                        className="font-display text-2xl sm:text-3xl font-bold text-stone-900 dark:text-white hover:text-amber-600 dark:hover:text-teal-400 transition-colors"
+                    <button
+                        onClick={(e) => {
+                            e.preventDefault();
+                            setActive('#home');
+                            ensureNavigationThenScroll('#home');
+                        }}
+                        aria-label="Home"
+                        className="bg-transparent p-0 m-0"
                     >
-                        BM
-                    </a>
+                        <BrandName className="text-stone-900 dark:text-white"/>
+                    </button>
 
                     {/* Desktop Nav */}
                     <nav className="hidden md:flex items-center gap-6 lg:gap-8 py-3">
@@ -61,7 +143,7 @@ export default function Navbar() {
                             <a
                                 key={l.href}
                                 href={l.href}
-                                onClick={() => setActive(l.href)}
+                                onClick={handleNavClick(l.href)}
                                 className={`nav-link ${active === l.href ? 'text-amber-600 dark:text-teal-400' : ''} text-base lg:text-lg`}
                             >
                                 {l.label}
@@ -120,10 +202,7 @@ export default function Navbar() {
                             <a
                                 key={l.href}
                                 href={l.href}
-                                onClick={() => {
-                                    setMenuOpen(false);
-                                    setActive(l.href);
-                                }}
+                                onClick={(e) => { handleNavClick(l.href, { closeMenu: true })(e); }}
                                 className={`nav-link ${active === l.href ? 'text-amber-600 dark:text-teal-400' : ''} text-lg`}
                             >
                                 {l.label}

@@ -38,7 +38,7 @@ export default function About() {
     const [ref, visible] = useInView()
 
     return (
-        <section id="about" ref={ref} className="py-28 relative bg-white dark:bg-navy-950">
+        <section id="about" ref={ref} className="py-28 relative bg-site">
             <div className="max-w-7xl mx-auto px-6">
                 <div
                     className={`transition-all duration-700 ${visible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
@@ -87,7 +87,7 @@ export default function About() {
                         <div className="mt-10 space-y-6">
                             {Object.entries(stacks).map(([category, items]) => (
                                 <div key={category}>
-                                    <h4 className="font-mono text-xs text-amber-600 dark:text-teal-400 mb-3 uppercase tracking-widest">{category}</h4>
+                                    <h4 className="text-xs text-amber-600 dark:text-white font-bold mb-3 uppercase tracking-widest">{category}</h4>
                                     <div className="flex flex-wrap gap-2">
                                         {items.map(item => (
                                             <span key={item} className="tag">{item}</span>

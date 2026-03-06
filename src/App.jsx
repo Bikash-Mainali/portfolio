@@ -5,7 +5,7 @@ import Skills from './components/Skills'
 import Experience from './components/Experience.jsx'
 import Projects from './components/Projects.jsx'
 import Contact from './components/Contact'
-import Footer from './components/Footer'
+import Footer from './components/shared/Footer.jsx'
 
 export default function App() {
   return (

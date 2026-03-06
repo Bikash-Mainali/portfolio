@@ -1,9 +1,10 @@
-import {useState, useRef, useCallback} from "react";
+import {useState, useRef, useCallback, useEffect} from "react";
 import {Link} from "react-router";
 import {supabase} from "../../util/supabaseClient.js";
 import {LeftArrow} from "../../icons/index.jsx";
 import {CATEGORIES, FONT_FAMILIES, FONT_SIZES, TAGS_BY_CATEGORY} from "../constants/BlogConstants.js";
 import TBtn from "./TBtn.jsx";
+import {v4 as uuidv4} from 'uuid';
 
 const BLOCK_TAGS = new Set(["p", "h1", "h2", "h3", "h4", "pre", "blockquote", "div"]);
 
@@ -207,6 +208,7 @@ export default function PostEditor() {
     const editorRef = useRef(null);
     const fileInputRef = useRef(null);
     const savedRangeRef = useRef(null);
+    const coverInputRef = useRef(null);
 
     const [title, setTitle] = useState("");
     const [categoryId, setCategoryId] = useState("");
@@ -215,8 +217,11 @@ export default function PostEditor() {
     const [published, setPublished] = useState(false);
     const [error, setError] = useState(null);
     const [wordCount, setWordCount] = useState(0);
-
-    const availableTags = categoryId ? TAGS_BY_CATEGORY[parseInt(categoryId)] || [] : [];
+    const [loading, setLoading] = useState(true);
+    const [categories, setCategories] = useState([]);
+    const [availableTags, setAvailableTags] = useState([]);
+    const [coverFile, setCoverFile] = useState(null);
+    const [coverPreview, setCoverPreview] = useState("");
 
     const saveRange = useCallback(() => {
         savedRangeRef.current = getActiveRange();
@@ -256,24 +261,154 @@ export default function PostEditor() {
         e.target.value = "";
     };
 
+    // Fetch categories once on mount
+    useEffect(() => {
+        const fetchCategories = async () => {
+            try {
+                const {data, error} = await supabase
+                    .from('categories')
+                    .select('*')
+                    .order('name');
+                setCategories(data);
+            } catch (err) {
+                setError(err.message)
+            }
+        };
+        fetchCategories();
+    }, []);
+
+
+    const fetchTagsByCategoryId = async (categoryIdStr) => {
+        // categoryIdStr is the string from the select; keep state update outside this fn
+        setSelectedTags([]);
+        setAvailableTags([]);
+        if (!categoryIdStr) return;
+        try {
+            const {data, error} = await supabase
+                .from('tags')
+                .select('*')
+                .eq('category_id', categoryIdStr)
+                .order('name', {ascending: true});
+            setAvailableTags(Array.isArray(data) ? data : []);
+        } catch (err) {
+            setError(err?.message || String(err));
+        }
+    }
+
+    // Upload a cover file to Supabase Storage and return public URL (or null)
+    const uploadCoverFile = async (file) => {
+        if (!file) return null;
+        const bucket = 'blog-images'; // ensure this bucket exists (or change to your bucket)
+        try {
+            // use a pure uuid filename (uuid.ext) so DB stores uuid-based filename
+            const id = uuidv4();
+            const ext = (file.type && file.type.split('/')[1]) || 'png';
+            const filename = `${id}.${ext}`; // stored filename in bucket root
+
+            const { data, error: uploadError } = await supabase.storage.from(bucket).upload(filename, file, { upsert: false });
+
+            if (uploadError) {
+                console.error('cover upload error', uploadError);
+                setError(uploadError.message || String(uploadError));
+                return null;
+            }
+
+            const { data: publicData } = supabase.storage.from(bucket).getPublicUrl(filename);
+
+            const publicUrl = publicData?.publicUrl || null;
+
+            // return both the storage filename and public URL; we'll store filename in DB
+            return { filename, publicUrl, id };
+        } catch (err) {
+            console.error('cover upload exception', err);
+            setError(err?.message || String(err));
+            return null;
+        }
+    }
+
     const handlePublish = async () => {
         setIsPublishing(true);
         setError(null);
         try {
+            // Upload embedded images (data: URLs) in the editor to Supabase Storage
+            async function dataURLtoBlob(dataURL) {
+                const parts = dataURL.split(',');
+                const mimeMatch = parts[0].match(/:(.*?);/);
+                const mime = mimeMatch ? mimeMatch[1] : 'image/png';
+                const bstr = atob(parts[1]);
+                let n = bstr.length;
+                const u8 = new Uint8Array(n);
+                while (n--) u8[n] = bstr.charCodeAt(n);
+                return new Blob([u8], { type: mime });
+            }
+
+            async function uploadEmbeddedImages(editorEl) {
+                if (!editorEl) return;
+                const imgs = Array.from(editorEl.querySelectorAll('img'));
+                const bucket = 'blog-images'; // adjust bucket name if different
+
+                for (let i = 0; i < imgs.length; i++) {
+                    const img = imgs[i];
+                    const src = img.getAttribute('src') || '';
+                    if (!src.startsWith('data:')) continue; // only upload embedded data URLs
+
+                    const blob = await dataURLtoBlob(src);
+                    const ext = (blob.type && blob.type.split('/')[1]) || 'png';
+                    const filename = `blogs/${Date.now()}-${uuidv4()}.${ext}`;
+
+                    // upload to Supabase Storage S3 bucket
+                    const {data, error } = await supabase.storage.from(bucket).upload(filename, blob, { upsert: false });
+                    if (error) {
+                        // don't abort all uploads on single failure, but surface error
+                        console.error('Image upload error', error);
+                        setError(error.message || String(error));
+                        continue;
+                    }
+
+                    // get public URL
+                    const { data: publicData } = supabase.storage.from(bucket).getPublicUrl(filename);
+                    const publicUrl = publicData?.publicUrl || '';
+                    if (publicUrl) {
+                        img.setAttribute('src', publicUrl);
+                    }
+                }
+            }
+
+            // upload images embedded in editor and replace srcs
+            await uploadEmbeddedImages(editorRef.current);
+
+            // Now serialize editor content (images now point to public URLs)
             const markdown = serializeToMarkdown(editorRef.current);
+
+            // Insert post
             const {data: post, error: postError} = await supabase
                 .from("posts")
-                .insert({title, content: markdown, category_id: parseInt(categoryId)})
+                .insert({title, content: markdown, category_id: Number(categoryId)})
                 .select()
                 .single();
+
             if (postError) throw postError;
 
+            // 4) Attach tags if any
             if (selectedTags.length > 0) {
                 const {error: tagError} = await supabase
                     .from("post_tags")
                     .insert(selectedTags.map((t) => ({post_id: post.id, tag_id: t.id})));
-                if (tagError) throw tagError;
+                if (tagError) console.error('post_tags insert error', tagError);
             }
+
+            // Upload cover image if exists — store uuid-based filename in DB as requested
+            if (coverFile) {
+                const uploadRes = await uploadCoverFile(coverFile);
+                if (uploadRes && uploadRes.filename) {
+                    const filenameToStore = uploadRes.filename; // e.g. '<uuid>.png'
+                    const { data, error } = await supabase
+                        .from("post_images")
+                        .insert({ post_id: post.id, url: filenameToStore, is_cover: true });
+                    debugger
+                }
+            }
+
             setPublished(true);
         } catch (err) {
             setError(err.message);
@@ -302,7 +437,7 @@ export default function PostEditor() {
 
     if (published) {
         return (
-            <div className="min-h-screen bg-stone-50 dark:bg-navy-950 flex items-center justify-center">
+            <div className="min-h-screen bg-site flex items-center justify-center">
                 <div className="text-center max-w-sm p-8">
                     <div
                         className="w-16 h-16 rounded-full bg-green-100 dark:bg-green-900/30 flex items-center justify-center mx-auto mb-5">
@@ -329,225 +464,256 @@ export default function PostEditor() {
     }
 
     return (
-        <div className="min-h-screen bg-stone-50 dark:bg-navy-950">
+        <div className="min-h-screen bg-site">
+            <div className="max-w-7xl mx-auto px-6 py-8">
 
-            {/* ── Top Bar ── */}
-            <header
-                className="sticky top-0 z-30 bg-white dark:bg-navy-900 border-b border-stone-200 dark:border-gray-700 shadow-sm">
-                <div className="max-w-5xl mx-auto px-4 h-13 flex items-center justify-between gap-4 py-2">
-                    <div className="flex items-center text-stone-900 dark:text-white">
-                        <Link to="/"
-                              className="p-1.5 hover:text-stone-700 dark:hover:text-slate-300 transition-colors rounded">
-                            <LeftArrow/>
-                        </Link>
-                        Back
-                    </div>
-                    <div className="text-xl font-semibold text-stone-800 dark:text-white">New Post</div>
+                {/* ── Top Bar ── */}
+                <header
+                    className="sticky top-0 z-30 bg-white dark:bg-navy-900 border-b border-stone-200 dark:border-gray-700 shadow-sm">
+                    <div className="max-w-5xl mx-auto px-4 h-13 flex items-center justify-between gap-4 py-2">
+                        <div className="flex items-center text-stone-900 dark:text-white">
+                            <Link to="/"
+                                  className="p-1.5 hover:text-stone-700 dark:hover:text-slate-300 transition-colors rounded">
+                                <LeftArrow/>
+                            </Link>
+                            Back
+                        </div>
+                        <div className="text-xl font-semibold text-stone-800 dark:text-white">New Post</div>
 
-                    <div className="flex items-center gap-3">
-                        {wordCount > 0 && (
-                            <span className="text-xs text-stone-400 dark:text-slate-500 hidden sm:block">
+                        <div className="flex items-center gap-3">
+                            {wordCount > 0 && (
+                                <span className="text-xs text-stone-400 dark:text-slate-500 hidden sm:block">
                                 {wordCount} words · ~{Math.max(1, Math.ceil(wordCount / 200))} min read
                             </span>
-                        )}
-                        {error && <p className="text-xs text-red-500 max-w-xs truncate">{error}</p>}
-                        <button
-                            onClick={handlePublish}
-                            disabled={!isPublishable}
-                            className="px-4 py-2 bg-amber-600 dark:bg-teal-500 text-white text-sm font-semibold rounded-lg hover:bg-amber-700 dark:hover:bg-teal-600 disabled:bg-stone-200 dark:disabled:bg-gray-700 disabled:text-stone-400 dark:disabled:text-gray-500 disabled:cursor-not-allowed transition-colors"
-                        >
-                            {isPublishing ? "Publishing…" : "Publish"}
-                        </button>
+                            )}
+                            {error && <p className="text-xs text-red-500 max-w-xs truncate">{error}</p>}
+                            <button
+                                onClick={handlePublish}
+                                disabled={!isPublishable}
+                                className="px-4 py-2 bg-amber-600 dark:bg-teal-500 text-white text-sm font-semibold rounded-lg hover:bg-amber-700 dark:hover:bg-teal-600 disabled:bg-stone-200 dark:disabled:bg-gray-700 disabled:text-stone-400 dark:disabled:text-gray-500 disabled:cursor-not-allowed transition-colors"
+                            >
+                                {isPublishing ? "Publishing…" : "Publish"}
+                            </button>
+                        </div>
                     </div>
-                </div>
-            </header>
+                </header>
 
-            <div className="max-w-5xl mx-auto px-4 py-6 grid grid-cols-1 lg:grid-cols-[1fr_256px] gap-6">
+                <div className="max-w-5xl mx-auto px-4 py-6 grid grid-cols-1 lg:grid-cols-[1fr_256px] gap-6">
 
-                {/* ── Editor Card ── */}
-                <div
-                    className="bg-white dark:bg-navy-900 rounded-xl border border-stone-200 dark:border-gray-700 shadow-sm overflow-hidden">
-
+                    {/* ── Editor Card ── */}
                     <div
-                        className="border-b border-stone-100 dark:border-gray-700 px-3 py-2 flex flex-wrap items-center gap-1 bg-stone-50 dark:bg-navy-800"
-                        onMouseDown={saveRange}
-                    >
-                        <select
-                            defaultValue=""
-                            onChange={(e) => {
-                                const val = e.target.value;
-                                e.target.value = "";
-                                if (val) withRange((range, editor) => formatBlock(val, range, editor));
-                            }}
-                            className="text-xs text-stone-600 dark:text-slate-300 bg-white dark:bg-navy-950 border border-stone-200 dark:border-gray-600 rounded-md px-2 py-1.5 outline-none cursor-pointer hover:bg-stone-50 dark:hover:bg-navy-900 transition-colors"
+                        className="bg-white dark:bg-navy-900 rounded-xl border border-stone-200 dark:border-gray-700 shadow-sm overflow-hidden">
+
+                        <div
+                            className="border-b border-stone-100 dark:border-gray-700 px-3 py-2 flex flex-wrap items-center gap-1 bg-stone-50 dark:bg-navy-800"
+                            onMouseDown={saveRange}
                         >
-                            <option value="" disabled>Heading</option>
-                            <option value="p">Normal</option>
-                            <option value="h1">Heading 1</option>
-                            <option value="h2">Heading 2</option>
-                            <option value="h3">Heading 3</option>
-                            <option value="h4">Heading 4</option>
-                        </select>
+                            <select
+                                defaultValue=""
+                                onChange={(e) => {
+                                    const val = e.target.value;
+                                    e.target.value = "";
+                                    if (val) withRange((range, editor) => formatBlock(val, range, editor));
+                                }}
+                                className="text-xs text-stone-600 dark:text-slate-300 bg-white dark:bg-navy-950 border border-stone-200 dark:border-gray-600 rounded-md px-2 py-1.5 outline-none cursor-pointer hover:bg-stone-50 dark:hover:bg-navy-900 transition-colors"
+                            >
+                                <option value="" disabled>Heading</option>
+                                <option value="p">Normal</option>
+                                <option value="h1">Heading 1</option>
+                                <option value="h2">Heading 2</option>
+                                <option value="h3">Heading 3</option>
+                                <option value="h4">Heading 4</option>
+                            </select>
 
-                        <select
-                            defaultValue=""
-                            onChange={(e) => {
-                                const val = e.target.value;
-                                e.target.value = "";
-                                if (val) withRange((range) => applySpanStyle("fontFamily", val, range));
-                            }}
-                            className="text-xs text-stone-600 dark:text-slate-300 bg-white dark:bg-navy-950 border border-stone-200 dark:border-gray-600 rounded-md px-2 py-1.5 outline-none cursor-pointer hover:bg-stone-50 dark:hover:bg-navy-900 transition-colors"
-                        >
-                            <option value="" disabled>Font</option>
-                            {FONT_FAMILIES.map((f) => (
-                                <option key={f.value} value={f.value} style={{fontFamily: f.value}}>{f.label}</option>
-                            ))}
-                        </select>
+                            <select
+                                defaultValue=""
+                                onChange={(e) => {
+                                    const val = e.target.value;
+                                    e.target.value = "";
+                                    if (val) withRange((range) => applySpanStyle("fontFamily", val, range));
+                                }}
+                                className="text-xs text-stone-600 dark:text-slate-300 bg-white dark:bg-navy-950 border border-stone-200 dark:border-gray-600 rounded-md px-2 py-1.5 outline-none cursor-pointer hover:bg-stone-50 dark:hover:bg-navy-900 transition-colors"
+                            >
+                                <option value="" disabled>Font</option>
+                                {FONT_FAMILIES.map((f) => (
+                                    <option key={f.value} value={f.value}
+                                            style={{fontFamily: f.value}}>{f.label}</option>
+                                ))}
+                            </select>
 
-                        <select
-                            defaultValue=""
-                            onChange={(e) => {
-                                const val = e.target.value;
-                                e.target.value = "";
-                                if (val) withRange((range) => applySpanStyle("fontSize", val, range));
-                            }}
-                            className="text-xs text-stone-600 dark:text-slate-300 bg-white dark:bg-navy-950 border border-stone-200 dark:border-gray-600 rounded-md px-2 py-1.5 outline-none cursor-pointer hover:bg-stone-50 dark:hover:bg-navy-900 transition-colors"
-                        >
-                            <option value="" disabled>Size</option>
-                            {FONT_SIZES.map((s) => (
-                                <option key={s.value} value={s.value}>{s.label}</option>
-                            ))}
-                        </select>
+                            <select
+                                defaultValue=""
+                                onChange={(e) => {
+                                    const val = e.target.value;
+                                    e.target.value = "";
+                                    if (val) withRange((range) => applySpanStyle("fontSize", val, range));
+                                }}
+                                className="text-xs text-stone-600 dark:text-slate-300 bg-white dark:bg-navy-950 border border-stone-200 dark:border-gray-600 rounded-md px-2 py-1.5 outline-none cursor-pointer hover:bg-stone-50 dark:hover:bg-navy-900 transition-colors"
+                            >
+                                <option value="" disabled>Size</option>
+                                {FONT_SIZES.map((s) => (
+                                    <option key={s.value} value={s.value}>{s.label}</option>
+                                ))}
+                            </select>
 
-                        <div className="w-px h-5 bg-stone-200 dark:bg-gray-600 mx-0.5"/>
+                            <div className="w-px h-5 bg-stone-200 dark:bg-gray-600 mx-0.5"/>
 
-                        <TBtn
-                            onAction={() => withRange((range) => toggleBold(range))}
-                            title="Bold"
-                        >
-                            <b>B</b>
-                        </TBtn>
+                            <TBtn
+                                onAction={() => withRange((range) => toggleBold(range))}
+                                title="Bold"
+                            >
+                                <b>B</b>
+                            </TBtn>
 
-                        <div className="w-px h-5 bg-stone-200 dark:bg-gray-600 mx-0.5"/>
+                            <div className="w-px h-5 bg-stone-200 dark:bg-gray-600 mx-0.5"/>
 
-                        <TBtn
-                            onAction={() => withRange((range, editor) => formatBlock("pre", range, editor))}
-                            title="Code Block"
-                        >
-                            <span className="font-mono text-xs">&lt;/&gt;</span>
-                        </TBtn>
+                            <TBtn
+                                onAction={() => withRange((range, editor) => formatBlock("pre", range, editor))}
+                                title="Code Block"
+                            >
+                                <span className="font-mono text-xs">&lt;/&gt;</span>
+                            </TBtn>
 
-                        <div className="w-px h-5 bg-stone-200 dark:bg-gray-600 mx-0.5"/>
+                            <div className="w-px h-5 bg-stone-200 dark:bg-gray-600 mx-0.5"/>
 
-                        <TBtn
-                            onAction={() => fileInputRef.current?.click()}
-                            title="Upload Image"
-                        >
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"
-                                 className="w-4 h-4 inline">
-                                <rect x="3" y="3" width="18" height="18" rx="2"/>
-                                <circle cx="8.5" cy="8.5" r="1.5"/>
-                                <polyline points="21 15 16 10 5 21"/>
-                            </svg>
-                            <span className="ml-1 text-xs">Image</span>
-                        </TBtn>
-                        <input
-                            ref={fileInputRef}
-                            type="file"
-                            accept="image/*"
-                            className="hidden"
-                            onChange={handleImageUpload}
-                        />
-                    </div>
+                            <TBtn
+                                onAction={() => fileInputRef.current?.click()}
+                                title="Upload Image"
+                            >
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"
+                                     className="w-4 h-4 inline">
+                                    <rect x="3" y="3" width="18" height="18" rx="2"/>
+                                    <circle cx="8.5" cy="8.5" r="1.5"/>
+                                    <polyline points="21 15 16 10 5 21"/>
+                                </svg>
+                                <span className="ml-1 text-xs">Image</span>
+                            </TBtn>
+                            <input
+                                ref={fileInputRef}
+                                type="file"
+                                accept="image/*"
+                                className="hidden"
+                                onChange={handleImageUpload}
+                            />
+                        </div>
 
-                    <div className="px-8 pt-8 pb-4">
-                        <input
-                            type="text"
-                            value={title}
-                            onChange={(e) => setTitle(e.target.value)}
-                            placeholder="Post title…"
-                            className="w-full text-3xl font-bold text-stone-900 dark:text-white placeholder-stone-300 dark:placeholder-slate-600 outline-none bg-transparent border-b-2 border-transparent focus:border-amber-200 dark:focus:border-teal-400/30 pb-2 transition-colors"
-                            style={{fontFamily: "Georgia, serif"}}
-                        />
-                    </div>
-
-                    <div
-                        ref={editorRef}
-                        contentEditable
-                        suppressContentEditableWarning
-                        onInput={handleInput}
-                        onKeyUp={handleSelectionChange}
-                        onMouseUp={handleSelectionChange}
-                        data-placeholder="Start writing your post…"
-                        className="px-8 pb-16 pt-2 min-h-[480px] outline-none text-stone-800 dark:text-slate-200"
-                        style={{fontFamily: "Georgia, serif", fontSize: "17px", lineHeight: "1.8"}}
-                    />
-                </div>
-
-                {/* ── Sidebar ── */}
-                <div className="space-y-4">
-                    <div
-                        className="bg-white dark:bg-navy-900 rounded-xl border border-stone-200 dark:border-gray-700 shadow-sm p-4">
-                        <h3 className="text-xs font-semibold text-stone-500 dark:text-slate-400 uppercase tracking-wide mb-3">Category</h3>
-                        <select
-                            value={categoryId}
-                            onChange={(e) => {
-                                setCategoryId(e.target.value);
-                                setSelectedTags([]);
-                            }}
-                            className="w-full bg-stone-50 dark:bg-navy-950 border border-stone-200 dark:border-gray-600 text-stone-700 dark:text-slate-300 rounded-lg px-3 py-2 text-sm outline-none focus:border-amber-400 dark:focus:border-teal-400 transition-colors"
-                        >
-                            <option value="">Select…</option>
-                            {CATEGORIES.map((c) => <option key={c.id} value={c.id}>{c.name}</option>)}
-                        </select>
-
-                        {availableTags.length > 0 && (
-                            <div className="mt-4">
-                                <h3 className="text-xs font-semibold text-stone-500 dark:text-slate-400 uppercase tracking-wide mb-2">Tags</h3>
-                                <div className="flex flex-wrap gap-1.5">
-                                    {availableTags.map((tag) => {
-                                        const sel = selectedTags.find((t) => t.id === tag.id);
-                                        return (
-                                            <button
-                                                key={tag.id}
-                                                onClick={() => toggleTag(tag)}
-                                                className={`px-2.5 py-1 rounded-full text-xs font-medium border transition-colors ${
-                                                    sel
-                                                        ? "bg-amber-600 dark:bg-teal-500 border-amber-600 dark:border-teal-500 text-white"
-                                                        : "bg-white dark:bg-navy-950 border-stone-200 dark:border-gray-600 text-stone-600 dark:text-slate-400 hover:border-amber-300 dark:hover:border-teal-400"
-                                                }`}
-                                            >
-                                                {tag.name}
-                                            </button>
-                                        );
-                                    })}
+                        <div className="px-8 pt-6 pb-4">
+                            {/* Cover upload placed above title */}
+                            <div className="mb-4">
+                                <h3 className="text-sm font-medium text-stone-600 dark:text-zinc-300 mb-2">Cover image</h3>
+                                <div className="flex items-center gap-3">
+                                    {coverPreview ? (
+                                        <img src={coverPreview} alt="cover preview" className="w-full h-24 object-cover rounded-md border" />
+                                    ) : (
+                                        <div className="w-full h-24 bg-stone-100 dark:bg-navy-800 rounded-md flex items-center justify-center text-stone-400">Preview</div>
+                                    )}
+                                    <div className="flex flex-col">
+                                        <input ref={coverInputRef} type="file" accept="image/*" className="hidden" onChange={(e) => {
+                                            const f = e.target.files?.[0];
+                                            if (!f) return;
+                                            setCoverFile(f);
+                                            const url = URL.createObjectURL(f);
+                                            setCoverPreview(url);
+                                        }} />
+                                        <div className="flex gap-2">
+                                            <button type="button" onClick={() => coverInputRef.current?.click()} className="px-3 py-1 text-xs rounded bg-amber-600 text-white">Choose</button>
+                                            {coverFile && <button type="button" onClick={() => { setCoverFile(null); setCoverPreview(''); coverInputRef.current.value = ''; }} className="px-3 py-1 text-xs rounded border">Remove</button>}
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
-                        )}
+
+                            <div className="pt-2">
+                                <input
+                                    type="text"
+                                    value={title}
+                                    onChange={(e) => setTitle(e.target.value)}
+                                    placeholder="Post title…"
+                                    className="w-full text-3xl font-bold text-stone-900 dark:text-white placeholder-stone-300 dark:placeholder-slate-600 outline-none bg-transparent border-b-2 border-transparent focus:border-amber-200 dark:focus:border-teal-400/30 pb-2 transition-colors"
+                                    style={{fontFamily: "Georgia, serif"}}
+                                />
+                            </div>
+                        </div>
+
+                        <div
+                            ref={editorRef}
+                            contentEditable
+                            suppressContentEditableWarning
+                            onInput={handleInput}
+                            onKeyUp={handleSelectionChange}
+                            onMouseUp={handleSelectionChange}
+                            data-placeholder="Start writing your post…"
+                            className="px-8 pb-16 pt-2 min-h-[480px] outline-none text-stone-800 dark:text-slate-200"
+                            style={{fontFamily: "Georgia, serif", fontSize: "17px", lineHeight: "1.8"}}
+                        />
                     </div>
 
-                    <div
-                        className="bg-white dark:bg-navy-900 rounded-xl border border-stone-200 dark:border-gray-700 shadow-sm p-4">
-                        <h3 className="text-xs font-semibold text-stone-500 dark:text-slate-400 uppercase tracking-wide mb-3">Stats</h3>
-                        <div className="space-y-2">
-                            {[
-                                ["Words", wordCount || "—"],
-                                ["Read time", wordCount ? `~${Math.max(1, Math.ceil(wordCount / 200))} min` : "—"],
-                                ["Category", categoryId ? CATEGORIES.find(c => c.id == categoryId)?.name : "—"],
-                                ["Tags", selectedTags.length || "—"],
-                            ].map(([label, val]) => (
-                                <div key={label} className="flex justify-between">
-                                    <span className="text-xs text-stone-400 dark:text-slate-500">{label}</span>
-                                    <span
-                                        className="text-xs font-medium text-stone-700 dark:text-slate-300">{val}</span>
+                    {/* ── Sidebar ── */}
+                    <div className="space-y-4">
+                        <div
+                            className="bg-white dark:bg-navy-900 rounded-xl border border-stone-200 dark:border-gray-700 shadow-sm p-4">
+                            <h3 className="text-xs font-semibold text-stone-500 dark:text-slate-400 uppercase tracking-wide mb-3">Category</h3>
+                            <select
+                                value={categoryId}
+                                onChange={(e) => {
+                                    const cidStr = e.target.value;
+                                    // keep categoryId as a string to match option values and prevent select mismatches
+                                    setCategoryId(cidStr);
+                                    fetchTagsByCategoryId(cidStr);
+                                }}
+                                className="w-full bg-site border border-stone-200 dark:border-gray-600 text-stone-700 dark:text-slate-300 rounded-lg px-3 py-2 text-sm outline-none focus:border-amber-400 dark:focus:border-teal-400 transition-colors"
+                            >
+                                <option value="">Select…</option>
+                                {categories.map((c) => <option key={c.id} value={String(c.id)}>{c.name}</option>)}
+                            </select>
+
+                            {availableTags.length > 0 && (
+                                <div className="mt-4">
+                                    <h3 className="text-xs font-semibold text-stone-500 dark:text-slate-400 uppercase tracking-wide mb-2">Tags</h3>
+                                    <div className="flex flex-wrap gap-1.5">
+                                        {availableTags.map((tag) => {
+                                            const sel = selectedTags.find((t) => t.id === tag.id);
+                                            return (
+                                                <button
+                                                    key={tag.id}
+                                                    onClick={() => toggleTag(tag)}
+                                                    className={`px-2.5 py-1 rounded-full text-xs font-medium border transition-colors ${
+                                                        sel
+                                                            ? "bg-amber-600 dark:bg-teal-500 border-amber-600 dark:border-teal-500 text-white"
+                                                            : "bg-white dark:bg-navy-950 border-stone-200 dark:border-gray-600 text-stone-600 dark:text-slate-400 hover:border-amber-300 dark:hover:border-teal-400"
+                                                    }`}
+                                                >
+                                                    {tag.name}
+                                                </button>
+                                            );
+                                        })}
+                                    </div>
                                 </div>
-                            ))}
+                            )}
+                        </div>
+
+                        <div
+                            className="bg-white dark:bg-navy-900 rounded-xl border border-stone-200 dark:border-gray-700 shadow-sm p-4">
+                            <h3 className="text-xs font-semibold text-stone-500 dark:text-slate-400 uppercase tracking-wide mb-3">Stats</h3>
+                            <div className="space-y-2">
+                                {[
+                                    ["Words", wordCount || "—"],
+                                    ["Read time", wordCount ? `~${Math.max(1, Math.ceil(wordCount / 200))} min` : "—"],
+                                    ["Category", categoryId ? CATEGORIES.find(c => c.id === Number(categoryId))?.name : "—"],
+                                    ["Tags", selectedTags.length || "—"],
+                                ].map(([label, val]) => (
+                                    <div key={label} className="flex justify-between">
+                                        <span className="text-xs text-stone-400 dark:text-slate-500">{label}</span>
+                                        <span
+                                            className="text-xs font-medium text-stone-700 dark:text-slate-300">{val}</span>
+                                    </div>
+                                ))}
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
 
-            <style>{`
+                <style>{`
                 [contenteditable][data-placeholder]:empty:before {
                     content: attr(data-placeholder);
                     color: #d1d5db;
@@ -578,6 +744,7 @@ export default function PostEditor() {
                 .dark [contenteditable] img { border-color: #374151; }
                 [contenteditable]:focus { outline: none; }
             `}</style>
+            </div>
         </div>
     );
 }

@@ -8,6 +8,7 @@ import AdminLayout from "./components/AdminLayout.jsx";
 import ProtectedRoute from "./components/ProtectedRoute.jsx";
 import NotFound from "./components/NotFound.jsx";
 import Blogs from "./components/Blogs.jsx";
+import Blog from "./components/blogs/Blog.jsx";
 
 ReactDOM.createRoot(document.getElementById('root')).render(
     <React.StrictMode>
@@ -16,7 +17,10 @@ ReactDOM.createRoot(document.getElementById('root')).render(
                 <Route index element={<App/>}/>
                 <Route path="/home" element={<App/>}/>
                 <Route path="*" element={<NotFound/>}/>
-                <Route path="/blogs" element={<Blogs/>}/>
+                <Route path="blogs">
+                    <Route index element={<Blogs/>}/>
+                    <Route path=":postId" element={<Blog/>}/>
+                </Route>
                 <Route path="/admin/*" element={
                     <ProtectedRoute>
                         <AdminLayout/>

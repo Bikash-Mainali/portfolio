@@ -39,11 +39,11 @@ export default function Home() {
 
     return (
         <section id="home"
-                 className="relative min-h-screen flex items-center overflow-hidden bg-white dark:bg-navy-950">
+                 className="relative min-h-screen flex items-center overflow-hidden bg-site">
             {/* Background orbs */}
-            <div className="orb w-96 h-96 bg-amber-600/10 dark:bg-teal-400/8 top-20 -left-40"
+            <div className="orb w-96 h-126 bg-amber-600/5 dark:bg-teal-400/8 top-20 -left-40"
                  style={{animationDelay: '0s'}}></div>
-            <div className="orb w-72 h-72 bg-amber-600/8 dark:bg-teal-400/6 bottom-20 -right-20"
+            <div className="orb w-72 h-112 bg-amber-600/5 dark:bg-teal-400/8 bottom-20 -right-20"
                  style={{animationDelay: '3s'}}></div>
 
             {/* Dot grid */}
@@ -136,8 +136,10 @@ export default function Home() {
                             {/* Floating badge */}
                             <div
                                 className="absolute -bottom-2 -left-8 card-glass  rounded-xl px-4 py-2 flex items-center gap-2 shadow-lg shadow-amber-600/20 dark:shadow-black/40 d">
+
                                 <span
-                                    className="w-3 h-3 rounded-full bg-amber-600 dark:bg-teal-400 animate-pulse [animation-duration:0.5s]"></span>
+                                    className="w-3 h-3 rounded-full bg-red-600 animate-pulse [animation-duration:0.5s]"></span>
+
                                 <span
                                     className="font-bold text-xs tracking-wider text-white dark:text-teal-400  decoration-amber-400 decoration-2 underline-offset-4">Available for remote-work</span>
                             </div>

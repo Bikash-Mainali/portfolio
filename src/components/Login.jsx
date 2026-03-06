@@ -57,7 +57,7 @@ export default function Login({displayLoginModal}) {
                             name="email"
                             value={userCredentials.email}
                             onChange={handleOnChange}
-                            className="w-full px-4 py-2 bg-stone-50 dark:bg-navy-950 border border-stone-300 dark:border-gray-600 rounded-lg text-stone-900 dark:text-white focus:outline-none focus:border-amber-600 dark:focus:border-teal-400 transition-colors"
+                            className="w-full px-4 py-2 bg-site border border-stone-300 dark:border-gray-600 rounded-lg text-stone-900 dark:text-white focus:outline-none focus:border-amber-600 dark:focus:border-teal-400 transition-colors"
                             placeholder="your@email.com"
                             required
                         />
@@ -71,8 +71,8 @@ export default function Login({displayLoginModal}) {
                             name="password"
                             value={userCredentials.password}
                             onChange={handleOnChange}
-                            className="w-full px-4 py-2 bg-stone-50 dark:bg-navy-950 border border-stone-300 dark:border-gray-600 rounded-lg text-stone-900 dark:text-white focus:outline-none focus:border-amber-600 dark:focus:border-teal-400 transition-colors"
-                            placeholder="••••••••"
+                            className="w-full px-4 py-2 bg-site border border-stone-300 dark:border-gray-600 rounded-lg text-stone-900 dark:text-white focus:outline-none focus:border-amber-600 dark:focus:border-teal-400 transition-colors"
+                            placeholder="password"
                             required
                         />
                     </div>

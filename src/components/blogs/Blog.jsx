@@ -94,7 +94,7 @@ export default function Blog() {
             className="min-h-screen py-5 max-w-7xl   px-10 sm:px-5 mx-auto relative  transition-colors duration-300 text-stone-900  dark:text-zinc-100"
             style={{fontFamily: "'Georgia', serif"}}>
             <div
-                className="sticky top-0 z-50 px-10 border-b bg-site-bg dark:border-gray-700 border-gray-300 sm:px-5 py-3">
+                className="sticky top-0 z-50 px-10 border-b bg-white dark:border-dark border-light sm:px-5 py-3">
                 <div className="flex justify-between items-center">
                     <div className="flex items-center gap-3">
                         <BrandName to={'/'} className="text-amber-600 dark:text-white text-lg"/>
@@ -104,7 +104,7 @@ export default function Blog() {
             </div>
 
             <div
-                className="mx-auto mt-20 border dark:border-gray-700 rounded-2xl border-gray-300 overflow-hidden">
+                className="mx-auto mt-20 border dark:border-dark rounded-2xl border-light overflow-hidden">
                 <button
                     onClick={goBack}
                     className={`m-4 cursor-pointer text-stone-700 dark:text-zinc-300 text-sm transition-colors 'cursor-pointer hover:text-amber-600 dark:hover:text-teal-400'}`}

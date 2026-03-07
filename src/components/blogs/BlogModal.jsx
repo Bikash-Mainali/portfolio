@@ -25,7 +25,7 @@ export default function BlogModal({post, onClose}) {
             onClick={onClose}
         >
             <div
-                className="border rounded-2xl w-full sm:max-w-7xl max-h-[90vh] overflow-y-auto shadow-2xl dark:bg-zinc-900 dark:border-gray-600 bg-white border-stone-200"
+                className="border rounded-2xl w-full sm:max-w-7xl max-h-[90vh] overflow-y-auto shadow-2xl dark:bg-zinc-900 dark:border-dark bg-white border-stone-200"
                 onClick={(e) => e.stopPropagation()}
                 style={scrollbarStyle}
             >

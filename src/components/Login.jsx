@@ -32,17 +32,17 @@ export default function Login({displayLoginModal}) {
 
     return (
         <div
-            className="fixed inset-0 z-[60] flex items-center justify-center bg-black/50 dark:bg-black/70 backdrop-blur-sm p-5"
+            className="fixed inset-0 z-[60] flex items-center justify-center bg-overlay backdrop-blur-sm p-5"
             onClick={closeModal}
         >
             <div
-                className="bg-white dark:bg-navy-900 border border-stone-300 dark:border-gray-600 rounded-xl p-8 w-full max-w-md shadow-2xl dark:shadow-[1px_1px_20px_16px_#404342]"
+                className="bg-white dark:bg-navy-900 border border-light dark:border-dark rounded-xl p-8 w-full max-w-md shadow-card-light dark:shadow-card-dark"
                 onClick={(e) => e.stopPropagation()}>
                 <div className="flex justify-between items-center mb-6">
-                    <h2 className="text-2xl font-bold text-stone-900 dark:text-white">Login</h2>
+                    <h2 className="text-3xl font-bold text-stone-900 dark:text-white">Login</h2>
                     <button
                         onClick={closeModal}
-                        className="text-stone-600 dark:text-gray-400 hover:text-stone-900 dark:hover:text-white text-3xl"
+                        className="cursor-pointer text-3xl text-white hover:text-primary"
                     >
                         &times;
                     </button>
@@ -51,13 +51,13 @@ export default function Login({displayLoginModal}) {
                 <form onSubmit={handleSubmit} className="space-y-4">
                     <div>
                         <label
-                            className="block text-sm font-medium text-stone-700 dark:text-gray-300 mb-2">Email</label>
+                            className="block text-sm font-medium mb-2">Email</label>
                         <input
                             type="email"
                             name="email"
                             value={userCredentials.email}
                             onChange={handleOnChange}
-                            className="w-full px-4 py-2 bg-site border border-stone-300 dark:border-gray-600 rounded-lg text-stone-900 dark:text-white focus:outline-none focus:border-amber-600 dark:focus:border-teal-400 transition-colors"
+                            className="w-full px-4 py-2 border border-light dark:border-dark rounded-lg  focus:outline-none  focus:border-primary transition-colors"
                             placeholder="your@email.com"
                             required
                         />
@@ -65,13 +65,13 @@ export default function Login({displayLoginModal}) {
 
                     <div>
                         <label
-                            className="block text-sm font-medium text-stone-700 dark:text-gray-300 mb-2">Password</label>
+                            className="block text-sm font-medium  mb-2">Password</label>
                         <input
                             type="password"
                             name="password"
                             value={userCredentials.password}
                             onChange={handleOnChange}
-                            className="w-full px-4 py-2 bg-site border border-stone-300 dark:border-gray-600 rounded-lg text-stone-900 dark:text-white focus:outline-none focus:border-amber-600 dark:focus:border-teal-400 transition-colors"
+                            className="w-full px-4 py-2 border border-light dark:border-dark rounded-lg  focus:outline-none  focus:border-primary transition-colors"
                             placeholder="password"
                             required
                         />
@@ -79,7 +79,7 @@ export default function Login({displayLoginModal}) {
 
                     <button
                         type="submit"
-                        className="w-full bg-amber-600 hover:bg-amber-700 dark:bg-teal-500 dark:hover:bg-teal-600 text-white py-3 font-medium rounded-lg transition-colors mt-6"
+                        className="w-full cursor-pointer  bg-primary-weak text-white py-3 font-medium rounded-lg transition-colors mt-6"
                     >
                         {
                             loading && error == null ? (

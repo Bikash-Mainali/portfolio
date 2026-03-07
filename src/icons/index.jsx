@@ -11,3 +11,5 @@ export {default as GraduationCap} from "./GraduationCap";
 export {default as Barchart} from "./Barchart";
 export {default as LeftArrow} from "./LeftArrow";
 export {default as Loader} from "./Loader.jsx";
+export {default as Hamburger} from "./Hamburger.jsx";
+export {default as Close} from "./Close.jsx";

@@ -1,30 +1,29 @@
 @import "tailwindcss";
 
-/* Dark mode */
 @custom-variant dark (&:where(.dark, .dark *));
 
-/* Theme tokens */
 @theme {
-
-    /* Fonts */
     --font-display: "Playfair Display", Georgia, serif;
     --font-body: "DM Sans", sans-serif;
     --font-mono: "JetBrains Mono", monospace;
 
-    /* Navy colors */
     --color-navy-950: #04091a;
     --color-navy-900: #060d24;
-    --color-navy-800: #0a1535;
-    --color-navy-700: #0e1d47;
+    --color-navy-dim: #191924;
+    --color-primary: #2dd4bf;
+    --color-primary-weak: #14b8a6;
+    --color-accent: #e08609;
+    --color-white: #ffffff;
+    --color-slate: oklch(55.4% 0.046 257.417);
+    --color-slate2: oklch(.704 .04 256.788);
+    --color-white-dim: rgba(255, 255, 255, 0.98);
+    --color-black: #000000;
+    --color-light: #e0dddd;
+    --color-dark: #272e43;
+    --color-overlay: rgb(0 0 0 / 0.5);
+    --shadow-card-dark: 1px 1px 1px 1px rgba(85, 85, 85, 0.54);
+    --shadow-card-light: 1px 1px 1px 1px #ffffff;
 
-    /* Teal colors */
-    --color-teal-400: #2dd4bf;
-    --color-teal-500: #14b8a6;
-
-    /* Accent */
-    --color-gold: #c9a227;
-
-    /* Animations */
     --animate-fade-up: fadeUp 0.7s ease forwards;
     --animate-fade-in: fadeIn 0.6s ease forwards;
     --animate-slide-right: slideRight 0.7s ease forwards;
@@ -33,8 +32,6 @@
     --animate-float: float 6s ease-in-out infinite;
     --animate-pulse-slow: pulse 4s ease-in-out infinite;
 }
-
-/* Keyframes */
 
 @keyframes fadeUp {
     0% {
@@ -79,65 +76,28 @@
 /* typing effect */
 @keyframes typing {
     from {
-        width: 0
+        width: 0;
     }
     to {
-        width: 100%
+        width: 100%;
     }
 }
 
 @keyframes blink {
     50% {
-        border-color: transparent
+        opacity: 0;
     }
 }
 
 @layer base {
     html {
         scroll-behavior: smooth;
-    }
-
-    /* Global theme/background variables */
-    :root {
-        --site-bg: white; /* light mode background */
-        --site-bg-dark: var(--color-navy-950); /* dark mode background token */
-    }
-
-    .bg-site-bg {
-        background-color: var(--site-bg);
-    }
-
-    /* Allow .dark class to flip the site variable for ease-of-use */
-    .dark {
-        --site-bg: var(--site-bg-dark);
+        box-sizing: border-box;
+        background-color: red;
     }
 
     body {
-        @apply bg-white dark:bg-navy-950 text-stone-900 dark:text-slate-200 font-body antialiased;
-        /* Use CSS variable for site background so it's configurable globally */
-        background-color: var(--site-bg);
-        /*background-image: radial-gradient(ellipse at 20% 50%, rgba(251, 191, 36, 0.04) 0%, transparent 50%),*/
-        /*radial-gradient(ellipse at 80% 20%, rgba(245, 158, 11, 0.04) 0%, transparent 50%);*/
-    }
-
-    /* .dark class now flips --site-bg via :root override above, keep gradients but align with var */
-    .dark body {
-        background-color: var(--site-bg);
-        /*background-image: radial-gradient(ellipse at 20% 50%, rgba(45, 212, 191, 0.04) 0%, transparent 50%),*/
-        /*radial-gradient(ellipse at 80% 20%, rgba(201, 162, 39, 0.04) 0%, transparent 50%);*/
-    }
-
-    /* Utility: apply the site background on any element */
-    .bg-site {
-        background-color: var(--site-bg) !important;
-    }
-
-    .dark .bg-site {
-        background-color: var(--site-bg) !important;
-    }
-
-    ::selection {
-        @apply bg-amber-200 text-amber-900 dark:bg-teal-500/30 dark:text-teal-300;
+        @apply bg-white dark:bg-navy-950 text-white font-body antialiased;
     }
 
     .scrollbar-hidden {
@@ -206,7 +166,8 @@
         background-color: #2dd4bf;
     }
 
-    @supports (-moz-appearance: none) {
+    /* Use a standards-based feature query for scrollbar support (avoids vendor-only property in @supports) */
+    @supports (scrollbar-color: auto) {
 
         .dark html.os-win .pretty-scrollbar-for-win,
         .dark html.os-linux .pretty-scrollbar-for-linux {
@@ -222,11 +183,11 @@
     }
 
     .section-line {
-        @apply w-16 h-1 bg-gradient-to-r from-amber-500 to-amber-600 dark:from-teal-400 dark:to-gold rounded-full mb-6;
+        @apply w-16 h-1 bg-gradient-to-r from-primary to-accent rounded-full mb-6;
     }
 
     .nav-link {
-        @apply font-mono text-sm text-stone-600 dark:text-slate-400 hover:text-amber-600 dark:hover:text-teal-400 transition-colors duration-200 relative;
+        @apply font-mono text-sm  text-navy-900 dark:text-white-dim  hover:text-primary transition-colors duration-200 relative;
     }
 
     .card-glass {
@@ -234,25 +195,25 @@
     }
 
     .tag {
-        @apply font-mono text-xs px-3 py-1 rounded-full bg-amber-100 text-amber-700 border border-amber-300 dark:bg-teal-400/10 dark:text-teal-400 dark:border-teal-400/20;
+        @apply font-mono text-xs px-3 py-1 rounded-full  border bg-primary/10 dark:text-primary text-dark border-primary/20;
     }
 
     .btn-primary {
-        @apply px-6 py-3 bg-amber-500 dark:bg-teal-500 text-white dark:text-navy-950 font-body font-medium rounded-lg hover:bg-amber-400 dark:hover:bg-teal-400 transition-all duration-200 hover:shadow-lg hover:shadow-amber-500/25 dark:hover:shadow-teal-500/25 hover:-translate-y-0.5;
+        @apply px-6 py-3 bg-primary-weak  text-navy-950 font-body font-medium rounded-lg hover:bg-primary transition-all duration-200 hover:shadow-lg hover:shadow-primary-weak hover:-translate-y-0.5;
     }
 
     .btn-outline {
-        @apply px-6 py-3 border border-amber-500/50 dark:border-teal-500/50 text-amber-600 dark:text-teal-400 font-body font-medium rounded-lg hover:bg-amber-500/10 dark:hover:bg-teal-500/10 transition-all duration-200 hover:-translate-y-0.5;
+        @apply px-6 py-3 border border-primary-weak text-primary font-body font-medium rounded-lg hover:bg-primary-weak transition-all duration-200 hover:-translate-y-0.5;
     }
 }
 
 @layer utilities {
     .text-gradient {
-        @apply bg-gradient-to-r from-amber-600 to-amber-400 dark:from-teal-400 dark:to-teal-200 bg-clip-text text-transparent;
+        @apply bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent;
     }
 
-    .text-gradient-gold {
-        @apply bg-gradient-to-r from-gold to-yellow-300 bg-clip-text text-transparent;
+    .text-gradient-accent {
+        @apply bg-accent bg-clip-text text-transparent;
     }
 
     .glow-teal {
@@ -266,16 +227,6 @@
     color: #d97706;
 }
 
-.dark .typed-cursor {
-    color: #2dd4bf;
-}
-
-@keyframes blink {
-    50% {
-        opacity: 0;
-    }
-}
-
 /* Skill bar animation */
 .skill-bar-fill {
     animation: skillFill 1.5s ease forwards;
@@ -284,7 +235,7 @@
 
 @keyframes skillFill {
     from {
-        width: 0% !important;
+        width: 0 !important;
     }
 }
 

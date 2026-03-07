@@ -32,7 +32,7 @@ export default function BlogCard({post, onClick}) {
     return (
         <div
             onClick={() => onClick(post)}
-            className="group flex gap-4 sm:gap-6 lg:gap-10 border rounded-2xl overflow-hidden transition-all duration-300 cursor-pointer p-3 sm:p-4 bg-white border-stone-200 hover:border-amber-300 hover:shadow-lg hover:shadow-amber-100/50 dark:bg-zinc-900/60 dark:border-gray-600 dark:hover:border-zinc-600 dark:hover:shadow-xl dark:hover:shadow-black/20"
+            className="group flex gap-4 sm:gap-6 lg:gap-10 border rounded-2xl overflow-hidden transition-all duration-300 cursor-pointer p-3 sm:p-4 bg-white border-stone-200 hover:border-amber-300 hover:shadow-lg hover:shadow-amber-100/50 dark:bg-zinc-900/60 dark:border-dark dark:hover:border-zinc-600 dark:hover:shadow-xl dark:hover:shadow-black/20"
         >
             {/* Thumbnail */}
             <div className="shrink-0 rounded-xl overflow-hidden w-24 h-24 sm:w-32 sm:h-32 md:w-48 md:h-48 lg:w-64 lg:h-64 bg-stone-100 dark:bg-zinc-800">

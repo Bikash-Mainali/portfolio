@@ -5,7 +5,7 @@ export const CATEGORY_COLORS_DARK = {
     Food: "bg-orange-500/10 text-orange-400 border-orange-500/20",
     Music: "bg-pink-500/10 text-pink-400 border-pink-500/20",
     Fashion: "bg-rose-500/10 text-rose-400 border-rose-500/20",
-    Health: "bg-teal-500/10 text-teal-400 border-teal-500/20",
+    Health: "bg-primary-weak/10 text-teal-400 border-primary-weak/20",
     Sports: "bg-yellow-500/10 text-yellow-400 border-yellow-500/20",
     Education: "bg-indigo-500/10 text-indigo-400 border-indigo-500/20",
     Finance: "bg-green-500/10 text-green-400 border-green-500/20",

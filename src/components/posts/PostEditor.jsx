@@ -437,7 +437,7 @@ export default function PostEditor() {
 
     if (published) {
         return (
-            <div className="min-h-screen bg-site flex items-center justify-center">
+            <div className="min-h-screen bg-white flex items-center justify-center">
                 <div className="text-center max-w-sm p-8">
                     <div
                         className="w-16 h-16 rounded-full bg-green-100 dark:bg-green-900/30 flex items-center justify-center mx-auto mb-5">
@@ -450,11 +450,11 @@ export default function PostEditor() {
                     <p className="text-stone-500 dark:text-slate-400 text-sm mb-6">"{title}" is now live.</p>
                     <div className="flex gap-3 justify-center">
                         <button onClick={handleReset}
-                                className="px-5 py-2.5 bg-white dark:bg-navy-800 border border-stone-200 dark:border-gray-600 text-stone-700 dark:text-slate-300 rounded-lg text-sm font-medium hover:bg-stone-50 dark:hover:bg-navy-700 transition-colors">
+                                className="px-5 py-2.5 bg-white dark:bg-navy-900 border border-stone-200 dark:border-dark text-stone-700 dark:text-slate-300 rounded-lg text-sm font-medium hover:bg-stone-50 dark:hover:bg-navy-950 transition-colors">
                             Write Another
                         </button>
                         <Link to="/blogs"
-                              className="px-5 py-2.5 bg-amber-600 dark:bg-teal-500 text-white rounded-lg text-sm font-semibold hover:bg-amber-700 dark:hover:bg-teal-600 transition-colors">
+                              className="px-5 py-2.5 bg-amber-600 dark:bg-primary-weak text-white rounded-lg text-sm font-semibold hover:bg-amber-700 dark:hover:bg-teal-600 transition-colors">
                             View All Posts
                         </Link>
                     </div>
@@ -464,12 +464,12 @@ export default function PostEditor() {
     }
 
     return (
-        <div className="min-h-screen bg-site">
+        <div className="min-h-screen bg-white">
             <div className="max-w-7xl mx-auto px-6 py-8">
 
                 {/* ── Top Bar ── */}
                 <header
-                    className="sticky top-0 z-30 bg-white dark:bg-navy-900 border-b border-stone-200 dark:border-gray-700 shadow-sm">
+                    className="sticky top-0 z-30 bg-white dark:bg-navy-900 border-b border-stone-200 dark:border-dark shadow-sm">
                     <div className="max-w-5xl mx-auto px-4 h-13 flex items-center justify-between gap-4 py-2">
                         <div className="flex items-center text-stone-900 dark:text-white">
                             <Link to="/"
@@ -490,7 +490,7 @@ export default function PostEditor() {
                             <button
                                 onClick={handlePublish}
                                 disabled={!isPublishable}
-                                className="px-4 py-2 bg-amber-600 dark:bg-teal-500 text-white text-sm font-semibold rounded-lg hover:bg-amber-700 dark:hover:bg-teal-600 disabled:bg-stone-200 dark:disabled:bg-gray-700 disabled:text-stone-400 dark:disabled:text-gray-500 disabled:cursor-not-allowed transition-colors"
+                                className="px-4 py-2 bg-amber-600 dark:bg-primary-weak text-white text-sm font-semibold rounded-lg hover:bg-amber-700 dark:hover:bg-teal-600 disabled:bg-stone-200 dark:disabled:bg-gray-700 disabled:text-stone-400 dark:disabled:text-gray-500 disabled:cursor-not-allowed transition-colors"
                             >
                                 {isPublishing ? "Publishing…" : "Publish"}
                             </button>
@@ -502,10 +502,10 @@ export default function PostEditor() {
 
                     {/* ── Editor Card ── */}
                     <div
-                        className="bg-white dark:bg-navy-900 rounded-xl border border-stone-200 dark:border-gray-700 shadow-sm overflow-hidden">
+                        className="bg-white dark:bg-navy-900 rounded-xl border border-stone-200 dark:border-dark shadow-sm overflow-hidden">
 
                         <div
-                            className="border-b border-stone-100 dark:border-gray-700 px-3 py-2 flex flex-wrap items-center gap-1 bg-stone-50 dark:bg-navy-800"
+                            className="border-b border-stone-100 dark:border-dark px-3 py-2 flex flex-wrap items-center gap-1 bg-stone-50 dark:bg-navy-900"
                             onMouseDown={saveRange}
                         >
                             <select
@@ -515,7 +515,7 @@ export default function PostEditor() {
                                     e.target.value = "";
                                     if (val) withRange((range, editor) => formatBlock(val, range, editor));
                                 }}
-                                className="text-xs text-stone-600 dark:text-slate-300 bg-white dark:bg-navy-950 border border-stone-200 dark:border-gray-600 rounded-md px-2 py-1.5 outline-none cursor-pointer hover:bg-stone-50 dark:hover:bg-navy-900 transition-colors"
+                                className="text-xs text-stone-600 dark:text-slate-300 bg-white dark:bg-navy-950 border border-stone-200 dark:border-dark rounded-md px-2 py-1.5 outline-none cursor-pointer hover:bg-stone-50 dark:hover:bg-navy-900 transition-colors"
                             >
                                 <option value="" disabled>Heading</option>
                                 <option value="p">Normal</option>
@@ -532,7 +532,7 @@ export default function PostEditor() {
                                     e.target.value = "";
                                     if (val) withRange((range) => applySpanStyle("fontFamily", val, range));
                                 }}
-                                className="text-xs text-stone-600 dark:text-slate-300 bg-white dark:bg-navy-950 border border-stone-200 dark:border-gray-600 rounded-md px-2 py-1.5 outline-none cursor-pointer hover:bg-stone-50 dark:hover:bg-navy-900 transition-colors"
+                                className="text-xs text-stone-600 dark:text-slate-300 bg-white dark:bg-navy-950 border border-stone-200 dark:border-dark rounded-md px-2 py-1.5 outline-none cursor-pointer hover:bg-stone-50 dark:hover:bg-navy-900 transition-colors"
                             >
                                 <option value="" disabled>Font</option>
                                 {FONT_FAMILIES.map((f) => (
@@ -548,7 +548,7 @@ export default function PostEditor() {
                                     e.target.value = "";
                                     if (val) withRange((range) => applySpanStyle("fontSize", val, range));
                                 }}
-                                className="text-xs text-stone-600 dark:text-slate-300 bg-white dark:bg-navy-950 border border-stone-200 dark:border-gray-600 rounded-md px-2 py-1.5 outline-none cursor-pointer hover:bg-stone-50 dark:hover:bg-navy-900 transition-colors"
+                                className="text-xs text-stone-600 dark:text-slate-300 bg-white dark:bg-navy-950 border border-stone-200 dark:border-dark rounded-md px-2 py-1.5 outline-none cursor-pointer hover:bg-stone-50 dark:hover:bg-navy-900 transition-colors"
                             >
                                 <option value="" disabled>Size</option>
                                 {FONT_SIZES.map((s) => (
@@ -605,7 +605,7 @@ export default function PostEditor() {
                                     {coverPreview ? (
                                         <img src={coverPreview} alt="cover preview" className="w-full h-24 object-cover rounded-md border" />
                                     ) : (
-                                        <div className="w-full h-24 bg-stone-100 dark:bg-navy-800 rounded-md flex items-center justify-center text-stone-400">Preview</div>
+                                        <div className="w-full h-24 bg-stone-100 dark:bg-navy-900 rounded-md flex items-center justify-center text-stone-400">Preview</div>
                                     )}
                                     <div className="flex flex-col">
                                         <input ref={coverInputRef} type="file" accept="image/*" className="hidden" onChange={(e) => {
@@ -651,7 +651,7 @@ export default function PostEditor() {
                     {/* ── Sidebar ── */}
                     <div className="space-y-4">
                         <div
-                            className="bg-white dark:bg-navy-900 rounded-xl border border-stone-200 dark:border-gray-700 shadow-sm p-4">
+                            className="bg-white dark:bg-navy-900 rounded-xl border border-stone-200 dark:border-dark shadow-sm p-4">
                             <h3 className="text-xs font-semibold text-stone-500 dark:text-slate-400 uppercase tracking-wide mb-3">Category</h3>
                             <select
                                 value={categoryId}
@@ -661,7 +661,7 @@ export default function PostEditor() {
                                     setCategoryId(cidStr);
                                     fetchTagsByCategoryId(cidStr);
                                 }}
-                                className="w-full bg-site border border-stone-200 dark:border-gray-600 text-stone-700 dark:text-slate-300 rounded-lg px-3 py-2 text-sm outline-none focus:border-amber-400 dark:focus:border-teal-400 transition-colors"
+                                className="w-full bg-white border border-stone-200 dark:border-dark text-stone-700 dark:text-slate-300 rounded-lg px-3 py-2 text-sm outline-none focus:border-amber-400 dark:focus:border-teal-400 transition-colors"
                             >
                                 <option value="">Select…</option>
                                 {categories.map((c) => <option key={c.id} value={String(c.id)}>{c.name}</option>)}
@@ -679,8 +679,8 @@ export default function PostEditor() {
                                                     onClick={() => toggleTag(tag)}
                                                     className={`px-2.5 py-1 rounded-full text-xs font-medium border transition-colors ${
                                                         sel
-                                                            ? "bg-amber-600 dark:bg-teal-500 border-amber-600 dark:border-teal-500 text-white"
-                                                            : "bg-white dark:bg-navy-950 border-stone-200 dark:border-gray-600 text-stone-600 dark:text-slate-400 hover:border-amber-300 dark:hover:border-teal-400"
+                                                            ? "bg-amber-600 dark:bg-primary-weak border-amber-600 dark:border-primary-weak text-white"
+                                                            : "bg-white dark:bg-navy-950 border-stone-200 dark:border-dark text-stone-600 dark:text-slate-400 hover:border-amber-300 dark:hover:border-teal-400"
                                                     }`}
                                                 >
                                                     {tag.name}
@@ -693,7 +693,7 @@ export default function PostEditor() {
                         </div>
 
                         <div
-                            className="bg-white dark:bg-navy-900 rounded-xl border border-stone-200 dark:border-gray-700 shadow-sm p-4">
+                            className="bg-white dark:bg-navy-900 rounded-xl border border-stone-200 dark:border-dark shadow-sm p-4">
                             <h3 className="text-xs font-semibold text-stone-500 dark:text-slate-400 uppercase tracking-wide mb-3">Stats</h3>
                             <div className="space-y-2">
                                 {[

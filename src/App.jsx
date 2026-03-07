@@ -8,18 +8,20 @@ import Contact from './components/Contact'
 import Footer from './components/shared/Footer.jsx'
 
 export default function App() {
-  return (
-    <>
-      <Navbar />
-      <main>
-        <Home />
-        <About />
-        <Skills />
-        <Experience />
-        <Projects />
-        <Contact />
-      </main>
-      <Footer />
-    </>
-  )
+    return (
+        <>
+            <Navbar/>
+            <main>
+                <Home/>
+                <About/>
+                <Skills/>
+                <Experience/>
+                <Projects/>
+                {/*update css in contact*/}
+                <Contact/>
+            </main>
+            {/*update css in footer*/}
+            <Footer />
+        </>
+    )
 }

@@ -106,14 +106,14 @@ export default function Blogs() {
 
     return (
         <div
-            className="min-h-screen max-w-7xl px-10 sm:px-5 mx-auto relative  transition-colors duration-300 text-stone-900  dark:text-zinc-100"
+            className="section-title min-h-screen max-w-7xl px-10 sm:px-5 mx-auto relative  transition-colors duration-300 text-stone-900  dark:text-zinc-100"
             style={{fontFamily: "'Georgia', serif"}}
         >
 
             {error ? <Error message={error}/> :
                 <>
                     {/* Sticky header: BrandName (left) + ThemeToggle (right) */}
-                    <div className="sticky top-0 z-50 bg-site border-b dark:border-gray-700 border-gray-200">
+                    <div className="sticky top-0 z-50 border-b dark:border-dark border-light">
                         <div className="max-w-7xl mx-auto px-10 sm:px-5 flex items-center justify-between py-3">
                             <Link to="/" className="flex items-center gap-2">
                                 <BrandName className="text-amber-600 dark:text-white text-lg"/>
@@ -133,7 +133,7 @@ export default function Blogs() {
                         </p>
                     </div>
                     {/* Sticky search & category bar below header */}
-                    <div className="bg-site border-b border-stone-100 dark:border-zinc-800/60">
+                    <div className="border-b border-stone-100 dark:border-dark ">
                         <div className="max-w-7xl mx-auto px-10 sm:px-5 py-3">
                             {/* Search & Filters (moved into sticky bar) */}
                             <div className="flex flex-col gap-3 sm:gap-4">
@@ -150,7 +150,7 @@ export default function Blogs() {
                                         value={search}
                                         onChange={(e) => setSearch(e.target.value)}
                                         placeholder="Search posts…"
-                                        className="w-full border text-sm rounded-xl pl-10 pr-4 py-2.5 outline-none transition-colors bg-white border-stone-300 text-stone-800 placeholder-stone-400 focus:border-amber-400 shadow-sm dark:bg-zinc-900 dark:border-gray-600 dark:text-zinc-200 dark:placeholder-zinc-600 dark:focus:border-zinc-500"
+                                        className="w-full border text-sm rounded-xl pl-10 pr-4 py-2.5 outline-none transition-colors bg-white border-stone-300 text-stone-800 placeholder-stone-400 focus:border-amber-400 shadow-sm dark:bg-zinc-900 dark:border-dark dark:text-zinc-200 dark:placeholder-zinc-600 dark:focus:border-zinc-500"
                                     />
                                 </div>
 

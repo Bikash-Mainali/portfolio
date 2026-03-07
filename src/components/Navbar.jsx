@@ -3,13 +3,14 @@ import Login from "./Login.jsx";
 import {Link, useNavigate} from "react-router";
 import ThemeToggle from "./ThemToggle.jsx";
 import BrandName from "./shared/BrandName.jsx";
+import {Close, Hamburger} from "../icons/index.jsx";
 
 const links = [
     {href: '#home', label: 'Home'},
     {href: '#about', label: 'About'},
     {href: '#skills', label: 'Skills'},
     {href: '#experience', label: 'Experience'},
-    {href: '#portfolio', label: 'Projects'},
+    {href: '#projects', label: 'Projects'},
     {href: '#contact', label: 'Contact'},
 ]
 
@@ -44,7 +45,7 @@ export default function Navbar() {
         if (!id) return false;
         // special case: home -> scroll to top
         if (id === 'home') {
-            window.scrollTo({ top: 0, behavior: 'smooth' });
+            window.scrollTo({top: 0, behavior: 'smooth'});
             return true;
         }
         const el = document.getElementById(id);
@@ -53,10 +54,13 @@ export default function Navbar() {
         const offset = header ? header.offsetHeight : 0;
         // use offsetTop for reliable document position
         const top = el.offsetTop - offset - 8; // small gap
-        window.scrollTo({ top: Math.max(0, top), behavior: 'smooth' });
+        window.scrollTo({top: Math.max(0, top), behavior: 'smooth'});
         // set focus for accessibility after a short delay
         setTimeout(() => {
-            try { el.focus && el.focus({ preventScroll: true }); } catch (e) {}
+            try {
+                el.focus && el.focus({preventScroll: true});
+            } catch (e) {
+            }
         }, 300);
         return true;
     };
@@ -67,11 +71,17 @@ export default function Navbar() {
 
         const scrollHomeNow = () => {
             try {
-                window.scrollTo({ top: 0, behavior: 'smooth' });
+                window.scrollTo({top: 0, behavior: 'smooth'});
             } catch (e) {
-                try { window.scrollTo(0, 0); } catch (err) {}
+                try {
+                    window.scrollTo(0, 0);
+                } catch (err) {
+                }
             }
-            try { history.replaceState(null, '', '/#home'); } catch (e) {}
+            try {
+                history.replaceState(null, '', '/#home');
+            } catch (e) {
+            }
         };
 
         // If not on home, navigate first then try scrolling until element exists or timeouts
@@ -109,21 +119,24 @@ export default function Navbar() {
             ensureNavigationThenScroll(href);
         } else if (href) {
             // fallback navigation for non-hash links
-            try { navigate(href); } catch (err) {}
+            try {
+                navigate(href);
+            } catch (err) {
+            }
         }
         if (opts.closeMenu) setMenuOpen(false);
     };
 
     return (
-        <>
+        <div className="navbar">
             <header
-                className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
+                className={`fixed top-0 z-50 w-full transition-all duration-300 border-b border-light dark:border-dark ${
                     scrolled
-                        ? 'bg-white/90 dark:bg-navy-950/90 backdrop-blur-md border-b border-stone-300/50 dark:border-white/5 shadow-xl shadow-black/5 dark:shadow-black/20'
+                        ? 'backdrop-blur-3xl shadow-md shadow-light dark:shadow-dark'
                         : ''
                 }`}
             >
-                <div className="max-w-7xl mx-auto px-4 sm:px-6 py-3 sm:py-4 flex items-center justify-between">
+                <div className="max-w-7xl mx-auto px-4 sm:px-6 py-3 sm:py-4 flex justify-between">
                     {/* Logo */}
                     <button
                         onClick={(e) => {
@@ -134,7 +147,7 @@ export default function Navbar() {
                         aria-label="Home"
                         className="bg-transparent p-0 m-0"
                     >
-                        <BrandName className="text-stone-900 dark:text-white"/>
+                        <BrandName className="text-black dark:text-white"/>
                     </button>
 
                     {/* Desktop Nav */}
@@ -144,7 +157,7 @@ export default function Navbar() {
                                 key={l.href}
                                 href={l.href}
                                 onClick={handleNavClick(l.href)}
-                                className={`nav-link ${active === l.href ? 'text-amber-600 dark:text-teal-400' : ''} text-base lg:text-lg`}
+                                className={`nav-link ${active === l.href ? 'text-teal-400' : ''} text-base lg:text-lg`}
                             >
                                 {l.label}
                             </a>
@@ -161,7 +174,7 @@ export default function Navbar() {
                         </a>
                         <button
                             onClick={() => setShowLogin(true)}
-                            className="bg-amber-600 hover:bg-amber-700 dark:bg-teal-500 dark:hover:bg-teal-600 text-white text-sm py-2.5 lg:py-3 px-5 lg:px-7 rounded-lg transition-colors"
+                            className="bg-primary-weak hover:bg-primary text-white py-2.5 lg:py-3 px-5 lg:px-7 rounded-lg transition-colors"
                         >
                             Login
                         </button>
@@ -169,41 +182,39 @@ export default function Navbar() {
                     </nav>
 
                     {/* Mobile Controls */}
-                    <div className="md:hidden flex items-center gap-3">
+                    <div className="md:hidden flex items-center gap-3 text-black">
                         <ThemeToggle/>
                         <button
                             className="flex flex-col gap-1.5 p-2"
                             onClick={() => setMenuOpen(!menuOpen)}
                             aria-label="Toggle menu"
                         >
-                            <span
-                                className={`w-6 h-0.5 bg-amber-600 dark:bg-teal-400 transition-all duration-300 ${menuOpen ? 'rotate-45 translate-y-2' : ''}`}
-                            ></span>
-                            <span
-                                className={`w-6 h-0.5 bg-amber-600 dark:bg-teal-400 transition-all duration-300 ${menuOpen ? 'opacity-0' : ''}`}
-                            ></span>
-                            <span
-                                className={`w-6 h-0.5 bg-amber-600 dark:bg-teal-400 transition-all duration-300 ${menuOpen ? '-rotate-45 -translate-y-2' : ''}`}
-                            ></span>
+                            {menuOpen ? (
+                                <Close/>
+                            ) : (
+                                <Hamburger/>
+                            )}
                         </button>
                     </div>
                 </div>
 
                 {/* Mobile Menu */}
                 <div
-                    className={`md:hidden transition-all duration-300 ease-in-out overflow-hidden ${
-                        menuOpen ? 'max-h-screen opacity-100' : 'max-h-0 opacity-0'
+                    className={`md:hidden transition-all duration-300 ease-in-out overflow-auto shadow-2xl ${
+                        menuOpen ? 'max-h-[60vh] opacity-100' : 'max-h-0 opacity-0'
                     }`}
                 >
                     <nav
-                        className="bg-stone-100 dark:bg-navy-800 backdrop-blur-xl border-y border-stone-300 dark:border-gray-500 px-6 py-6 flex flex-col gap-5"
+                        className="dark:bg-overlay bg-white px-6 py-6 flex flex-col gap-5"
                     >
                         {links.map((l) => (
                             <a
                                 key={l.href}
                                 href={l.href}
-                                onClick={(e) => { handleNavClick(l.href, { closeMenu: true })(e); }}
-                                className={`nav-link ${active === l.href ? 'text-amber-600 dark:text-teal-400' : ''} text-lg`}
+                                onClick={(e) => {
+                                    handleNavClick(l.href, {closeMenu: true})(e);
+                                }}
+                                className={`nav-link ${active === l.href ? 'text-teal-400' : ''} text-lg`}
                             >
                                 {l.label}
                             </a>
@@ -228,7 +239,7 @@ export default function Navbar() {
                                 setShowLogin(true);
                                 setMenuOpen(false);
                             }}
-                            className="bg-amber-600 hover:bg-amber-700 dark:bg-teal-500 dark:hover:bg-teal-600 text-white text-sm py-3 px-7 rounded-lg transition-colors w-fit"
+                            className="bg-amber-600 hover:bg-amber-700 dark:bg-primary-weak dark:hover:bg-teal-600 text-white text-sm py-3 px-7 rounded-lg transition-colors w-fit"
                         >
                             Login
                         </button>
@@ -240,6 +251,6 @@ export default function Navbar() {
             {showLogin && (
                 <Login displayLoginModal={displayLoginModal}/>
             )}
-        </>
+        </div>
     )
 }

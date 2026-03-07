@@ -37,7 +37,7 @@ export default function Contact() {
     }
 
     return (
-        <section id="contact" ref={ref} className="py-28 bg-site relative">
+        <section id="contact" ref={ref} className="py-28 bg-white relative">
             <div className="max-w-7xl mx-auto px-6">
                 <div
                     className={`text-center transition-all duration-700 ${visible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
@@ -155,7 +155,7 @@ export default function Contact() {
                                         onChange={handleChange}
                                         required
                                         placeholder="Name"
-                                        className="w-full bg-site border border-stone-300 dark:border-white/10 rounded-lg px-4 py-3 text-sm text-stone-900 dark:text-white placeholder-stone-400 dark:placeholder-slate-600 focus:outline-none focus:border-amber-600/50 dark:focus:border-teal-400/50 transition-all"
+                                        className="w-full bg-white border border-stone-300 dark:border-white/10 rounded-lg px-4 py-3 text-sm text-stone-900 dark:text-white placeholder-stone-400 dark:placeholder-slate-600 focus:outline-none focus:border-amber-600/50 dark:focus:border-teal-400/50 transition-all"
                                     />
                                 </div>
                                 <div>
@@ -168,7 +168,7 @@ export default function Contact() {
                                         onChange={handleChange}
                                         required
                                         placeholder="Email"
-                                        className="w-full bg-site border border-stone-300 dark:border-white/10 rounded-lg px-4 py-3 text-sm text-stone-900 dark:text-white placeholder-stone-400 dark:placeholder-slate-600 focus:outline-none focus:border-amber-600/50 dark:focus:border-teal-400/50 transition-all"
+                                        className="w-full bg-white border border-stone-300 dark:border-white/10 rounded-lg px-4 py-3 text-sm text-stone-900 dark:text-white placeholder-stone-400 dark:placeholder-slate-600 focus:outline-none focus:border-amber-600/50 dark:focus:border-teal-400/50 transition-all"
                                     />
                                 </div>
                             </div>
@@ -184,7 +184,7 @@ export default function Contact() {
                                         onChange={handleChange}
                                         required
                                         placeholder="Title/Subject"
-                                        className="w-full bg-site border border-stone-300 dark:border-white/10 rounded-lg px-4 py-3 text-sm text-stone-900 dark:text-white placeholder-stone-400 dark:placeholder-slate-600 focus:outline-none focus:border-amber-600/50 dark:focus:border-teal-400/50 transition-all"
+                                        className="w-full bg-white border border-stone-300 dark:border-white/10 rounded-lg px-4 py-3 text-sm text-stone-900 dark:text-white placeholder-stone-400 dark:placeholder-slate-600 focus:outline-none focus:border-amber-600/50 dark:focus:border-teal-400/50 transition-all"
                                     />
                                 </div>
                             </div>
@@ -198,7 +198,7 @@ export default function Contact() {
                                     required
                                     rows={5}
                                     placeholder="Tell me something..."
-                                    className="w-full bg-site border border-stone-300 dark:border-white/10 rounded-lg px-4 py-3 text-sm text-stone-900 dark:text-white placeholder-stone-400 dark:placeholder-slate-600 focus:outline-none focus:border-amber-600/50 dark:focus:border-teal-400/50 transition-all resize-none"
+                                    className="w-full bg-white border border-stone-300 dark:border-white/10 rounded-lg px-4 py-3 text-sm text-stone-900 dark:text-white placeholder-stone-400 dark:placeholder-slate-600 focus:outline-none focus:border-amber-600/50 dark:focus:border-teal-400/50 transition-all resize-none"
                                 ></textarea>
                             </div>
 

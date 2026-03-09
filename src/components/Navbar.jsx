@@ -130,127 +130,86 @@ export default function Navbar() {
     return (
         <div className="navbar">
             <header
-                className={`fixed top-0 z-50 w-full transition-all duration-300 border-b border-light dark:border-dark ${
-                    scrolled
-                        ? 'backdrop-blur-3xl shadow-md shadow-light dark:shadow-dark'
-                        : ''
-                }`}
-            >
-                <div className="max-w-7xl mx-auto px-4 sm:px-6 py-3 sm:py-4 flex justify-between">
+                className={`fixed top-0 z-50 w-full transition-all duration-300 border-b border-light dark:border-dark ${scrolled ? "backdrop-blur-2xl bg-white/70 dark:bg-black/60 shadow-md" : "bg-transparent"}`}>
+                <div
+                    className="flex max-w-7xl mx-auto px-4 sm:px-6 py-3 sm:py-4  items-center justify-between">
                     {/* Logo */}
-                    <a
-                        href="#home"
-                        onClick={() => {
-                            setActive('#home');
-                            ensureNavigationThenScroll('#home');
-                        }}
-                        aria-label="Home"
-                        className="bg-transparent p-0 m-0"
-                    >
-                        <BrandName className="text-black dark:text-white" />
-                    </a>
-
+                    <a href="#home" onClick={() => {
+                        setActive("#home");
+                        ensureNavigationThenScroll("#home");
+                    }} aria-label="Home" className="flex items-center"> <BrandName
+                        className="text-black dark:text-white"/> </a>
                     {/* Desktop Nav */}
-                    <nav className="hidden md:flex items-center gap-6 lg:gap-8 py-3">
+                    ```jsx
+                    <nav className="hidden md:flex items-center flex-wrap gap-4 lg:gap-6">
+
                         {links.map((l) => (
                             <a
                                 key={l.href}
                                 href={l.href}
                                 onClick={handleNavClick(l.href)}
-                                className={`nav-link ${active === l.href ? 'text-primary' : ''} text-base lg:text-lg`}
+                                className={`nav-link whitespace-nowrap text-sm lg:text-base ${
+                                    active === l.href ? "text-primary" : ""
+                                }`}
                             >
                                 {l.label}
                             </a>
                         ))}
-                        <Link to={'/blogs'} className="nav-link text-base lg:text-lg">
+
+                        <Link
+                            to="/blogs"
+                            className="nav-link whitespace-nowrap text-sm lg:text-base"
+                        >
                             Blogs
                         </Link>
+
                         <a
                             href="/BIKASH MAINALI-Resume-v2.pdf"
                             target="_blank"
-                            className="btn-outline text-base lg:text-lg py-2 px-3 lg:px-4"
+                            className="btn-outline whitespace-nowrap text-sm py-2 px-3 lg:px-4"
                         >
                             Resume
                         </a>
+
                         <button
                             onClick={() => setShowLogin(true)}
-                            className="bg-primary-weak hover:bg-primary text-white py-2.5 lg:py-3 px-5 lg:px-7 rounded-lg transition-colors"
+                            className="bg-primary-weak hover:bg-primary text-white py-2 px-4 rounded-lg transition-colors whitespace-nowrap"
                         >
                             Login
                         </button>
-                        <ThemeToggle/>
+
+                        <ThemeToggle />
+
                     </nav>
+                    ```
 
                     {/* Mobile Controls */}
-                    <div className="md:hidden flex items-center gap-3 text-black">
-                        <ThemeToggle/>
-                        <button
-                            className="flex flex-col gap-1.5 p-2"
-                            onClick={() => setMenuOpen(!menuOpen)}
-                            aria-label="Toggle menu"
-                        >
-                            {menuOpen ? (
-                                <Close/>
-                            ) : (
-                                <Hamburger/>
-                            )}
-                        </button>
+                    <div className="md:hidden flex items-center gap-3"><ThemeToggle/>
+                        <button className="p-2" onClick={() => setMenuOpen(!menuOpen)}
+                                aria-label="Toggle menu"> {menuOpen ? <Close/> : <Hamburger/>} </button>
                     </div>
                 </div>
-
                 {/* Mobile Menu */}
                 <div
-                    className={`md:hidden transition-all duration-300 ease-in-out overflow-auto shadow-2xl ${
-                        menuOpen ? 'max-h-[60vh] opacity-100' : 'max-h-0 opacity-0'
-                    }`}
-                >
+                    className={`md:hidden transition-all duration-300 ease-in-out overflow-hidden ${menuOpen ? "max-h-[70vh] opacity-100" : "max-h-0 opacity-0"}`}>
                     <nav
-                        className="dark:bg-overlay bg-white px-6 py-6 flex flex-col gap-5"
-                    >
-                        {links.map((l) => (
-                            <a
-                                key={l.href}
-                                href={l.href}
-                                onClick={(e) => {
-                                    handleNavClick(l.href, {closeMenu: true})(e);
-                                }}
-                                className={`nav-link ${active === l.href ? 'text-teal-400' : ''} text-lg`}
-                            >
-                                {l.label}
-                            </a>
-                        ))}
-                        <Link
-                            to={'/blogs'}
-                            className="nav-link text-lg"
-                            onClick={() => setMenuOpen(false)}
-                        >
-                            Blogs
-                        </Link>
-                        <a
-                            href="/BIKASH MAINALI-Resume-v2.pdf"
-                            target="_blank"
-                            className="btn-outline text-sm py-2 px-4 w-fit"
-                            onClick={() => setMenuOpen(false)}
-                        >
-                            Resume
-                        </a>
-                        <button
-                            onClick={() => {
-                                setShowLogin(true);
-                                setMenuOpen(false);
-                            }}
-                            className="bg-primary-weak hover:bg-primary text-white py-2.5 lg:py-3 px-5 lg:px-7 w-fit rounded-lg transition-colors"
-                        >
-                            Login
+                        className="bg-white dark:bg-overlay px-6 py-6 flex flex-col gap-5 border-t border-light dark:border-dark"> {links.map((l) => (
+                        <a key={l.href} href={l.href} onClick={(e) => {
+                            handleNavClick(l.href, {closeMenu: true})(e);
+                        }} className={`nav-link text-lg ${active === l.href ? "text-primary" : ""}`}> {l.label} </a>))}
+                        <Link to="/blogs" className="nav-link text-lg" onClick={() => setMenuOpen(false)}> Blogs </Link>
+                        <a href="/BIKASH MAINALI-Resume-v2.pdf" target="_blank"
+                           className="btn-outline text-sm py-2 px-4 w-fit"
+                           onClick={() => setMenuOpen(false)}> Resume </a>
+                        <button onClick={() => {
+                            setShowLogin(true);
+                            setMenuOpen(false);
+                        }}
+                                className="bg-primary-weak hover:bg-primary text-white py-2.5 px-5 w-fit rounded-lg transition-colors"> Login
                         </button>
                     </nav>
                 </div>
             </header>
-
-            {/* Login Modal */}
-            {showLogin && (
-                <Login displayLoginModal={displayLoginModal}/>
-            )}
-        </div>
+            {/* Login Modal */} {showLogin && <Login displayLoginModal={displayLoginModal}/>} </div>
     )
 }

@@ -112,9 +112,9 @@ export default function Projects() {
     const filtered = active === 'All' ? projects : projects.filter(p => p.category === active)
 
     return (
-        <section id="projects" ref={ref} className="relative max-w-7xl mx-auto px-6 sm:px-0 sm:pt-45 pt-35">
+        <section id="projects" ref={ref}
+                 className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-34 sm:pt-32 md:pt-40 lg:pt-52">
             <div className="absolute inset-0 dot-grid opacity-20 dark:opacity-15"></div>
-            <div className="relative max-w-7xl mx-auto px-6">
                 <div
                     className={`transition-all duration-700 ${visible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
                     <h2 className="section-title">Projects</h2>
@@ -194,7 +194,6 @@ export default function Projects() {
                         </div>
                     ))}
                 </div>
-            </div>
         </section>
     )
 }

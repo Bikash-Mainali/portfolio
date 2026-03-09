@@ -115,116 +115,111 @@ export default function Experience() {
     const [ref, visible] = useInView()
 
     return (
-        <section id="experience" ref={ref} className="relative max-w-7xl mx-auto px-6 sm:px-0 sm:pt-45 pt-35">
-            <div className="max-w-7xl mx-auto px-6">
-                <div
-                    className={`transition-all duration-700 ${visible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
-                    <h2 className="section-title">Experience</h2>
-                    <div className="section-line"></div>
-                </div>
+        <section id="experience" ref={ref}
+                 className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-34 sm:pt-32 md:pt-40 lg:pt-52">
+        <div
+                className={`transition-all duration-700 ${visible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
+                <h2 className="section-title">Experience</h2>
+                <div className="section-line"></div>
+            </div>
 
-                <div className="flex flex-wrap gap-4 mb-12 items-center">
-                    <a
-                        href="/BIKASH MAINALI-Resume-v2.pdf"
-                        target="_blank"
-                        className="btn-primary flex items-center gap-2 text-sm"
-                    >
-                        <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
-                            <path d="M12 16v-8M8 12l4 4 4-4M5 20h14"/>
-                        </svg>
-                        Download Resume
-                    </a>
-                </div>
+            <div className="flex flex-wrap gap-4 mb-12 items-center">
+                <a
+                    href="/BIKASH MAINALI-Resume-v2.pdf"
+                    target="_blank"
+                    className="btn-primary flex items-center gap-2 text-sm"
+                >
+                    <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                        <path d="M12 16v-8M8 12l4 4 4-4M5 20h14"/>
+                    </svg>
+                    Download Resume
+                </a>
+            </div>
 
-                <div className="grid lg:grid-cols-3 gap-12">
-                    {/* Experience timeline */}
-                    <div className="lg:col-span-2 relative">
-                        {/* Timeline line */}
-                        <div
-                            className="absolute left-4 top-0 bottom-0 w-px bg-gradient-to-b from-primary via-primary-weak to-transparent "></div>
+            <div className="flex flex-col lg:flex-row gap-12">
 
-                        <div className="space-y-10">
-                            {experiences.map((exp, i) => (
-                                <div
-                                    key={i}
-                                    className="relative pl-12 transition-all duration-500"
-                                    style={{
-                                        transitionDelay: `${i * 120}ms`,
-                                        opacity: visible ? 1 : 0,
-                                        transform: visible ? 'translateX(0)' : 'translateX(-20px)',
-                                    }}
-                                >
-                                    {/* Dot */}
-                                    <div
-                                        className="absolute left-2.5 top-1.5 w-3 h-3 rounded-full bg-primary  border-2 border-white  dark:border-navy-900 ring-2 ring-primary-weak"></div>
+                {/* Experience timeline */}
+                <div className="flex-1 lg:flex-[2] relative border">
+                    {/* Timeline line */}
+                    <div className="absolute sm:left-3 left-0 top-0 bottom-0 w-px bg-gradient-to-b from-primary via-primary-weak to-transparent"></div>
 
-                                    <div
-                                        className="card-glass rounded-2xl p-6 hover:border-primary transition-all duration-200">
-                                        <div className="flex flex-wrap items-start justify-between gap-2 mb-1">
-                                            <h3 className="font-display font-semibold text-dark dark:text-white text-lg">{exp.title}</h3>
-                                            <span
-                                                className="font-mono text-xs dark:text-light text-slate dark:ring-primary bg-light dark:bg-dark  px-3 py-1 rounded-full">{exp.period}</span>
-                                        </div>
-                                        <p className="font-mono text-sm  dark:text-primary text-dark mb-4">{exp.company} · {exp.location}</p>
-                                        <ul className="space-y-1.5 mb-4">
-                                            {exp.bullets.map(b => (
-                                                <li key={b}
-                                                    className="flex items-start gap-2 text-dark dark:text-slate2 text-sm">
-                                                    <span
-                                                        className="text-dark dark:text-primary mt-0.5 shrink-0">▹</span>
-                                                    <span>{b}</span>
-                                                </li>
-                                            ))}
-                                        </ul>
-                                        <div className="flex flex-wrap gap-2">
-                                            {exp.tags.map(t => (
-                                                <span key={t} className="tag text-xs dar">{t}</span>
-                                            ))}
-                                        </div>
+                    <div className="space-y-10">
+                        {experiences.map((exp, i) => (
+                            <div
+                                key={i}
+                                className="relative sm:pl-10 pl-5 transition-all duration-500"
+                                style={{
+                                    transitionDelay: `${i * 120}ms`,
+                                    opacity: visible ? 1 : 0,
+                                    transform: visible ? 'translateX(0)' : 'translateX(-20px)',
+                                }}
+                            >
+                                {/* Dot */}
+                                <div className="absolute sm:left-1.5 -left-1.5 top-1.5 w-3 h-3 rounded-full bg-primary border-2 border-white dark:border-navy-900 ring-2 ring-primary-weak"></div>
+
+                                <div className="card-glass rounded-2xl sm:p-6 p-4 hover:border-primary transition-all duration-200">
+                                    <div className="flex flex-wrap items-start justify-between gap-2 mb-1">
+                                        <h3 className="font-display font-semibold text-dark dark:text-white text-lg">
+                                            {exp.title}
+                                        </h3>
+                                        <span className="font-mono text-xs dark:text-light text-slate bg-light dark:bg-dark px-3 py-1 rounded-full">
+                                {exp.period}
+                            </span>
+                                    </div>
+
+                                    <p className="font-mono text-sm dark:text-primary text-dark mb-4">
+                                        {exp.company} · {exp.location}
+                                    </p>
+
+                                    <ul className="space-y-1.5 mb-4">
+                                        {exp.bullets.map(b => (
+                                            <li key={b} className="flex items-start gap-2 text-dark dark:text-slate2 text-sm">
+                                                <span className="text-dark dark:text-primary mt-0.5 shrink-0">▹</span>
+                                                <span>{b}</span>
+                                            </li>
+                                        ))}
+                                    </ul>
+
+                                    <div className="flex flex-wrap gap-2">
+                                        {exp.tags.map(t => (
+                                            <span key={t} className="tag text-xs">{t}</span>
+                                        ))}
                                     </div>
                                 </div>
-                            ))}
-                        </div>
-                    </div>
-
-                    {/* Education sidebar */}
-                    <div
-                        className="transition-all duration-700 delay-300"
-                        style={{opacity: visible ? 1 : 0, transform: visible ? 'translateY(0)' : 'translateY(20px)'}}
-                    >
-                        <h3 className="font-display text-xl text-stone-900 dark:text-white font-semibold mb-6 flex items-center gap-2">
-                            <GraduationCap size='45'/>Education
-                        </h3>
-                        <div className="space-y-5">
-                            {education.map((edu, i) => (
-                                <div key={i} className="card-glass rounded-xl p-5 border-l-2 border-primary/50">
-                                    <h4 className="font-body font-medium text-stone-900 dark:text-white text-sm mb-1">{edu.degree}</h4>
-                                    <p className="font-mono text-xs text-accent dark:text-primary mb-2">{edu.school}</p>
-                                    <p className="font-mono text-xs text-slate">{edu.period}</p>
-                                    <p className="font-mono text-xs text-accent dark:text-primary mt-1">{edu.detail}</p>
-                                </div>
-                            ))}
-                        </div>
-
-                        {/* Facts */}
-                        <h3 className="font-display text-xl text-dark dark:text-light font-semibold mt-10 mb-6 flex items-center gap-2">
-                            <Barchart size="45"/> At a Glance
-                        </h3>
-                        <div className="grid grid-cols-2 gap-4">
-                            {[
-                                {num: '10', label: 'Projects'},
-                                {num: '8+', label: 'Years Exp.'},
-                                {num: '1', label: 'In Progress'},
-                                {num: '4', label: 'Companies'},
-                            ].map(f => (
-                                <div key={f.label} className="card-glass rounded-xl p-4 text-center">
-                                    <div className="font-display text-2xl font-bold text-gradient">{f.num}</div>
-                                    <div className="font-mono text-xs text-slate mt-1">{f.label}</div>
-                                </div>
-                            ))}
-                        </div>
+                            </div>
+                        ))}
                     </div>
                 </div>
+
+                {/* Education sidebar */}
+                <div className="w-full lg:w-[350px] shrink-0 transition-all duration-700 delay-300"
+                     style={{
+                         opacity: visible ? 1 : 0,
+                         transform: visible ? 'translateY(0)' : 'translateY(20px)'
+                     }}
+                >
+                    <h3 className="font-display text-xl text-stone-900 dark:text-white font-semibold mb-6 flex items-center gap-2">
+                        <GraduationCap size="45" /> Education
+                    </h3>
+
+                    <div className="space-y-5">
+                        {education.map((edu, i) => (
+                            <div key={i} className="card-glass rounded-xl p-5 border-l-2 border-primary/50">
+                                <h4 className="font-body font-medium text-stone-900 dark:text-white text-sm mb-1">
+                                    {edu.degree}
+                                </h4>
+                                <p className="font-mono text-xs text-accent dark:text-primary mb-2">
+                                    {edu.school}
+                                </p>
+                                <p className="font-mono text-xs text-slate">{edu.period}</p>
+                                <p className="font-mono text-xs text-accent dark:text-primary mt-1">
+                                    {edu.detail}
+                                </p>
+                            </div>
+                        ))}
+                    </div>
+                </div>
+
             </div>
         </section>
     )

@@ -38,7 +38,7 @@ export default function Home() {
     }, [displayed, typing, roleIndex])
 
     return (
-        <section id="home" className="relative max-w-7xl mx-auto px-6 sm:px-0 sm:pt-60  pt-45">
+        <section id="home" className="scroll-mt-24 relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-34 sm:pt-32 md:pt-40 lg:pt-52">
             <div className="flex flex-col lg:flex-row items-center justify-between gap-12">
                 {/* LEFT: text */}
                 <div className="flex-1 max-w-xl">
@@ -67,7 +67,7 @@ export default function Home() {
                         style={{animationDelay: '0.5s', opacity: 0}}
                     >
                         Full-stack engineer with <span
-                        className="text-accent font-medium">8+ years &nbsp;</span>
+                        className="text-accent font-medium">8+ years&nbsp;</span>
                         building scalable, high-performance solutions across healthcare, ad-tech, banking, and
                         e-commerce. Passionate about designing robust systems, bridging frontend and backend
                         technologies, and delivering software that drives business impact. Always excited to solve
@@ -79,7 +79,7 @@ export default function Home() {
                         <a href="#contact" className="btn-outline">Get In Touch</a>
                     </div>
 
-                    <div className="flex flex-wrap gap-10 mt-14 animate-fade-up"
+                    <div className="flex flex-wrap gap-8 mt-14 lg:justify-start justify-center animate-fade-up"
                          style={{animationDelay: '0.8s', opacity: 0}}>
                         {[
                             {value: '8+', label: 'Years Experience'},
@@ -98,30 +98,26 @@ export default function Home() {
 
                 {/* RIGHT: profile image */}
                 <div
-                    className="w-11/12 h-11/12 lg:w-96 lg:h-96 md:w-100 md:h-100 sm:w-120 sm:h-120  flex-shrink-0 animate-fade-up"
-                    style={{animationDelay: '0.4s', opacity: 0}}>
+                    className="w-64 h-64 sm:w-72 sm:h-72 md:w-80 md:h-80 lg:w-96 lg:h-96 flex-shrink-0 animate-fade-up"
+                    style={{ animationDelay: "0.4s", opacity: 0 }}
+                >
                     <div className="relative group">
 
-                        {/* Animated glow ring */}
-                        <div
-                            className="absolute -inset-1 bg-gradient-to-br from-primary-weak via-primary-weak to-primary-weak opacity-60 group-hover:opacity-90 blur-sm transition-all duration-500 animate-pulse-slow"></div>
+                        {/* glow */}
+                        <div className="absolute inset-0 bg-gradient-to-br from-primary-weak via-primary-weak to-primary-weak opacity-60 group-hover:opacity-90 blur-sm transition-all duration-500 animate-pulse-slow"></div>
 
-                        {/* Corner brackets decoration */}
-                        <div
-                            className="absolute -top-5 -left-5 w-9 h-9 border-t-2 border-l-2 border-primary-weak rounded-tl-lg pointer-events-none"></div>
-                        <div
-                            className="absolute -bottom-5 -right-5 w-9 h-9 border-b-2 border-r-2 border-primary-weak  rounded-br-lg pointer-events-none"></div>
+                        {/* brackets */}
+                        <div className="absolute -top-4 -left-4 w-8 h-8 border-t-2 border-l-2 border-primary-weak rounded-tl-lg"></div>
+                        <div className="absolute -bottom-4 -right-4 w-8 h-8 border-b-2 border-r-2 border-primary-weak rounded-br-lg"></div>
 
-                        {/* Image circle */}
-                        <div
-                            className="relative w-full h-full rounded-lg overflow-hidden border-1 border-primary-weak">
+                        {/* image */}
+                        <div className="relative w-64 h-64 sm:w-72 sm:h-72 md:w-80 md:h-80 lg:w-96 lg:h-96 rounded-lg overflow-hidden border border-primary-weak">
                             <img
                                 src="/profile.jpg"
                                 alt="Bikash Mainali"
                                 className="w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-700"
                             />
-                            <div
-                                className="absolute inset-0 bg-gradient-to-t from-navy-dim dark:text-navy-900 to-transparent pointer-events-none rounded-lg"></div>
+                            <div className="absolute inset-0 bg-gradient-to-t from-navy-dim to-transparent pointer-events-none rounded-lg"></div>
                         </div>
 
                         {/* Floating badge */}

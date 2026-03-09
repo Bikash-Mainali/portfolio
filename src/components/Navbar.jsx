@@ -180,7 +180,6 @@ export default function Navbar() {
                         <ThemeToggle />
 
                     </nav>
-                    ```
 
                     {/* Mobile Controls */}
                     <div className="md:hidden flex items-center gap-3"><ThemeToggle/>

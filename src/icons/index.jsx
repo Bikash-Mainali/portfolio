@@ -13,3 +13,4 @@ export {default as LeftArrow} from "./LeftArrow";
 export {default as Loader} from "./Loader.jsx";
 export {default as Hamburger} from "./Hamburger.jsx";
 export {default as Close} from "./Close.jsx";
+export {default as Search} from "./Search.jsx";

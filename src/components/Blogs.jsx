@@ -7,6 +7,7 @@ import SkeletonCard from "./blogs/LoaderSkeleton.jsx";
 import BrandName from "./shared/BrandName.jsx";
 import ThemeToggle from "./ThemToggle.jsx";
 import {getS3ImageUrl} from "../util/s3Util.js";
+import {Search} from "../icons/index.jsx";
 
 export default function Blogs() {
     const [posts, setPosts] = useState([]);
@@ -105,8 +106,8 @@ export default function Blogs() {
     );
 
     return (
-        <div
-            className="section-title min-h-screen max-w-7xl px-10 sm:px-5 mx-auto relative  transition-colors duration-300 text-stone-900  dark:text-zinc-100"
+        <section
+            className="relative section-title min-h-screen max-w-7xl px-10 sm:px-5 mx-auto   transition-colors duration-300 text-stone-900  dark:text-zinc-100"
             style={{fontFamily: "'Georgia', serif"}}
         >
 
@@ -116,7 +117,7 @@ export default function Blogs() {
                     <div className="sticky top-0 z-50 border-b dark:border-dark border-light">
                         <div className="max-w-7xl mx-auto px-10 sm:px-5 flex items-center justify-between py-3">
                             <Link to="/" className="flex items-center gap-2">
-                                <BrandName className="text-amber-600 dark:text-white text-lg"/>
+                                <BrandName className="text-black dark:text-white"/>
                             </Link>
                             <ThemeToggle/>
                         </div>
@@ -125,32 +126,27 @@ export default function Blogs() {
 
                     </div>
                     <div className="max-w-7xl mx-auto px-10 mt-20 sm:px-5 text-center pb-3">
-                        <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold mb-3 text-stone-900 dark:text-white">
+                        <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold mb-3 text-dark dark:text-light">
                             Bikash's Blog
                         </h1>
-                        <p className="text-base sm:text-lg max-w-xl mx-auto text-stone-500 dark:text-zinc-500">
+                        <p className="text-base sm:text-lg max-w-xl mx-auto text-slate">
                             Thoughts, stories, and ideas on technology, travel, and everything in between.
                         </p>
                     </div>
                     {/* Sticky search & category bar below header */}
-                    <div className="border-b border-stone-100 dark:border-dark ">
+                    <div className="border-b dark:border-dark border-light">
                         <div className="max-w-7xl mx-auto px-10 sm:px-5 py-3">
                             {/* Search & Filters (moved into sticky bar) */}
-                            <div className="flex flex-col gap-3 sm:gap-4">
+                            <div className="flex flex-col gap-3 sm:gap-4 ">
                                 {/* Search */}
-                                <div className="relative">
-                                    <svg
-                                        className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-stone-400 dark:text-zinc-500"
-                                        fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
-                                              d="M21 21l-4.35-4.35M17 11A6 6 0 1 1 5 11a6 6 0 0 1 12 0z"/>
-                                    </svg>
+                                <div className="relative flex items-center">
+                                    <Search className="absolute left-3 w-4 h-4 text-stone-400 pointer-events-none"/>
                                     <input
                                         type="text"
                                         value={search}
                                         onChange={(e) => setSearch(e.target.value)}
                                         placeholder="Search posts…"
-                                        className="w-full border text-sm rounded-xl pl-10 pr-4 py-2.5 outline-none transition-colors bg-white border-stone-300 text-stone-800 placeholder-stone-400 focus:border-amber-400 shadow-sm dark:bg-zinc-900 dark:border-dark dark:text-zinc-200 dark:placeholder-zinc-600 dark:focus:border-zinc-500"
+                                        className="w-full border text-sm rounded-xl pl-10 pr-4 py-2.5 outline-none transition-colors bg-white dark:bg-dark border-light  placeholder-light focus:border-slate shadow-sm dark:border-dark "
                                     />
                                 </div>
 
@@ -161,8 +157,8 @@ export default function Blogs() {
                                         onClick={() => setActiveCategory("All")}
                                         className={`shrink-0 px-3 sm:px-4 py-1.5 sm:py-2 rounded-xl text-xs sm:text-sm font-medium transition-all border whitespace-nowrap ${
                                             activeCategory === "All"
-                                                ? "bg-amber-500 border-amber-500 text-zinc-950"
-                                                : "bg-white border-stone-300 text-stone-500 hover:border-amber-300 hover:text-stone-800 dark:bg-zinc-900 dark:border-zinc-800 dark:text-zinc-400 dark:hover:border-zinc-600 dark:hover:text-zinc-200"
+                                                ? "bg-primary-weak border-primary text-black "
+                                                : "bg-white text-black "
                                         }`}
                                     >
                                         All
@@ -173,9 +169,8 @@ export default function Blogs() {
                                             onClick={() => setActiveCategory(cat.name)}
                                             className={`shrink-0 px-3 sm:px-4 py-1.5 sm:py-2 rounded-xl text-xs sm:text-sm font-medium transition-all border whitespace-nowrap ${
                                                 activeCategory === cat.name
-                                                    ? "bg-amber-500 border-amber-500 text-zinc-950"
-                                                    : "bg-white border-stone-300 text-stone-500 hover:border-amber-300 hover:text-stone-800 dark:bg-zinc-900 dark:border-zinc-800 dark:text-zinc-400 dark:hover:border-zinc-600 dark:hover:text-zinc-200"
-                                            }`}
+                                                    ? "bg-primary-weak border-primary text-black "
+                                                    : "bg-white text-black "}`}
                                         >
                                             {cat.name}
                                         </button>
@@ -189,7 +184,7 @@ export default function Blogs() {
                     <div className="mx-auto sm:py-20 py-10 max-w-7xl px-10 sm:px-5">
                         {/* Results count */}
                         {!loading && !error && (
-                            <p className="text-xs mb-4 sm:mb-6 text-stone-400 dark:text-zinc-600">
+                            <p className="text-xs mb-4 sm:mb-6 text-slate">
                                 {filtered.length} post{filtered.length !== 1 ? "s" : ""}
                                 {activeCategory !== "All" && ` in ${activeCategory}`}
                                 {search && ` matching "${search}"`}
@@ -218,14 +213,14 @@ export default function Blogs() {
                         {/* Empty State */}
                         {!loading && !error && filtered.length === 0 && (
                             <div className="text-center py-16 sm:py-24">
-                                <p className="text-base sm:text-lg mb-4 text-stone-400 dark:text-zinc-600">No posts
+                                <p className="text-base sm:text-lg mb-4 text-slate">No posts
                                     found.</p>
                                 <button
                                     onClick={() => {
                                         setSearch("");
                                         setActiveCategory("All");
                                     }}
-                                    className="text-sm cursor-pointer text-amber-500 hover:text-amber-400 transition-colors"
+                                    className="text-sm cursor-pointer text-slate hover:text-primary-weak transition-colors"
                                 >
                                     Clear filters
                                 </button>
@@ -234,6 +229,6 @@ export default function Blogs() {
                     </div>
                 </>
             }
-        </div>
+        </section>
     );
 }

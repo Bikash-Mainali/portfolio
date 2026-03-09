@@ -91,13 +91,11 @@
 
 @layer base {
     html {
-        scroll-behavior: smooth;
-        box-sizing: border-box;
-        background-color: red;
-    }
-
-    body {
         @apply bg-white dark:bg-navy-950 text-white font-body antialiased;
+        margin: 0;
+        padding: 0;
+        height: auto;
+        box-sizing: border-box;
     }
 
     .scrollbar-hidden {
@@ -199,11 +197,11 @@
     }
 
     .btn-primary {
-        @apply px-6 py-3 bg-primary-weak  text-navy-950 font-body font-medium rounded-lg hover:bg-primary transition-all duration-200 hover:shadow-lg hover:shadow-primary-weak hover:-translate-y-0.5;
+        @apply px-6 py-3 bg-primary-weak  text-navy-950 font-body font-medium rounded-lg hover:bg-primary transition-all duration-200 hover:shadow-md hover:shadow-primary-weak hover:-translate-y-0.5;
     }
 
     .btn-outline {
-        @apply px-6 py-3 border border-primary-weak text-primary font-body font-medium rounded-lg hover:bg-primary-weak transition-all duration-200 hover:-translate-y-0.5;
+        @apply px-6 py-3 border border-primary-weak text-primary font-body font-medium rounded-lg transition-all duration-200 hover:-translate-y-0.5;
     }
 }
 

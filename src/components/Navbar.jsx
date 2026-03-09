@@ -138,17 +138,17 @@ export default function Navbar() {
             >
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 py-3 sm:py-4 flex justify-between">
                     {/* Logo */}
-                    <button
-                        onClick={(e) => {
-                            e.preventDefault();
+                    <a
+                        href="#home"
+                        onClick={() => {
                             setActive('#home');
                             ensureNavigationThenScroll('#home');
                         }}
                         aria-label="Home"
                         className="bg-transparent p-0 m-0"
                     >
-                        <BrandName className="text-black dark:text-white"/>
-                    </button>
+                        <BrandName className="text-black dark:text-white" />
+                    </a>
 
                     {/* Desktop Nav */}
                     <nav className="hidden md:flex items-center gap-6 lg:gap-8 py-3">
@@ -157,7 +157,7 @@ export default function Navbar() {
                                 key={l.href}
                                 href={l.href}
                                 onClick={handleNavClick(l.href)}
-                                className={`nav-link ${active === l.href ? 'text-teal-400' : ''} text-base lg:text-lg`}
+                                className={`nav-link ${active === l.href ? 'text-primary' : ''} text-base lg:text-lg`}
                             >
                                 {l.label}
                             </a>
@@ -239,7 +239,7 @@ export default function Navbar() {
                                 setShowLogin(true);
                                 setMenuOpen(false);
                             }}
-                            className="bg-amber-600 hover:bg-amber-700 dark:bg-primary-weak dark:hover:bg-teal-600 text-white text-sm py-3 px-7 rounded-lg transition-colors w-fit"
+                            className="bg-primary-weak hover:bg-primary text-white py-2.5 lg:py-3 px-5 lg:px-7 w-fit rounded-lg transition-colors"
                         >
                             Login
                         </button>

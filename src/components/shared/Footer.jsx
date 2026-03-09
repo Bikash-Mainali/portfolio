@@ -2,20 +2,18 @@ import BrandName from "./BrandName.jsx";
 
 export default function Footer() {
     return (
-        <footer className="py-7 border-t border-stone-300 dark:border-white/5">
-            <div className="max-w-7xl mx-auto px-6 flex flex-col md:flex-row items-center justify-between gap-4">
-                <BrandName className="text-stone-400 dark:text-white/50"/>
-                <p className="font-mono text-xs text-stone-600 dark:text-slate-600 text-center">
-                    © {new Date().getFullYear()} Bikash Mainali · Designed by {' '}
-                    <span className="text-amber-600 dark:text-teal-400/70">Bikash Mainali</span>
-                </p>
-                <a
-                    href="#home"
-                    className="font-mono text-xs text-stone-500 dark:text-slate-500 hover:text-amber-600 dark:hover:text-teal-400 transition-colors flex items-center gap-2"
-                >
-                    Back to top ↑
-                </a>
-            </div>
+        <footer id="footer" className="flex justify-between max-w-7xl mx-auto px-6 sm:mt-28 mt-25 sm:py-8 py-5 sm:px-0 border-t border-light dark:border-dark">
+            <BrandName className="text-slate"/>
+            <p className="font-mono text-xs text-dark dark:text-slate text-center">
+                © {new Date().getFullYear()} Bikash Mainali · Designed by {' '}
+                <span className="text-accent dark:text-primary-weak">Bikash Mainali</span>
+            </p>
+            <a
+                href="#home"
+                className="font-mono text-md text-dark dark:text-slate hover:text-primary-weak transition-colors"
+            >
+                Back to top ↑
+            </a>
         </footer>
     )
 }

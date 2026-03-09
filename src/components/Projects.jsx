@@ -112,7 +112,7 @@ export default function Projects() {
     const filtered = active === 'All' ? projects : projects.filter(p => p.category === active)
 
     return (
-        <section id="projects" ref={ref} className="relative max-w-7xl mx-auto px-6 sm:px-0 pt-60">
+        <section id="projects" ref={ref} className="relative max-w-7xl mx-auto px-6 sm:px-0 sm:pt-45 pt-35">
             <div className="absolute inset-0 dot-grid opacity-20 dark:opacity-15"></div>
             <div className="relative max-w-7xl mx-auto px-6">
                 <div

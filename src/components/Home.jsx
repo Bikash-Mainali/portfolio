@@ -38,20 +38,8 @@ export default function Home() {
     }, [displayed, typing, roleIndex])
 
     return (
-        <section id="home" className="relative max-w-7xl mx-auto px-6 sm:px-0 pt-68">
-            {/* Background orbs */}
-            <div className="orb w-96 h-126 bg-amber-600/5 dark:bg-teal-400/8 -top-1/12 -left-100"
-                 style={{animationDelay: '0s'}}></div>
-
-            <div className="orb w-96 h-126 bg-amber-600/5 dark:bg-teal-400/8 top-3/4 -right-80"
-                 style={{animationDelay: '0s'}}></div>
-
-            <div className="absolute inset-0 dot-grid opacity-20 pointer-events-none"></div>
-
-            <div className="absolute inset-0 dot-grid opacity-30"></div>
-
+        <section id="home" className="relative max-w-7xl mx-auto px-6 sm:px-0 sm:pt-60  pt-45">
             <div className="flex flex-col lg:flex-row items-center justify-between gap-12">
-
                 {/* LEFT: text */}
                 <div className="flex-1 max-w-xl">
                     <p className="font-mono text-primary text-lg mb-5 animate-fade-up"
@@ -144,7 +132,7 @@ export default function Home() {
                                     className="w-3 h-3 rounded-full bg-red-600 animate-pulse [animation-duration:0.5s]"></span>
 
                             <span
-                                className="font-mono text-xs tracking-wider dark:text-primary text-white  decoration-amber-400 decoration-2 underline-offset-4">Available for remote-work</span>
+                                className="font-mono text-xs tracking-wider dark:text-primary text-white  decoration-accent decoration-2 underline-offset-4">Available for remote-work</span>
                         </div>
                     </div>
                 </div>

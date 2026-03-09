@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import {formatDate, estimateReadTime} from "../../util/dateUtil.js";
 import {supabase} from "../../util/supabaseClient.js";
-import {useParams, useNavigate} from "react-router";
+import {useParams, useNavigate, Link} from "react-router";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import {CATEGORY_COLORS_DARK, CATEGORY_COLORS_LIGHT, THEMES} from "../constants/BlogConstants.js";
@@ -84,30 +84,30 @@ export default function Blog() {
     if (loading && !post) {
         return (
             <div className="min-h-[40vh] flex items-center justify-center p-8">
-                <div className="text-stone-500 dark:text-zinc-400">Loading…</div>
+                <div className="text-slate">Loading…</div>
             </div>
         );
     }
 
     return (
         <div
-            className="min-h-screen py-5 max-w-7xl   px-10 sm:px-5 mx-auto relative  transition-colors duration-300 text-stone-900  dark:text-zinc-100"
+            className="relative min-h-screen py-5 max-w-7xl px-10 sm:px-5 mx-auto transition-colors duration-300 text-dark  dark:text-light"
             style={{fontFamily: "'Georgia', serif"}}>
-            <div
-                className="sticky top-0 z-50 px-10 border-b bg-white dark:border-dark border-light sm:px-5 py-3">
-                <div className="flex justify-between items-center">
-                    <div className="flex items-center gap-3">
-                        <BrandName to={'/'} className="text-amber-600 dark:text-white text-lg"/>
-                    </div>
+            <div className="sticky top-0 z-50 border-b dark:border-dark border-light">
+                <div className="max-w-7xl mx-auto px-10 sm:px-5 flex items-center justify-between py-3">
+                    <Link to="/" className="flex items-center gap-2">
+                        <BrandName className="text-black dark:text-white"/>
+                    </Link>
                     <ThemeToggle/>
                 </div>
+
             </div>
 
             <div
                 className="mx-auto mt-20 border dark:border-dark rounded-2xl border-light overflow-hidden">
                 <button
                     onClick={goBack}
-                    className={`m-4 cursor-pointer text-stone-700 dark:text-zinc-300 text-sm transition-colors 'cursor-pointer hover:text-amber-600 dark:hover:text-teal-400'}`}
+                    className="m-4 cursor-pointer text-slate2 text-sm transition-colors  hover:text-primary"
                     aria-label="Go back"
                 >
                     <LeftArrow size={25}/>
@@ -131,21 +131,21 @@ export default function Blog() {
                         )}
 
                         <h1
-                            className={`text-2xl sm:text-3xl font-bold mb-2 leading-snug dark:text-white text-stone-900`}
+                            className={`text-2xl sm:text-3xl font-bold mb-2 leading-snug dark:text-white text-dark`}
                             style={{fontFamily: "'Georgia', serif"}}
                         >
                             {post.title}
                         </h1>
 
                         <div
-                            className="flex items-center gap-3 text-xs mb-6 text-stone-400 dark:text-zinc-500">
+                            className="flex items-center gap-3 text-xs mb-6 text-slate2">
                             <span>{formatDate(post.created_at)}</span>
                             <span>·</span>
                             <span>{estimateReadTime(post.content)} min read</span>
                         </div>
 
                         <div
-                            className="markdown-body leading-relaxed text-sm sm:text-base mb-6 text-stone-700 dark:text-zinc-300">
+                            className="markdown-body leading-relaxed text-sm sm:text-base mb-6 text-dark dark:text-light">
                             <ReactMarkdown
                                 remarkPlugins={[remarkGfm]}
                                 components={{
@@ -203,10 +203,10 @@ export default function Blog() {
 
                         {tags.length > 0 && (
                             <div
-                                className="flex flex-wrap gap-2 py-4 border-t border-stone-100 dark:border-zinc-800">
+                                className="flex flex-wrap gap-2 py-4 border-t border-light  dark:border-dark">
                                 {tags.map((tag) => (
                                     <span key={tag.id}
-                                          className="text-xs px-3 py-1 rounded-full text-stone-400 bg-stone-100 dark:text-zinc-500 dark:bg-zinc-800">
+                                          className="text-xs px-3 py-1 rounded-full text-slate bg-light dark:bg-dark">
                                             #{tag.name}
                                         </span>
                                 ))}

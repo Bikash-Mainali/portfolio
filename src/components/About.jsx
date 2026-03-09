@@ -38,7 +38,7 @@ export default function About() {
     const [ref, visible] = useInView()
 
     return (
-        <section id="about" ref={ref} className="relative max-w-7xl mx-auto px-6 sm:px-0 pt-60">
+        <section id="about" ref={ref} className="relative max-w-7xl mx-auto px-6 sm:px-0 sm:pt-45 pt-35">
             <div>
                 <div
                     className={`transition-all duration-700 ${visible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>

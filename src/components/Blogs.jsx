@@ -146,7 +146,7 @@ export default function Blogs() {
                                         value={search}
                                         onChange={(e) => setSearch(e.target.value)}
                                         placeholder="Search posts…"
-                                        className="w-full border text-sm rounded-xl pl-10 pr-4 py-2.5 outline-none transition-colors bg-white dark:bg-dark border-light  placeholder-light focus:border-slate shadow-sm dark:border-dark "
+                                        className="w-full border text-sm rounded-xl pl-10 pr-4 py-2.5 outline-none transition-colors bg-white dark:bg-dark border-light  placeholder-light focus:border-slate shadow-sm dark:focus:border-primary-weak  dark:border-slate"
                                     />
                                 </div>
 
@@ -155,7 +155,7 @@ export default function Blogs() {
                                     className="flex gap-2 flex-wrap sm:flex-wrap overflow-x-auto pb-1 sm:pb-0 scrollbar-hide">
                                     <button
                                         onClick={() => setActiveCategory("All")}
-                                        className={`shrink-0 px-3 sm:px-4 py-1.5 sm:py-2 rounded-xl text-xs sm:text-sm font-medium transition-all border whitespace-nowrap ${
+                                        className={`shrink-0 px-3 sm:px-4 py-1.5 sm:py-2 rounded-xl text-xs sm:text-sm font-medium transition-all border border-slate whitespace-nowrap ${
                                             activeCategory === "All"
                                                 ? "bg-primary-weak border-primary text-black "
                                                 : "bg-white text-black "
@@ -167,7 +167,7 @@ export default function Blogs() {
                                         <button
                                             key={cat.id}
                                             onClick={() => setActiveCategory(cat.name)}
-                                            className={`shrink-0 px-3 sm:px-4 py-1.5 sm:py-2 rounded-xl text-xs sm:text-sm font-medium transition-all border whitespace-nowrap ${
+                                            className={`shrink-0 px-3 sm:px-4 py-1.5 sm:py-2 rounded-xl text-xs sm:text-sm font-medium transition-all border border-slate whitespace-nowrap ${
                                                 activeCategory === cat.name
                                                     ? "bg-primary-weak border-primary text-black "
                                                     : "bg-white text-black "}`}

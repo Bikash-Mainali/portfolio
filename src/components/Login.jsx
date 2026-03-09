@@ -57,7 +57,7 @@ export default function Login({displayLoginModal}) {
                             name="email"
                             value={userCredentials.email}
                             onChange={handleOnChange}
-                            className="w-full px-4 py-2 border border-light dark:border-dark rounded-lg  focus:outline-none  focus:border-primary transition-colors"
+                            className="w-full px-4 py-2 border border-light dark:border-dark rounded-lg focus:outline-none focus:border-primary transition-colors text-black placeholder:text-gray-500"
                             placeholder="your@email.com"
                             required
                         />
@@ -71,7 +71,7 @@ export default function Login({displayLoginModal}) {
                             name="password"
                             value={userCredentials.password}
                             onChange={handleOnChange}
-                            className="w-full px-4 py-2 border border-light dark:border-dark rounded-lg  focus:outline-none  focus:border-primary transition-colors"
+                            className="w-full px-4 py-2 border border-light dark:border-dark rounded-lg focus:outline-none focus:border-primary transition-colors text-black placeholder:text-gray-500"
                             placeholder="password"
                             required
                         />

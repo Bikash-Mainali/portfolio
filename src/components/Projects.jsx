@@ -114,86 +114,90 @@ export default function Projects() {
     return (
         <section id="projects" ref={ref}
                  className="relative max-w-7xl mx-auto px-6 lg:px-8 pt-34 sm:pt-32 md:pt-40 lg:pt-52">
-            <div className="absolute inset-0 dot-grid opacity-20 dark:opacity-15"></div>
-                <div
-                    className={`transition-all duration-700 ${visible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
-                    <h2 className="section-title">Projects</h2>
-                    <div className="section-line"></div>
-                </div>
+            <div className="absolute inset-0 dot-grid opacity-20 dark:opacity-15 pointer-events-none"></div>
 
-                {/* Filter tabs */}
-                <div className="flex gap-2 mb-10">
-                    {filters.map(f => (
-                        <button
-                            key={f}
-                            onClick={() => setActive(f)}
-                            className={`font-mono text-sm px-5 py-2 rounded-full transition-all duration-200 ${
-                                active === f
-                                    ? 'bg-primary-weak text-white dark:text-navy-950 font-medium'
-                                    : 'text-dark dark:text-slate border border-light dark:border-dark hover:border-primary hover:text-primary'
-                            }`}
-                        >
-                            {f}
-                        </button>
-                    ))}
-                </div>
+            {/* Content above the decorative grid */}
+            <div
+                className={`transition-all duration-700 ${visible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
+                <h2 className="section-title">Projects</h2>
+                <div className="section-line"></div>
+            </div>
 
-                {/* Grid */}
-                <div className="grid md:grid-cols-2 gap-6">
-                    {filtered.map((project, i) => (
-                        <div
-                            key={project.id}
-                            className="group card-glass rounded-2xl overflow-hidden hover:border-primary-weak transition-all duration-300"
-                            style={{
-                                transitionDelay: `${i * 100}ms`,
-                                opacity: visible ? 1 : 0,
-                                transform: visible ? 'translateY(0)' : 'translateY(24px)',
-                            }}
-                        >
-                            {/* Image */}
-                            <div className="h-48 overflow-hidden relative">
-                                <img
-                                    src={project.img}
-                                    alt={project.title}
-                                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                                />
-                                <div
-                                    className="absolute inset-0 bg-gradient-to-t from-white dark:from-navy-950 to-transparent opacity-60"></div>
-                                <span
-                                    className="absolute top-3 right-3 font-mono text-xs px-3 py-1 rounded-full bg-light dark:bg-navy-950/70  text-primary border  border-primary-weak backdrop-blur-sm">
+            {/* Filter tabs */}
+            <div className="flex gap-2 mb-10">
+                {filters.map(f => (
+                    <button
+                        type="button"
+                        aria-pressed={active === f}
+                        key={f}
+                        onClick={() => setActive(f)}
+                        className={`font-mono text-sm px-5 py-2 rounded-full transition-all duration-200 ${
+                            active === f
+                                ? 'bg-primary-weak text-white dark:text-navy-950 font-medium'
+                                : 'text-dark dark:text-slate border border-light dark:border-dark hover:border-primary hover:text-primary'
+                        }`}
+                    >
+                        {f}
+                    </button>
+                ))}
+            </div>
+
+            {/* Grid */}
+            <div className="grid md:grid-cols-2 gap-6">
+                {filtered.map((project, i) => (
+                    <div
+                        key={project.id}
+                        className="group card-glass rounded-2xl overflow-hidden hover:border-primary-weak transition-all duration-300"
+                        style={{
+                            transitionDelay: `${i * 100}ms`,
+                            opacity: visible ? 1 : 0,
+                            transform: visible ? 'translateY(0)' : 'translateY(24px)',
+                        }}
+                    >
+                        {/* Image */}
+                        <div className="h-48 overflow-hidden relative">
+                            <img
+                                src={project.img}
+                                alt={project.title}
+                                className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                            />
+                            <div
+                                className="absolute inset-0 bg-gradient-to-t from-white dark:from-navy-950 to-transparent opacity-60"></div>
+                            <span
+                                className="absolute top-3 right-3 font-mono text-xs px-3 py-1 rounded-full bg-white dark:bg-navy-950/70  text-primary border  border-primary-weak backdrop-blur-sm">
                   {project.category}
                 </span>
+                        </div>
+
+                        <div className="p-6">
+                            <h3 className="font-display font-bold text-dark dark:text-white text-xl mb-2">{project.title}</h3>
+                            <p className="text-dark dark:text-slate text-sm leading-relaxed mb-4">{project.description}</p>
+
+                            <div className="flex flex-wrap gap-2 mb-5">
+                                {project.tags.map(t => (
+                                    <span key={t} className="tag">{t}</span>
+                                ))}
                             </div>
 
-                            <div className="p-6">
-                                <h3 className="font-display font-bold text-dark dark:text-white text-xl mb-2">{project.title}</h3>
-                                <p className="text-dark dark:text-slate text-sm leading-relaxed mb-4">{project.description}</p>
-
-                                <div className="flex flex-wrap gap-2 mb-5">
-                                    {project.tags.map(t => (
-                                        <span key={t} className="tag">{t}</span>
-                                    ))}
-                                </div>
-
-                                <div className="flex gap-3">
-                                    {project.links && Object.entries(project.links).map(([key, value]) => (
-                                            <a
-                                                key={`${project.id}-${key}`}
-                                                href={value.link}
-                                                target="_blank"
-                                                rel="noopener noreferrer"
-                                                className="flex items-center gap-2 text-sm font-mono text-dark  dark:text-primary hover:text-primary-weak transition-colors"
-                                            >
-                                                <span>{value.icon}</span>
-                                                {value.label}
-                                            </a>
-                                        )
-                                    )}
-                                </div>
+                            <div className="flex gap-3">
+                                {project.links && Object.entries(project.links).map(([key, value]) => (
+                                        <a
+                                            key={`${project.id}-${key}`}
+                                            href={value.link}
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            className="flex items-center gap-2 text-sm font-mono text-dark  dark:text-primary hover:text-primary-weak transition-colors"
+                                        >
+                                            <span>{value.icon}</span>
+                                            {value.label}
+                                        </a>
+                                    )
+                                )}
                             </div>
                         </div>
-                    ))}
-                </div>
+                    </div>
+                ))}
+            </div>
         </section>
     )
 }

@@ -38,7 +38,8 @@ export default function About() {
     const [ref, visible] = useInView()
 
     return (
-        <section id="about" ref={ref} className="relative max-w-7xl mx-auto px-6 sm:px-0 sm:pt-45 pt-35">
+        <section id="about" ref={ref}
+                 className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-34 sm:pt-32 md:pt-40 lg:pt-52">
             <div>
                 <div
                     className={`transition-all duration-700 ${visible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
@@ -101,67 +102,91 @@ export default function About() {
 
                     {/* Photo & socials */}
                     <div
-                        className={`lg:col-span-2 flex flex-col items-center lg:items-start gap-6 transition-all duration-700 delay-400 ${visible ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-8'}`}>
-                        <div className="relative group">
-                            {/* Subtle glow ring (matches Home) */}
+                        className={`lg:col-span-2 flex flex-col items-center lg:items-start gap-6 transition-all duration-700 delay-400 ${
+                            visible ? "opacity-100 translate-x-0" : "opacity-0 translate-x-8"
+                        }`}
+                    >
+                        <div
+                            className="flex flex-col sm:flex-row lg:flex-col gap-6 items-center justify-start lg:items-start w-full">
+
+                            {/* Profile image */}
                             <div
-                                className="absolute -inset-1 rounded-2xl bg-gradient-to-br from-primary-weak via-primary to-primary opacity-30 group-hover:opacity-60 blur-sm transition-all duration-300"></div>
-                            <div
-                                className="relative w-64 h-64 rounded-2xl overflow-hidden border border-light dark:border-primary-weak">
+                                className="relative w-44 h-44 sm:w-56 sm:h-56 lg:w-64 lg:h-64 rounded-2xl overflow-hidden border border-light dark:border-primary-weak">
                                 <img
                                     src="/profile1.jpg"
                                     alt="Bikash Mainali"
-                                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                                    className="w-full h-full object-cover transition-transform duration-500 hover:scale-105"
                                     onError={(e) => {
-                                        e.target.src = `https://ui-avatars.com/api/?name=Bikash+Mainali&background=0e1d47&color=2dd4bf&size=256&font-size=0.4`
+                                        e.target.src =
+                                            "https://ui-avatars.com/api/?name=Bikash+Mainali&background=0e1d47&color=2dd4bf&size=256&font-size=0.4";
                                     }}
                                 />
+
                                 <div
                                     className="absolute inset-0 bg-gradient-to-t from-navy-900/40 to-transparent pointer-events-none rounded-2xl"></div>
                             </div>
-                        </div>
 
-                        {/* Social links */}
-                        <div className="flex gap-3 flex-wrap">
-                            {[
-                                {
-                                    label: 'LinkedIn',
-                                    href: 'https://www.linkedin.com/in/bikash-mainali-629505168/',
-                                    icon: <Github/>
-                                },
-                                {label: 'GitHub', href: 'https://github.com/Bikash-Mainali', icon: <Linkedin/>},
-                                {label: 'Facebook', href: 'https://www.facebook.com/biki51', icon: <Facebook/>},
-                                {
-                                    label: 'Instagram',
-                                    href: 'https://www.instagram.com/mainalibiki/',
-                                    icon: <Instagram/>
-                                },
-                            ].map(s => (
-                                <a
-                                    key={s.label}
-                                    href={s.href}
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    className="flex items-center gap-2 px-4 py-2 card-glass rounded-full text-sm  dark:text-light text-dark hover:text-primary  transition-all duration-200 hover:-translate-y-0.5"
-                                >
-                                    <span>{s.icon}</span>
-                                    <span className="font-mono text-xs">{s.label}</span>
-                                </a>
-                            ))}
-                        </div>
+                            <div className="contact-info flex flex-col gap-6 w-full sm:w-auto">
 
-                        {/* Contact info box */}
-                        <div className="card-glass rounded-xl p-5 w-full space-y-3">
-                            <div className="flex items-center gap-3 text-sm text-stone-700 dark:text-slate-300">
-                                <span className="text-accent dark:text-primary"><MapPinned/></span>
-                                <span>CA, USA</span>
-                            </div>
-                            <div className="flex items-center gap-3 text-sm text-dark dark:text-slate-300">
-                                <span className="text-accent dark:text-primary"><Mail/></span>
-                                <a href="mailto:bikashmainali18@gmail.com"
-                                   className="hover:text-accent dark:hover:text-primary transition-colors">
-                                    bikashmainali18@gmail.com
-                                </a>
+                                {/* Social links */}
+                                <div className="grid grid-cols-2 sm:grid-cols-2 gap-3 lg:order-1 order-2">
+                                    {[
+                                        {
+                                            label: "LinkedIn",
+                                            href: "https://www.linkedin.com/in/bikash-mainali-629505168/",
+                                            icon: <Linkedin/>,
+                                        },
+                                        {
+                                            label: "GitHub",
+                                            href: "https://github.com/Bikash-Mainali",
+                                            icon: <Github/>,
+                                        },
+                                        {
+                                            label: "Facebook",
+                                            href: "https://www.facebook.com/biki51",
+                                            icon: <Facebook/>,
+                                        },
+                                        {
+                                            label: "Instagram",
+                                            href: "https://www.instagram.com/mainalibiki/",
+                                            icon: <Instagram/>,
+                                        },
+                                    ].map((s) => (
+                                        <a
+                                            key={s.label}
+                                            href={s.href}
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            className="flex items-center justify-center gap-2 px-4 py-2 card-glass rounded-full text-sm dark:text-light text-dark hover:text-primary transition-all duration-200 hover:-translate-y-0.5"
+                                        >
+                                            <span>{s.icon}</span>
+                                            <span className="font-mono text-xs">{s.label}</span>
+                                        </a>
+                                    ))}
+                                </div>
+
+                                {/* Contact info box */}
+                                <div className="card-glass lg:order-2 order-1 rounded-xl p-5 w-full space-y-3">
+                                    <div className="flex items-center gap-3 text-sm text-dark dark:text-light">
+          <span className="text-accent dark:text-primary">
+            <MapPinned/>
+          </span>
+                                        <span>CA, USA</span>
+                                    </div>
+
+                                    <div className="flex items-center gap-3 text-sm text-dark dark:text-light">
+          <span className="text-accent dark:text-primary">
+            <Mail/>
+          </span>
+
+                                        <a
+                                            href="mailto:bikashmainali18@gmail.com"
+                                            className="hover:text-accent dark:hover:text-primary transition-colors break-all"
+                                        >
+                                            bikashmainali18@gmail.com
+                                        </a>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>

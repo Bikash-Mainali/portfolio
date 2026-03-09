@@ -116,7 +116,7 @@ export default function Experience() {
 
     return (
         <section id="experience" ref={ref}
-                 className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-34 sm:pt-32 md:pt-40 lg:pt-52">
+                 className="relative max-w-7xl mx-auto px-6 lg:px-8 pt-34 sm:pt-32 md:pt-40 lg:pt-52">
         <div
                 className={`transition-all duration-700 ${visible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
                 <h2 className="section-title">Experience</h2>
@@ -139,7 +139,7 @@ export default function Experience() {
             <div className="flex flex-col lg:flex-row gap-12">
 
                 {/* Experience timeline */}
-                <div className="flex-1 lg:flex-[2] relative border">
+                <div className="flex-1 lg:flex-[2] relative">
                     {/* Timeline line */}
                     <div className="absolute sm:left-3 left-0 top-0 bottom-0 w-px bg-gradient-to-b from-primary via-primary-weak to-transparent"></div>
 
@@ -147,7 +147,7 @@ export default function Experience() {
                         {experiences.map((exp, i) => (
                             <div
                                 key={i}
-                                className="relative sm:pl-10 pl-5 transition-all duration-500"
+                                className="relative sm:pl-10 pl-3 transition-all duration-500"
                                 style={{
                                     transitionDelay: `${i * 120}ms`,
                                     opacity: visible ? 1 : 0,
@@ -155,7 +155,7 @@ export default function Experience() {
                                 }}
                             >
                                 {/* Dot */}
-                                <div className="absolute sm:left-1.5 -left-1.5 top-1.5 w-3 h-3 rounded-full bg-primary border-2 border-white dark:border-navy-900 ring-2 ring-primary-weak"></div>
+                                <div className="absolute sm:left-1.5 -left-1 top-0 sm:w-3 sm:h-3 w-2 h-2 rounded-full bg-primary border-2 border-white dark:border-navy-900 sm:ring-2 ring-1 ring-primary-weak"></div>
 
                                 <div className="card-glass rounded-2xl sm:p-6 p-4 hover:border-primary transition-all duration-200">
                                     <div className="flex flex-wrap items-start justify-between gap-2 mb-1">

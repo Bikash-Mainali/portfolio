@@ -39,7 +39,7 @@ export default function About() {
 
     return (
         <section id="about" ref={ref}
-                 className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-34 sm:pt-32 md:pt-40 lg:pt-52">
+                 className="relative max-w-7xl mx-auto  px-6 lg:px-8 pt-34 sm:pt-32 md:pt-40 lg:pt-52">
             <div>
                 <div
                     className={`transition-all duration-700 ${visible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
@@ -63,7 +63,7 @@ export default function About() {
                                 I specialize in designing scalable, high-performance applications using <strong>Java
                                 (Spring
                                 Boot), Node.js, Python FAST API, React, Angular, TypeScript, Postgres, MongoDB, and
-                                Microservices architectures </strong>. My
+                                Microservices architectures.</strong> My
                                 experience spans backend system design, cloud-native deployments, and crafting
                                 intuitive, pixel-perfect frontend experiences.
                             </p>
@@ -71,7 +71,7 @@ export default function About() {
                                 Recently, I've been expanding my focus into <strong>AI/ML-driven systems, exploring how
                                 intelligent automation, data modeling, agentic AI and AI-powered features can enhance
                                 enterprise
-                                applications </strong>. I'm particularly interested in building software that integrates
+                                applications</strong>. I'm particularly interested in building software that integrates
                                 machine
                                 learning, predictive systems, and intelligent workflows into real-world products.
                             </p>

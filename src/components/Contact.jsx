@@ -86,7 +86,7 @@ export default function Contact() {
 
     return (
         <section id="contact" ref={ref}
-                 className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-34 sm:pt-32 md:pt-40 lg:pt-52">
+                 className="relative max-w-7xl mx-auto px-6 lg:px-8 pt-34 sm:pt-32 md:pt-40 lg:pt-52">
             <div
                 className={`text-center transition-all duration-700 ${visible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
                 <h2 className="section-title text-center">Get In Touch</h2>
@@ -147,10 +147,10 @@ export default function Contact() {
                     className="md:col-span-3 transition-all duration-700 delay-400"
                     style={{opacity: visible ? 1 : 0, transform: visible ? 'translateX(0)' : 'translateX(20px)'}}
                 >
-                    <form onSubmit={handleSubmit} className="card-glass rounded-2xl p-8 space-y-5">
+                    <form onSubmit={handleSubmit} className="card-glass rounded-2xl p-4 space-y-5">
                         <div className="grid sm:grid-cols-2 gap-5">
                             <div>
-                                <label className="font-mono text-xs text-dark dark:text-slate mb-2 block">Your
+                                <label className="font-mono text-xs text-stone-500 dark:text-slate-500 mb-2 block">Your
                                     Name</label>
                                 <input
                                     type="text"
@@ -209,7 +209,7 @@ export default function Contact() {
                         <button
                             type="submit"
                             disabled={sending}
-                            className="btn-primary w-full justify-center flex items-center gap-2 disabled:opacity-60 disabled:cursor-not-allowed"
+                            className="btn-primary text-white w-full justify-center flex items-center gap-2 disabled:opacity-60 disabled:cursor-not-allowed"
                         >
                             {sending ? (
                                 <>
@@ -226,7 +226,7 @@ export default function Contact() {
                             ) : (
                                 <>
                                     Send Message
-                                    <Send></Send>
+                                    <Send className="text-light"></Send>
                                 </>
                             )}
                         </button>

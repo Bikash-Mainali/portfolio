@@ -38,7 +38,7 @@ export default function Home() {
     }, [displayed, typing, roleIndex])
 
     return (
-        <section id="home" className="scroll-mt-24 relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-34 sm:pt-32 md:pt-40 lg:pt-52">
+        <section id="home" className="relative max-w-7xl mx-auto px-6 lg:px-8 pt-34 sm:pt-32 md:pt-40 lg:pt-52">
             <div className="flex flex-col lg:flex-row items-center justify-between gap-12">
                 {/* LEFT: text */}
                 <div className="flex-1 max-w-xl">

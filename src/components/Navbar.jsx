@@ -140,7 +140,6 @@ export default function Navbar() {
                     }} aria-label="Home" className="flex items-center"> <BrandName
                         className="text-black dark:text-white"/> </a>
                     {/* Desktop Nav */}
-                    ```jsx
                     <nav className="hidden md:flex items-center flex-wrap gap-4 lg:gap-6">
 
                         {links.map((l) => (

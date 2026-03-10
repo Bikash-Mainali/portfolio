@@ -171,7 +171,7 @@ export default function Blog() {
                                             ? <code
                                                 className="px-1.5 py-0.5 rounded text-sm font-mono bg-amber-50 text-amber-700 border border-amber-200 dark:bg-zinc-800 dark:text-amber-400 dark:border-zinc-700" {...props} />
                                             : <code
-                                                className="block p-4 rounded-xl text-sm font-mono overflow-x-auto mb-4 bg-stone-50 text-amber-700 border border-stone-200 dark:bg-zinc-800/80 dark:text-amber-300 dark:border-zinc-700" {...props} />,
+                                                className="block px-4 pt-4 rounded-xl text-sm font-mono overflow-x-auto mb-4 bg-stone-50 text-amber-700 border border-stone-200 dark:bg-zinc-800/80 dark:text-amber-300 dark:border-zinc-700" {...props} />,
                                     pre: ({node, ...props}) => <pre className="mb-4" {...props} />,
                                     ul: ({node, ...props}) => <ul
                                         className="list-disc list-inside mb-4 space-y-1 pl-2 text-stone-600 dark:text-zinc-300" {...props} />,

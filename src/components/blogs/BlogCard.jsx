@@ -31,17 +31,18 @@ export default function BlogCard({post, onClick}) {
             className="group flex gap-4 sm:gap-6 lg:gap-10 border rounded-2xl overflow-hidden transition-all duration-300 cursor-pointer p-3 sm:p-4 bg-white border-light  hover:border-primary-weak hover:shadow-md hover:shadow-light dark:bg-navy-900 dark:border-dark dark:hover:border-slate dark:hover:shadow-md dark:hover:shadow-dark"
         >
             {/* Thumbnail */}
-            <div
-                className="shrink-0 rounded-xl overflow-hidden w-24 h-24 sm:w-32 sm:h-32 md:w-48 md:h-48 lg:w-64 lg:h-64 bg-light dark:bg-navy-900">
-                {coverImage && (
+            {coverImage && (
+                <div
+                    className="shrink-0 rounded-xl overflow-hidden w-24 h-24 sm:w-32 sm:h-32 md:w-48 md:h-48 lg:w-64 lg:h-64 bg-light dark:bg-navy-900">
+
                     <img
                         src={coverImage}
                         alt={post.title}
                         className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                     />
-                )}
-            </div>
 
+                </div>
+            )}
             {/* Content */}
             <div className="flex flex-col flex-1 min-w-0">
                 {/* Title */}

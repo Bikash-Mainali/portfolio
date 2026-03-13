@@ -101,6 +101,22 @@ const projects = [
 
         }
     },
+    {
+        id: 7,
+        title: 'Job Search Assistance - Chrome Extension',
+        category: 'Web',
+        description: 'JobSearchHelper is a Chrome extension for job seekers who are tired of manually scanning through dozens of postings. Define a personal list of keywords — skills, roles, work arrangements, seniority levels — and instantly highlight every match on any job listing page, so the signal jumps out without reading every line.',
+        tags: ['JavaScript', 'HTML', 'CSS'],
+        img: './job-search-ext.png',
+        links: {
+            'live': {
+                link: 'https://github.com/Bikash-Mainali/BM-Job-Search-Extension/blob/master/README.md',
+                label: 'GitHub',
+                icon: <Github className="h-4 w-4"/>
+            }
+
+        }
+    },
 ]
 
 const filters = ['All', 'Web', 'App']

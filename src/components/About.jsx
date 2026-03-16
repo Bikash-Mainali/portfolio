@@ -143,12 +143,12 @@ export default function About() {
                                         },
                                         {
                                             label: "Facebook",
-                                            href: "https://www.facebook.com/biki51",
+                                            href: "https://www.facebook.com/",
                                             icon: <Facebook/>,
                                         },
                                         {
                                             label: "Instagram",
-                                            href: "https://www.instagram.com/mainalibiki/",
+                                            href: "https://www.instagram.com/",
                                             icon: <Instagram/>,
                                         },
                                     ].map((s) => (

@@ -31,13 +31,13 @@ export default function Contact() {
             color: "text-stone-800 dark:text-white border-stone-800/30 dark:border-white/30 hover:border-stone-800 dark:hover:border-white hover:text-stone-900 dark:hover:text-gray-200 hover:bg-stone-800/10 dark:hover:bg-white/10 hover:shadow-[0_0_15px_rgba(120,113,108,0.3)] dark:hover:shadow-[0_0_15px_white]"
         },
         {
-            href: 'https://www.facebook.com/biki51',
+            href: 'https://www.facebook.com/',
             label: 'facebook',
             icon: <Facebook/>,
             color: "text-[#1877F2] border-[#1877F2]/40 hover:border-[#1877F2] hover:text-[#1877F2]/90 hover:bg-[#1877F2]/10 hover:shadow-[0_0_15px_#1877F2]"
         },
         {
-            href: 'https://www.instagram.com/mainalibiki/',
+            href: 'https://www.instagram.com/',
             label: 'instagram',
             icon: <Instagram/>,
             color: "text-[#E4405F] border-[#E4405F]/40 hover:border-[#E4405F] hover:text-[#E4405F]/90 hover:bg-[#E4405F]/10 hover:shadow-[0_0_15px_#E4405F]"
